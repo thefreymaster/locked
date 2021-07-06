@@ -1,7 +1,7 @@
 import { Box, Button, SlideFade, Spinner, toast, useDisclosure } from '@chakra-ui/react';
 import React from 'react';
 import { Redirect } from 'react-router-dom';
-import { signInWithGoogle } from '../../api/firebase';
+import firebaseApi from '../../api/firebase';
 import Font from '../../common/Font';
 import Wrapper from '../../common/Wrapper';
 import { useGlobalState } from '../../providers/root';
@@ -61,11 +61,11 @@ const Welcome = () => {
                             <Font fontWeight={900} fontSize={isMobile ? 72 : 124} variant="primary">Locked</Font>
                             <Font fontWeight={600} fontSize={18}>Find a secure safe bike rack</Font>
                             <Box mt={5} display="flex" flexDir={isMobile ? "column" : "row"}>
-                                <Button size="lg" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => signInWithGoogle(dispatch, showSuccessToast)}>Sign Up With Google</Button>
+                                <Button size="lg" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => firebaseApi.auth.signIn(dispatch, showSuccessToast)}>Sign Up With Google</Button>
                                 <Box ml={2} mr={2} mt={2}>
                                     Or
                                 </Box>
-                                <Button size="lg" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => signInWithGoogle(dispatch, showSuccessToast)}>Sign In With Google</Button>
+                                <Button size="lg" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => firebaseApi.auth.signIn(dispatch, showSuccessToast)}>Sign In With Google</Button>
                             </Box>
                         </Box>
                     </Wrapper>

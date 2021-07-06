@@ -86,7 +86,7 @@ const MapContainer = (props) => {
     return (
         <>
             <Map
-                style="mapbox://styles/mapbox/basic-v9"
+                style="mapbox://styles/thefreymaster/ckke447ga0wla19k1cqupmrrz"
                 containerStyle={{
                     height: '100vh',
                     width: '100vw'
@@ -100,26 +100,7 @@ const MapContainer = (props) => {
                 <MarkerContainer coordinates={props.coordinates} />
                 {/* <FriendsContainer setViewport={setViewport} viewport={viewport} /> */}
             </Map>
-            <AbsoluteButton onClick={() => history.push('/add')}>Invite Friend</AbsoluteButton>
-            <AvatarGroup size="md" max={4} style={{ position: 'absolute', bottom: 20, left: 20 }}>
-                {/* {Object.entries(authorizedUsers).map(([key, value]) => {
-                    return (
-                        <Avatar
-                            className="cursor-hover"
-                            onClick={() => {
-                                setViewport({ ...viewportObj, zoom: 13, latitude: value.coordinates.latitude, longitude: value.coordinates.longitude });
-                                history.push(`/map/${key}`)
-                            }}
-                            src={value.provider?.photoURL || value.avatarUrl} />
-                    )
-                })} */}
-                <Avatar className="cursor-hover"
-                    onClick={() => {
-                        setViewport({ ...viewportObj, zoom: 13, latitude: coordinates.latitude, longitude: coordinates.longitude });
-                        history.push(`/map/${firebase.user.uid}`)
-                    }} src={firebase.provider?.photoURL || avatarUrl}
-                />
-            </AvatarGroup>
+            <AbsoluteButton onClick={() => history.push('/add')}>Add</AbsoluteButton>
         </>
     )
 }

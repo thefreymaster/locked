@@ -6,6 +6,7 @@ import { Spinner } from '@chakra-ui/react';
 import Wrapper from '../common/Wrapper';
 import LocksMap from '../components/LocksMap';
 import RequestLocation from '../components/RequestLocation';
+import AddRack from '../components/AddRack';
 
 const Router = () => {
     const { firebase } = useGlobalState();
@@ -33,6 +34,9 @@ const Router = () => {
             </Route>
             <Route exact path="/map/:id">
                 <LocksMap />
+            </Route>
+            <Route exact path="/add">
+                <AddRack />
             </Route>
             <Route exact path="/*">
                 <Redirect to="/" />

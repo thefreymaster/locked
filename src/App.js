@@ -4,7 +4,7 @@ import Router from './router/index';
 import Zindex from './common/Zindex';
 import { useGlobalState } from './providers/root';
 import { useToast } from '@chakra-ui/react';
-import { checkForFirebaseAuth } from './api/firebase';
+import firebaseApi from './api/firebase';
 import Header from './components/Header';
 
 const App = () => {
@@ -24,7 +24,7 @@ const App = () => {
   }
 
   React.useEffect(() => {
-    checkForFirebaseAuth(dispatch, showSuccessToast);
+    firebaseApi.verify(dispatch, showSuccessToast);
   }, [])
 
   return (

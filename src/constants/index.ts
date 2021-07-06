@@ -44,18 +44,11 @@ export const BLUE_GREY = "#EDF2F7";
 export const initialValues = {
     name: null,
     notes: null,
-    cuisine: null,
     location: {
         city: null,
         state: null,
     },
-    ratings: {
-        // food: null,
-        // ambiance: null,
-        // amenities: null,
-        // speed: null,
-        // service: null,
-    },
+    ratings: {},
     recommended: null,
 }
 

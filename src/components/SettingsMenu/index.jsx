@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { BACKGROUND_COLOR_HW, BACKGROUND_COLOR_HW_DARK, BLUE, PRIMARY_COLOR_SCHEME } from '../../constants';
 import { BiMenu } from 'react-icons/bi';
-import { checkForFirebaseAuth, signInWithGoogle, signOutWithGoogle } from '../../api/firebase';
+import firebaseApi from '../../api/firebase';
 // import Authenticated from '../Authenticated';
 import { useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -54,7 +54,7 @@ const SettingsMenu = () => {
                     {firebase.isAuthenticated ? (
                         <Authenticated />
                     ) : (
-                            <MenuItem onClick={() => signInWithGoogle(dispatch, showSuccessToast)}>
+                            <MenuItem onClick={() => firebaseApi.auth.signIn(dispatch, showSuccessToast)}>
                                 <FontAwesomeIcon color={BLUE} icon={faGoogle} />
                                 <Box mr={3} />
                                 Sign In With Google
@@ -69,7 +69,7 @@ const SettingsMenu = () => {
                     {firebase.isAuthenticated && (
                         <>
                             <MenuDivider />
-                            <MenuItem onClick={() => signOutWithGoogle(dispatch, showInfoToast, history)}>Sign Out</MenuItem>
+                            <MenuItem onClick={() => firebaseApi.auth.signOut(dispatch, showInfoToast, history)}>Sign Out</MenuItem>
                         </>
                     )}
                 </MenuGroup>
