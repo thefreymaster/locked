@@ -14,6 +14,7 @@ export interface IDefaultState {
         fetching: boolean;
         isDay: boolean;
         isInstalled: boolean;
+        containsLocks?: boolean;
     },
     coordinates: {
         latitude?: number;

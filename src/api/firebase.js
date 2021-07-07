@@ -1,3 +1,4 @@
+import imageCompression from 'browser-image-compression';
 import firebase from "firebase/app";
 import "firebase/analytics";
 import "firebase/auth";
@@ -28,17 +29,23 @@ const verify = (dispatch, showSuccessToast) => {
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
             dispatch({ type: 'FIREBASE_AUTHENTICATION_SUCCESS', payload: { user } });
-            // var userRefUpdates = firebase.database().ref('users/' + user.uid);
-            // userRefUpdates.on('value', (snapshot) => {
-            //     dispatch(isFetching);
-            //     const snapshotValue = snapshot.val();
-            //     if (snapshotValue) {
-            //         if (snapshotValue.groupId) {
-            //             dispatch({ type: 'SET_GROUP_ID', payload: { groupId: snapshotValue.groupId } })
-            //         }
-            //         readGroupId(snapshotValue.groupId, user.uid, dispatch)
-            //     }
-            // })
+            var refUpdates = firebase.database().ref('locks');
+            refUpdates.on('value', (snapshot) => {
+                dispatch(isFetching);
+                const snapshotValue = snapshot.val();
+                if (snapshotValue) {
+                    dispatch({
+                        type: 'POPULATE_DATA',
+                        payload: {
+                            locks: snapshotValue
+                        }
+                    });
+                    dispatch(fetchingComplete);
+                }
+                else {
+                    dispatch(fetchingComplete);
+                }
+            })
         }
         else {
             dispatch(authValidationComplete);
@@ -82,8 +89,8 @@ export const addUserLocation = ({ postData, user, dispatch }) => {
 
 const add = ({ postData, uid, dispatch, history, toast }) => {
     dispatch(isFetching);
-    var restaurantListRef = firebase.database().ref(`users/${uid}/restaurants`);
-    restaurantListRef.push({ ...postData, createdDate: new Date().toISOString() }).then(() => {
+    var listRef = firebase.database().ref(`locks`);
+    listRef.push({ ...postData, createdDate: new Date().toISOString(), author: uid }).then(() => {
         toast();
         dispatch(fetchingComplete);
         history.push("/");
@@ -121,18 +128,18 @@ const upload = ({ uid, file, form }) => {
         maxSizeMB: 0.5,
         useWebWorker: true
     }
-    // imageCompression(file, options)
-    //     .then(function (compressedFile) {
-    //         imageRef.put(compressedFile).then((snapshot) => {
-    //             const { metadata } = snapshot;
-    //             const { fullPath } = metadata;
-    //             form.setFieldValue("imageUrl", fullPath);
-    //             console.log('Uploaded a blob or file!');
-    //         });
-    //     })
-    //     .catch(function (error) {
-    //         console.log(error.message);
-    //     });
+    imageCompression(file, options)
+        .then(function (compressedFile) {
+            imageRef.put(compressedFile).then((snapshot) => {
+                const { metadata } = snapshot;
+                const { fullPath } = metadata;
+                form.setFieldValue("imageUrl", fullPath);
+                console.log('Uploaded a blob or file!');
+            });
+        })
+        .catch(function (error) {
+            console.log(error.message);
+        });
 }
 
 const getImage = ({ id, fileUrl, dispatch }) => {

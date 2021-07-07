@@ -64,6 +64,15 @@ const reducer = (state: any, action: any) => {
             newState.coordinates.hasCoordinatesError = true;
             break;
         }
+        case 'POPULATE_DATA': {
+            newState.locks = payload.locks;
+            newState.meta.containsLocks = true;
+            break;
+        }
+        case 'SET_IMAGE_ABSOLUTE_URL': {
+            newState.locks[payload.id].imageUrlAbsolute = payload.url;
+            break;
+        }
         default:
             console.error(new Error());
     }

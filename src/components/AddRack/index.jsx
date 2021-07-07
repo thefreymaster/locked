@@ -36,7 +36,7 @@ const AddRack = (props) => {
 
     const showSuccessToast = () => {
         toast({
-            title: "Restaurant added",
+            title: "Bike rack added",
             status: "info",
             duration: 3000,
             isClosable: true,
@@ -45,7 +45,7 @@ const AddRack = (props) => {
     }
     const showSuccessEditToast = () => {
         toast({
-            title: "Restaurant updated",
+            title: "Bike rack updated",
             status: "info",
             duration: 3000,
             isClosable: true,
