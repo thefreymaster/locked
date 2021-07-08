@@ -157,7 +157,7 @@ const BikeRacksContainer = (props) => {
         return (
             <Marker onClick={() => {
                 props.setPopupViewport({ visible: true, coordinates: [value.location.long, value.location.lat + 0.00015590001135], lock: value, id: key })
-                props.setViewport({ zoom: 16, latitude: location.lat + 0.00099590001135, longitude: location.long });
+                props.setViewport({ zoom: 16, latitude: location.lat + 0.00199590001135, longitude: location.long });
                 history.push(`/map/${key}`);
             }}
                 key={`friend-marker-${key}`}
