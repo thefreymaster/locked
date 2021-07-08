@@ -1,10 +1,16 @@
-.menu-button{
+.menu-button {
     border-radius: 5px;
 }
 
-.menu-button-dark:hover{
+.menu-button-dark:hover {
     background-color: #162d42 !important;
 }
-.cursor:hover{
+
+.cursor:hover {
     cursor: pointer;
+}
+
+.header {
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(10px);
 }

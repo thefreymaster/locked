@@ -67,7 +67,7 @@ const SettingsMenu = () => {
                 </MenuGroup>
                 <MenuGroup>
                     <MenuDivider />
-                    <MenuItem>v0.1.1</MenuItem>
+                    <MenuItem>v0.2.0</MenuItem>
                 </MenuGroup>
                 <MenuGroup>
                     {firebase.isAuthenticated && (

@@ -8,6 +8,7 @@ import { useGlobalState } from '../../providers/root';
 import { isMobile } from 'react-device-detect';
 import './welcome.scss';
 import { PRIMARY_COLOR_SCHEME } from '../../constants';
+import DeviceWrapper from '../../common/DeviceWrapper';
 
 const Welcome = () => {
     const { firebase, dispatch } = useGlobalState();
@@ -62,7 +63,7 @@ const Welcome = () => {
                             <Font fontWeight={600} fontSize={18}>Find a secure safe bike rack</Font>
                             <Box mt={5} display="flex" flexDir={isMobile ? "column" : "row"}>
                                 <Button size="lg" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => firebaseApi.auth.signIn(dispatch, showSuccessToast)}>Sign Up With Google</Button>
-                                <Box ml={2} mr={2} mt={2}>
+                                <Box m={2} d="flex" justifyContent="center" alignItems="center">
                                     Or
                                 </Box>
                                 <Button size="lg" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => firebaseApi.auth.signIn(dispatch, showSuccessToast)}>Sign In With Google</Button>

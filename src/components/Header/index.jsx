@@ -15,11 +15,17 @@ const Header = () => {
         top: 0,
         width: "100%",
         zIndex: 6,
-        backdropFilter: 'blur(4px)',
     }
 
     return (
-        <Flex style={{ ...fixed }} transitionBackground display="flex" backgroundColor="#ffffff80" alignItems="center" padding={meta.isInstalled ? "50px 20px 15px 20px" : "15px 20px"}>
+        <Flex style={{ ...fixed }}
+            transitionBackground
+            display="flex"
+            backgroundColor="#ffffff80"
+            alignItems="center"
+            padding={meta.isInstalled ? "50px 20px 15px 20px" : "15px 20px"}
+            className="header"
+        >
             <Flex display="flex" direction="column" justifyContent="center">
                 <Flex display="flex" direction="row" margin="0px 0px 0px 0px" hoverCursor alignItems="center">
                     <BsFillShieldLockFill />

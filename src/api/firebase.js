@@ -86,10 +86,10 @@ export const addUserLocation = ({ postData, user, dispatch }) => {
     });
 }
 
-const add = ({ uid, dispatch, history, toast }) => {
+const add = ({ postData, uid, dispatch, history, toast }) => {
     dispatch(isFetching);
     var listRef = firebase.database().ref(`locks`);
-    listRef.push({ createdDate: new Date().toISOString(), author: uid }).then(() => {
+    listRef.push({ ...postData, createdDate: new Date().toISOString(), author: uid }).then(() => {
         toast();
         dispatch(fetchingComplete);
         history.push("/");
