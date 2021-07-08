@@ -9,7 +9,7 @@ export const validatePage1 = ({ values }) => {
 export const validatePage2 = ({ values }) => {
     const { ratings, recommended, size } = values;
     const { quality, safety, illumination } = ratings;
-    if (size && quality && safety && illumination && recommended) {
+    if (size && quality && safety && illumination && recommended !== null) {
         return false;
     }
     return true;

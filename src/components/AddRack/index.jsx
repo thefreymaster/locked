@@ -10,7 +10,6 @@ import React from 'react';
 // import { cuisines } from '../../json/cuisines';
 import { states } from '../../json/states';
 import AbsoluteButton from '../../common/AbsoluteButton';
-import { addRestaurant, updateRestaurant } from '../../api/firebase';
 import { useGlobalState } from '../../providers/root';
 import Upload from '../Upload';
 import { validatePage1, validatePage2, validatePage3 } from '../../validation';
@@ -28,8 +27,7 @@ import firebaseApi from '../../api/firebase';
 
 const AddRack = (props) => {
     let { id } = useParams();
-
-    const { firebase, meta, dispatch, restaurants } = useGlobalState();
+    const { firebase, meta, dispatch, locks } = useGlobalState();
     const history = useHistory();
 
     const toast = useToast();
@@ -79,7 +77,7 @@ const AddRack = (props) => {
             <Wrapper>
                 <DeviceWrapper>
                     <Formik
-                        initialValues={initialValues}
+                        initialValues={locks[id] || initialValues}
                         onSubmit={(values, actions) => {
                             setTimeout(() => {
                                 alert(JSON.stringify(values, null, 2))
@@ -261,7 +259,7 @@ const AddRack = (props) => {
                                             </Field>
                                             {id && (
                                                 <Box pt="20px">
-                                                    <Photo name={restaurants[id].name} imageUrlAbsolute={restaurants[id].imageUrlAbsolute} />
+                                                    <Photo name={locks[id].name} imageUrlAbsolute={locks[id].imageUrlAbsolute} />
                                                 </Box>
                                             )}
                                             <AbsoluteButton disabled={validatePage3({ values: props.values })} isLoading={meta.fetching} onClick={() => {

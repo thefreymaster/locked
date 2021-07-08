@@ -63,3 +63,9 @@
         transition: z-index 250ms ease-in-out;
     }
 }
+
+.rack-marker{
+    &:hover{
+        cursor: pointer;
+    }
+}

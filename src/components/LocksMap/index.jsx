@@ -1,18 +1,25 @@
-import Wrapper from '../../common/Wrapper';
 import ReactMapboxGl, { Marker, Popup } from 'react-mapbox-gl';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useGlobalState } from '../../providers/root';
 import { Redirect } from 'react-router-dom';
-import { Spinner, Fade, Box, CloseButton, Badge, Image } from '@chakra-ui/react';
+import { Spinner, Fade, Box, CloseButton, Image, Badge, Button, Divider } from '@chakra-ui/react';
 import AbsoluteButton from '../../common/AbsoluteButton';
 import { useHistory, useParams } from 'react-router-dom';
-import { AiFillLock } from 'react-icons/ai';
+import { BsFillShieldLockFill } from 'react-icons/bs';
 import './users-map.scss';
 import { calculateOverallRating } from '../../utils/calcOverallRating';
 import { PRIMARY_GREEN, PRIMARY_YELLOW, PRIMARY_RED } from '../../constants';
 import { isMobile } from 'react-device-detect';
-import Flex from '../../common/Flex';
 import firebaseApi from '../../api/firebase';
+import DeviceWrapper from '../../common/DeviceWrapper';
+import RackSize from './Size';
+import RackRecommendation from './Recommendation';
+import Font from '../../common/Font';
+import { AiFillStar } from 'react-icons/ai';
+import { BiEditAlt, BiTrash } from 'react-icons/bi';
+import StarRating from '../../components/StarRating';
+import DeleteRack from '../DeleteRack';
+import { debounce } from 'lodash';
 
 const Map = ReactMapboxGl({
     accessToken:
@@ -39,65 +46,51 @@ const UserMap = () => {
         )
     }
     return (
-        <Wrapper>
-            <MapContainer coordinates={coordinates} />
-        </Wrapper>
+        <DeviceWrapper>
+            <MapContainer id={id} />
+        </DeviceWrapper>
     )
 }
 
-const defaultState = {
-    width: window.innerWidth,
-    height: window.innerHeight,
-    zoom: 14,
-}
-
 const MapContainer = (props) => {
-    let viewportObj;
-    let lat;
-    let long;
-
+    let initialViewport;
     const { locks, coordinates } = useGlobalState();
     const lock = locks[props.id];
 
     if (props.id) {
-        viewportObj = {
+        initialViewport = {
             width: window.innerWidth,
             height: window.innerHeight,
             latitude: lock.location.lat + 0.00061000001135,
             longitude: lock.location.long,
             zoom: 18,
         }
-        lat = parseFloat(lock.location.lat);
-        long = parseFloat(lock.location.long);
     }
     else {
-        viewportObj = {
+        initialViewport = {
             width: window.innerWidth,
             height: window.innerHeight,
             latitude: coordinates.latitude,
             longitude: coordinates.longitude,
             zoom: 14,
         }
-        lat = parseFloat(coordinates.lat);
-        long = parseFloat(coordinates.long);
     }
 
+    const [viewport, setViewport] = React.useState({ ...initialViewport });
     const [popupViewport, setPopupViewport] = React.useState({
         visible: props.id ? true : false,
         coordinates: lock ? [lock.location.long, lock.location.lat + 0.00009590001135] : [],
         lock: lock || {},
         id: props.id,
     })
-
-    useEffect(() => {
-        setViewport({ ...viewportObj })
-    }, [])
-
-    const [viewport, setViewport] = React.useState({ ...viewportObj });
     const history = useHistory();
 
     if (!viewport) {
-        return <Spinner />
+        return (
+            <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+                <Spinner colorScheme="red" size="md" />
+            </Box>
+        )
     }
     return (
         <>
@@ -110,16 +103,22 @@ const MapContainer = (props) => {
                 center={[viewport.longitude, viewport.latitude]}
                 zoom={[viewport.zoom]}
             >
+                <BikeRacksContainer setViewport={setViewport} viewport={viewport} setPopupViewport={setPopupViewport} />
                 {popupViewport.visible && (
                     <Popup
                         anchor="bottom"
                         coordinates={popupViewport.coordinates}
                         offset={8}>
-                        <RestaurantPopup setPopupViewport={setPopupViewport} id={popupViewport.id} lock={popupViewport.lock} />
+                        <RackPopup
+                            setViewport={setViewport}
+                            viewport={viewport}
+                            setPopupViewport={setPopupViewport}
+                            id={popupViewport.id}
+                            lock={popupViewport.lock}
+                        />
                     </Popup>
                 )}
-                <MarkerContainer coordinates={props.coordinates} />
-                <BikeRacksContainer setViewport={setViewport} viewport={viewport} setPopupViewport={setPopupViewport} />
+                <MarkerContainer coordinates={coordinates} />
             </Map>
             <AbsoluteButton onClick={() => history.push('/add')}>Add</AbsoluteButton>
         </>
@@ -157,14 +156,15 @@ const BikeRacksContainer = (props) => {
         const { location, ratings } = value;
         return (
             <Marker onClick={() => {
+                props.setPopupViewport({ visible: true, coordinates: [value.location.long, value.location.lat + 0.00015590001135], lock: value, id: key })
+                props.setViewport({ zoom: 16, latitude: location.lat + 0.00099590001135, longitude: location.long });
                 history.push(`/map/${key}`);
-                props.setPopupViewport({ visible: true, coordinates: [value.location.long, value.location.lat + 0.00009590001135], lock: value, id: key })
-                props.setViewport({ zoom: 16, latitude: location.lat, longitude: location.long });
             }}
                 key={`friend-marker-${key}`}
-                coordinates={[location.long, location.lat]}>
+                coordinates={[location.long, location.lat]}
+                className="rack-marker">
                 <div style={style}>
-                    <AiFillLock style={{ transform: 'translate(6px, 6px) rotate(-45deg)', color: getColor(ratings) }} />
+                    <BsFillShieldLockFill style={{ transform: 'translate(6px, 6px) rotate(-45deg)', color: getColor(ratings), fontSize: 15 }} />
                 </div>
             </Marker>
         )
@@ -172,10 +172,13 @@ const BikeRacksContainer = (props) => {
 
 }
 
-const RestaurantPopup = (props) => {
+const RackPopup = (props) => {
     const { dispatch } = useGlobalState();
     const { lock } = props;
     const [fadeIn, setFadeIn] = React.useState(false);
+    const [isDeleteOpenOpen, setIsOpen] = React.useState(false)
+
+    const history = useHistory();
 
     React.useLayoutEffect(() => {
         if (lock) {
@@ -185,10 +188,8 @@ const RestaurantPopup = (props) => {
 
     const inline = {
         borderRadius: 10,
-        marginBottom: 15,
-        minWidth: !isMobile && "80%",
-        width: 300,
-        height: 300,
+        minWidth: 360,
+        maxWidth: 360,
     }
     React.useLayoutEffect(() => {
         setTimeout(() => {
@@ -200,62 +201,71 @@ const RestaurantPopup = (props) => {
             <Box flexDir="column" maxW="lg" key={lock.name} style={inline} display="flex">
                 <Box width="100%" display="flex" justifyContent="flex-end">
                     <CloseButton position="absolute" color="white" margin={2} size="lg" onClick={() => {
-                        setFadeIn(false)
-                        props.setPopupViewport({ visible: false, coordinates: [], lock: {} })
+                        setFadeIn(false);
+                        props.setPopupViewport({ visible: false, coordinates: [], lock: {} });
+                        props.setViewport({ ...props.viewport, zoom: 14 });
+                        history.push('/map')
                     }} />
                 </Box>
                 <Image minH={isMobile ? 100 : 250} objectFit="cover" bg="red.800" color="white" loading="eager" borderRadius="10px 10px 0px 0px" name={lock.name} src={lock.imageUrlAbsolute} />
                 <Box display="flex" flexDirection="row" padding="15px 15px 0px 15px">
+                    <RackRecommendation recommended={lock.recommended} />
                     <Box mr={1} />
-                    {
-                        lock.recommended ? (
-                            <Flex flexGrow="none" display="flex" alignItems="center">
-                                <Box marginRight="1px" />
-                                <Badge variant="outline" colorScheme="green">Recommended</Badge>
-                                <Box marginRight="8px" />
-                            </Flex>
-                        ) : (
-                            <Flex flexGrow="none" display="flex" alignItems="center">
-                                <Box marginRight="1px" />
-                                <Badge variant="outline" colorScheme="red">Not Recommended</Badge>
-                                <Box marginRight="8px" />
-                            </Flex>
-                        )
-                    }
-                </Box>
-                {/* <Box padding="15px 15px 0px 15px">
-                    <Font fontWeight={900} fontSize={24} variant="primary">{restaurant.name}</Font>
-                    <Box display="flex" direction="row" alignItems="flex-start" marginTop={2}>
-                        <Flex display="flex" direction="row" justifyContent="flex-start" alignItems="center">
+                    <RackSize size={lock.size} />
+                    <Box flexGrow={1} />
+                    <Badge>
+                        <Box display="flex" direction="row" justifyContent="center" alignItems="center">
+                            <Font>Overall</Font>
                             <AiFillStar color="#FBB03B" />
                             <Box marginRight="1px" />
-                            <Font fontSize="12px" fontWeight={900}>{calculateOverallRating({ ratings: restaurant.ratings })}</Font>
-                            <Box marginRight="8px" />
-                        </Flex>
-                        <Flex display="flex" direction="row" justifyContent="center" alignItems="center">
-                            <BiMapPin color="#9b2c2c" />
-                            <Box marginRight="1px" />
-                            <Font fontSize="12px" fontWeight={900}>{restaurant.location.city}, {restaurant.location.state}</Font>
-                            <Box marginRight="8px" />
-                        </Flex>
-                        <Flex display="flex" direction="row" justifyContent="center" alignItems="center">
-                            <ImSpoonKnife color="#646464" />
-                            <Box marginRight="1px" />
-                            <Font fontSize="12px" fontWeight={900}>{restaurant.cuisine}</Font>
-                            <Box marginRight="8px" />
-                        </Flex>
-                        <Flex display="flex" direction="row" justifyContent="flex-end" alignItems="center">
-                            <IoIosPricetag color="#6ad66a" />
-                            <Box marginRight="1px" />
-                            <Font fontSize="12px" fontWeight={900}>{restaurant.price}</Font>
-                        </Flex>
+                            <Font fontSize="12px" fontWeight={900}>{lock.ratings.quality}</Font>
+                        </Box>
+                    </Badge>
+
+                </Box>
+                <Box pt={3}>
+                    <Divider />
+                </Box>
+                <Box padding="15px 15px 0px 15px">
+                    <Font fontSize={24} textAlign="center">{lock.name}</Font>
+                    <Box display="flex" direction="row" alignItems="flex-start" marginTop={4}>
+                        <Box display="flex" flexDir="column" justifyContent="center" alignItems="center" flexGrow={1}>
+                            <StarRating overallRating={lock.ratings.quality} />
+                            <Font>Quality</Font>
+                        </Box>
+                        <Box display="flex" flexDir="column" justifyContent="center" alignItems="center" flexGrow={1}>
+                            <StarRating overallRating={lock.ratings.safety} />
+                            <Font>Safety</Font>
+                        </Box>
+                        <Box display="flex" flexDir="column" justifyContent="center" alignItems="center" flexGrow={1}>
+                            <StarRating overallRating={lock.ratings.illumination} />
+                            <Font>Illumination</Font>
+                        </Box>
                     </Box>
-                    <Box marginTop="10px" />
-                    <Font fontSize="12px">{restaurant.notes}</Font>
-                    <Box marginTop="10px" width="100%" display="flex" justifyContent="flex-end">
-                        <Button block onClick={() => history.push(`/view/${props.id}`)}>View Details</Button>
-                    </Box>
-                </Box> */}
+                </Box>
+                <Box pt={3}>
+                    <Divider />
+                </Box>
+                <Box width="100%" display="flex" justifyContent="flex-end">
+                    <Button
+                        colorScheme="red"
+                        margin={2}
+                        size="sm"
+                        icon={<BiTrash />}
+                        onClick={() => setIsOpen(true)}
+                    >Delete</Button>
+                    <Box flexGrow={1} />
+                    <Button
+                        colorScheme="gray"
+                        margin={2}
+                        size="sm"
+                        icon={<BiEditAlt />}
+                        onClick={() => {
+                            history.push(`/edit/${props.id}`)
+                        }}
+                    >Edit</Button>
+                </Box>
+                <DeleteRack setIsOpen={setIsOpen} isOpen={isDeleteOpenOpen} id={props.id} />
             </Box>
         </Fade>
     )

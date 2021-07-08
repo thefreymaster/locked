@@ -6,7 +6,6 @@ import "firebase/database";
 import "firebase/storage";
 
 import { authValidationComplete, fetchingComplete, isFetching } from "../actions";
-import { generateKey } from "../utils/generateKey";
 
 const verify = (dispatch, showSuccessToast) => {
     firebase.auth()
@@ -87,10 +86,10 @@ export const addUserLocation = ({ postData, user, dispatch }) => {
     });
 }
 
-const add = ({ postData, uid, dispatch, history, toast }) => {
+const add = ({ uid, dispatch, history, toast }) => {
     dispatch(isFetching);
     var listRef = firebase.database().ref(`locks`);
-    listRef.push({ ...postData, createdDate: new Date().toISOString(), author: uid }).then(() => {
+    listRef.push({ createdDate: new Date().toISOString(), author: uid }).then(() => {
         toast();
         dispatch(fetchingComplete);
         history.push("/");
@@ -110,7 +109,7 @@ const update = ({ postData, uid, dispatch, history, itemId, toast }) => {
 
 const remove = ({ uid, dispatch, history, itemId, onClose, setIsDeleting, toast }) => {
     dispatch(isFetching);
-    var restaurantListRef = firebase.database().ref(`users/${uid}/restaurants/${itemId}`);
+    var restaurantListRef = firebase.database().ref(`locks/${itemId}`);
     restaurantListRef.remove().then(() => {
         toast();
         dispatch(fetchingComplete);

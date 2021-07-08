@@ -49,17 +49,18 @@ export const getCoordinatesOutsideForm = (setIsGettingCoordinates, setGpsError, 
 
 export const getGPSCoordinates = (dispatch, user) => {
     const options = {
-        timeout: 10000, enableHighAccuracy: true, maximumAge: 0
+        timeout: 10000,
+        enableHighAccuracy: true,
     }
-    return navigator.geolocation.watchPosition(
+    return navigator.geolocation.getCurrentPosition(
         (position) => {
-            const { latitude, longitude } = position.coords;
-            addUserLocation({ postData: { coordinates: { latitude, longitude } }, user, dispatch })
+            const { latitude } = position.coords;
+            const { longitude } = position.coords;
+            addUserLocation({ user, dispatch })
             dispatch({ type: 'SET_GPS_COORDINATES', payload: { latitude, longitude } })
         },
-        (e) => {
+        () => {
             dispatch({ type: 'HAS_COORDINATES_ERROR' })
-            console.log(e)
         },
         options
     );

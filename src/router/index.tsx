@@ -35,6 +35,9 @@ const Router = () => {
             <Route exact path="/map/:id">
                 <LocksMap />
             </Route>
+            <Route exact path="/edit/:id">
+                <AddRack />
+            </Route>
             <Route exact path="/add">
                 <AddRack />
             </Route>

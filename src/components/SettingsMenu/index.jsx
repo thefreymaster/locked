@@ -66,6 +66,10 @@ const SettingsMenu = () => {
                     <MenuItem onClick={() => history.push("/about")}>About</MenuItem>
                 </MenuGroup>
                 <MenuGroup>
+                    <MenuDivider />
+                    <MenuItem>v0.1.1</MenuItem>
+                </MenuGroup>
+                <MenuGroup>
                     {firebase.isAuthenticated && (
                         <>
                             <MenuDivider />
