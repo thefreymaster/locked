@@ -30,7 +30,7 @@ const App = () => {
       dispatch(isInstalledApp)
     }
     if (navigator.geolocation) {
-      getGPSCoordinates(dispatch, () => firebaseApi.verify({ lat: coordinates.latitude, lng: coordinates.longitude, dispatch, showSuccessToast }));
+      getGPSCoordinates(dispatch, () => firebaseApi.initialize({ lat: coordinates.latitude, lng: coordinates.longitude, dispatch, showSuccessToast }));
     }
   }, [])
 

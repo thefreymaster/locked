@@ -7,7 +7,7 @@ import "firebase/storage";
 
 import { authValidationComplete, fetchingComplete, isFetching } from "../actions";
 
-const verify = ({ lat, lng, dispatch, showSuccessToast }) => {
+const initialize = ({ lat, lng, dispatch, showSuccessToast }) => {
     firebase.auth()
         .getRedirectResult()
         .then((result) => {
@@ -171,7 +171,7 @@ const refresh = ({ lat, lng, dispatch }) => {
 }
 
 const firebaseApi = {
-    verify,
+    initialize,
     auth: {
         signIn,
         signOut,
