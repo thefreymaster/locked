@@ -36,11 +36,9 @@ const RequestLocation = () => {
     if (!coordinates.hasCoordinates) {
         return (
             <Wrapper>
-                <DeviceWrapper>
-                    <Box display="flex" alignItems="center" justifyContent="center">
-                        <Spinner />
-                    </Box>
-                </DeviceWrapper>
+                <Box display="flex" alignItems="center" justifyContent="center">
+                    <Spinner />
+                </Box>
             </Wrapper>
         )
     }

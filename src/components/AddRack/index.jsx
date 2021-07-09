@@ -74,7 +74,7 @@ const AddRack = (props) => {
 
     return (
         <Fade in>
-            <Wrapper>
+            <Wrapper justifyContent="flex-start">
                 <DeviceWrapper>
                     <Formik
                         initialValues={locks[id] || initialValues}

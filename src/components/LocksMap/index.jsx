@@ -30,11 +30,11 @@ const UserMap = () => {
     const { coordinates, firebase } = useGlobalState();
     const { id } = useParams();
 
-    if (!firebase.isAuthenticated) {
-        return (
-            <Redirect to="/" />
-        )
-    }
+    // if (!firebase.isAuthenticated) {
+    //     return (
+    //         <Redirect to="/" />
+    //     )
+    // }
     if (!coordinates.hasCoordinates) {
         if (id) {
             return (
@@ -54,7 +54,7 @@ const UserMap = () => {
 
 const MapContainer = (props) => {
     let initialViewport;
-    const { locks, coordinates } = useGlobalState();
+    const { locks, coordinates, firebase } = useGlobalState();
     const lock = locks[props.id];
 
     if (props.id) {
@@ -120,7 +120,7 @@ const MapContainer = (props) => {
                 )}
                 <MarkerContainer coordinates={coordinates} />
             </Map>
-            <AbsoluteButton onClick={() => history.push('/add')}>Add</AbsoluteButton>
+            {firebase.isAuthenticated && <AbsoluteButton onClick={() => history.push('/add')}>Add</AbsoluteButton>}
         </>
     )
 }
@@ -173,10 +173,12 @@ const BikeRacksContainer = (props) => {
 }
 
 const RackPopup = (props) => {
-    const { dispatch } = useGlobalState();
+    const { dispatch, firebase } = useGlobalState();
     const { lock } = props;
     const [fadeIn, setFadeIn] = React.useState(false);
-    const [isDeleteOpenOpen, setIsOpen] = React.useState(false)
+    const [isDeleteOpenOpen, setIsOpen] = React.useState(false);
+    const canEditDelete = firebase.isAuthenticated && firebase.provider && firebase.user.uid === lock?.author;
+
 
     const history = useHistory();
 
@@ -246,25 +248,27 @@ const RackPopup = (props) => {
                 <Box pt={3}>
                     <Divider />
                 </Box>
-                <Box width="100%" display="flex" justifyContent="flex-end">
-                    <Button
-                        colorScheme="red"
-                        margin={2}
-                        size="sm"
-                        icon={<BiTrash />}
-                        onClick={() => setIsOpen(true)}
-                    >Delete</Button>
-                    <Box flexGrow={1} />
-                    <Button
-                        colorScheme="gray"
-                        margin={2}
-                        size="sm"
-                        icon={<BiEditAlt />}
-                        onClick={() => {
-                            history.push(`/edit/${props.id}`)
-                        }}
-                    >Edit</Button>
-                </Box>
+                {canEditDelete && (
+                    <Box width="100%" display="flex" justifyContent="flex-end">
+                        <Button
+                            colorScheme="red"
+                            margin={2}
+                            size="sm"
+                            icon={<BiTrash />}
+                            onClick={() => setIsOpen(true)}
+                        >Delete</Button>
+                        <Box flexGrow={1} />
+                        <Button
+                            colorScheme="gray"
+                            margin={2}
+                            size="sm"
+                            icon={<BiEditAlt />}
+                            onClick={() => {
+                                history.push(`/edit/${props.id}`)
+                            }}
+                        >Edit</Button>
+                    </Box>
+                )}
                 <DeleteRack setIsOpen={setIsOpen} isOpen={isDeleteOpenOpen} id={props.id} />
             </Box>
         </Fade>

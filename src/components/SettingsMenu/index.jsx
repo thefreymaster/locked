@@ -32,7 +32,7 @@ const SettingsMenu = () => {
             status: "success",
             duration: 3000,
             isClosable: true,
-            position: 'top'
+            position: 'bottom-left'
         })
     }
     const showInfoToast = () => {
@@ -41,7 +41,7 @@ const SettingsMenu = () => {
             status: "info",
             duration: 3000,
             isClosable: true,
-            position: 'top'
+            position: 'bottom-left'
         })
     }
     return (
@@ -63,11 +63,7 @@ const SettingsMenu = () => {
                 </MenuGroup>
                 <MenuGroup>
                     <MenuDivider />
-                    <MenuItem onClick={() => history.push("/about")}>About</MenuItem>
-                </MenuGroup>
-                <MenuGroup>
-                    <MenuDivider />
-                    <MenuItem>v0.2.0</MenuItem>
+                    <MenuItem>v0.2.1</MenuItem>
                 </MenuGroup>
                 <MenuGroup>
                     {firebase.isAuthenticated && (

@@ -28,29 +28,26 @@ const verify = (dispatch, showSuccessToast) => {
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
             dispatch({ type: 'FIREBASE_AUTHENTICATION_SUCCESS', payload: { user } });
-            var refUpdates = firebase.database().ref('locks');
-            refUpdates.on('value', (snapshot) => {
-                dispatch(isFetching);
-                const snapshotValue = snapshot.val();
-                if (snapshotValue) {
-                    dispatch({
-                        type: 'POPULATE_DATA',
-                        payload: {
-                            locks: snapshotValue
-                        }
-                    });
-                    dispatch(fetchingComplete);
-                }
-                else {
-                    dispatch(fetchingComplete);
-                }
-            })
         }
-        else {
-            dispatch(authValidationComplete);
-            dispatch(fetchingComplete);
-        }
-
+        var refUpdates = firebase.database().ref('locks');
+        refUpdates.on('value', (snapshot) => {
+            dispatch(isFetching);
+            const snapshotValue = snapshot.val();
+            if (snapshotValue) {
+                dispatch({
+                    type: 'POPULATE_DATA',
+                    payload: {
+                        locks: snapshotValue
+                    }
+                });
+                dispatch(fetchingComplete);
+            }
+            else {
+                dispatch(fetchingComplete);
+            }
+        })
+        dispatch(fetchingComplete);
+        dispatch(authValidationComplete);
     })
 }
 

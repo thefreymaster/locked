@@ -1,6 +1,6 @@
 import { Box, Button, SlideFade, Spinner, toast, useDisclosure } from '@chakra-ui/react';
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import firebaseApi from '../../api/firebase';
 import Font from '../../common/Font';
 import Wrapper from '../../common/Wrapper';
@@ -13,6 +13,7 @@ import DeviceWrapper from '../../common/DeviceWrapper';
 const Welcome = () => {
     const { firebase, dispatch } = useGlobalState();
     const { isOpen, onToggle } = useDisclosure();
+    const histroy = useHistory();
 
     React.useEffect(() => {
         onToggle();
@@ -61,12 +62,14 @@ const Welcome = () => {
                         <Box display="flex" flexDir="column" justifyContent="center" alignItems="center">
                             <Font fontWeight={900} fontSize={isMobile ? 72 : 124} variant="primary">Locked</Font>
                             <Font fontWeight={600} fontSize={18}>Find a secure safe bike rack</Font>
+                            <Box mt={5} />
+                            <Button size="lg" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => histroy.push('/map')}>Find a Bike Rack</Button>
                             <Box mt={5} display="flex" flexDir={isMobile ? "column" : "row"}>
-                                <Button size="lg" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => firebaseApi.auth.signIn(dispatch, showSuccessToast)}>Sign Up With Google</Button>
-                                <Box m={2} d="flex" justifyContent="center" alignItems="center">
+                                <Button size="sm" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => firebaseApi.auth.signIn(dispatch, showSuccessToast)}>Sign Up With Google</Button>
+                                <Box m={1} d="flex" justifyContent="center" alignItems="center">
                                     Or
                                 </Box>
-                                <Button size="lg" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => firebaseApi.auth.signIn(dispatch, showSuccessToast)}>Sign In With Google</Button>
+                                <Button size="sm" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => firebaseApi.auth.signIn(dispatch, showSuccessToast)}>Sign In With Google</Button>
                             </Box>
                         </Box>
                     </Wrapper>

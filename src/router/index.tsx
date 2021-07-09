@@ -21,7 +21,11 @@ const Router = () => {
     return (
         <Switch>
             <Route exact path="/">
-                <Welcome />
+                {
+                    firebase.isAuthenticated ?
+                        <Redirect to="/map" /> :
+                        <Welcome />
+                }
             </Route>
             <Route exact path="/request">
                 <RequestLocation />
@@ -36,10 +40,18 @@ const Router = () => {
                 <LocksMap />
             </Route>
             <Route exact path="/edit/:id">
-                <AddRack />
+                {
+                    firebase.isAuthenticated ?
+                        <AddRack /> :
+                        <Redirect to="/" />
+                }
             </Route>
             <Route exact path="/add">
-                <AddRack />
+                {
+                    firebase.isAuthenticated ?
+                        <AddRack /> :
+                        <Redirect to="/" />
+                }
             </Route>
             <Route exact path="/*">
                 <Redirect to="/" />

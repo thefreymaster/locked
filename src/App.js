@@ -29,9 +29,9 @@ const App = () => {
     if (navigator.standalone) {
       dispatch(isInstalledApp)
     }
-    // if (navigator.geolocation) {
-    //   getGPSCoordinates(dispatch);
-    // }
+    if (navigator.geolocation) {
+      getGPSCoordinates(dispatch);
+    }
     firebaseApi.verify(dispatch, showSuccessToast);
   }, [])
 

@@ -21,7 +21,7 @@ const Header = () => {
         <Flex style={{ ...fixed }}
             transitionBackground
             display="flex"
-            backgroundColor="#ffffff80"
+            // backgroundColor="#ffffff80"
             alignItems="center"
             padding={meta.isInstalled ? "50px 20px 15px 20px" : "15px 20px"}
             className="header"
