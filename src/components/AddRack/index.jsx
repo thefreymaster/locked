@@ -92,7 +92,7 @@ const AddRack = (props) => {
                                                 {({ field, form }) => (
                                                     <FormControl colorScheme="red" isRequired isInvalid={form.errors.name && form.touched.name}>
                                                         <FormLabel htmlFor="name">Cross Streets</FormLabel>
-                                                        <Input {...field} variant="filled" id="name" placeholder="Where did you go?" autoFocus={!id} autoCorrect={false} _autofill={false} />
+                                                        <Input {...field} variant="filled" id="name" placeholder="Pearl & Lopez" autoCorrect={false} _autofill={false} />
                                                     </FormControl>
                                                 )}
                                             </Field>
@@ -284,6 +284,7 @@ const AddRack = (props) => {
                                     )}
                                     <AbsoluteButton right={100} onClick={() => {
                                         formProps.resetForm();
+                                        history.push('/map');
                                         props.onClose();
                                     }}>Cancel</AbsoluteButton>
                                     {/* {page === 1 && <AbsoluteButton left={20} right="none" onClick={() => history.goBack()}><BiArrowBack /></AbsoluteButton>} */}

@@ -40,18 +40,10 @@ const Router = () => {
                 <LocksMap />
             </Route>
             <Route exact path="/edit/:id">
-                {
-                    firebase.isAuthenticated ?
-                        <AddRack /> :
-                        <Redirect to="/" />
-                }
+                <LocksMap />
             </Route>
             <Route exact path="/add">
-                {
-                    firebase.isAuthenticated ?
-                        <AddRack /> :
-                        <Redirect to="/" />
-                }
+                <LocksMap />
             </Route>
             <Route exact path="/*">
                 <Redirect to="/" />
