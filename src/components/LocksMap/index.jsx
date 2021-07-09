@@ -2,7 +2,7 @@ import ReactMapboxGl, { Marker, Popup } from 'react-mapbox-gl';
 import React from 'react';
 import { useGlobalState } from '../../providers/root';
 import { Redirect } from 'react-router-dom';
-import { Spinner, Fade, Box, CloseButton, Image, Badge, Button, Divider } from '@chakra-ui/react';
+import { Spinner, Fade, Box, CloseButton, Image, Badge, Button, Divider, useDisclosure } from '@chakra-ui/react';
 import AbsoluteButton from '../../common/AbsoluteButton';
 import { useHistory, useParams } from 'react-router-dom';
 import { BsFillShieldLockFill } from 'react-icons/bs';
@@ -19,7 +19,8 @@ import { AiFillStar } from 'react-icons/ai';
 import { BiEditAlt, BiTrash } from 'react-icons/bi';
 import StarRating from '../../components/StarRating';
 import DeleteRack from '../DeleteRack';
-import { debounce } from 'lodash';
+import DrawerContainer from '../../common/DrawerContainer';
+import AddRack from '../AddRack';
 
 const Map = ReactMapboxGl({
     accessToken:
@@ -27,14 +28,9 @@ const Map = ReactMapboxGl({
 });
 
 const UserMap = () => {
-    const { coordinates, firebase } = useGlobalState();
+    const { coordinates } = useGlobalState();
     const { id } = useParams();
 
-    // if (!firebase.isAuthenticated) {
-    //     return (
-    //         <Redirect to="/" />
-    //     )
-    // }
     if (!coordinates.hasCoordinates) {
         if (id) {
             return (
@@ -54,7 +50,8 @@ const UserMap = () => {
 
 const MapContainer = (props) => {
     let initialViewport;
-    const { locks, coordinates, firebase, dispatch } = useGlobalState();
+    const { locks, coordinates, firebase } = useGlobalState();
+    const { isOpen, onOpen, onClose } = useDisclosure();
     const lock = locks[props.id];
 
     if (props.id) {
@@ -120,7 +117,12 @@ const MapContainer = (props) => {
                 )}
                 <MarkerContainer coordinates={coordinates} />
             </Map>
-            {firebase.isAuthenticated && <AbsoluteButton onClick={() => history.push('/add')}>Add</AbsoluteButton>}
+            {firebase.isAuthenticated && (
+                <AbsoluteButton onClick={() => onOpen()}>Add</AbsoluteButton>
+            )}
+            <DrawerContainer title="Add Bike Rack" isOpen={isOpen} onClose={onClose}>
+                <AddRack onClose={onClose} />
+            </DrawerContainer>
         </>
     )
 }

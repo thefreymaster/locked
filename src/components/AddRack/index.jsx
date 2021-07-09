@@ -7,7 +7,6 @@ import {
 import { Field, Form, Formik } from 'formik';
 import { useHistory, Redirect } from 'react-router-dom';
 import React from 'react';
-// import { cuisines } from '../../json/cuisines';
 import { states } from '../../json/states';
 import AbsoluteButton from '../../common/AbsoluteButton';
 import { useGlobalState } from '../../providers/root';
@@ -17,7 +16,6 @@ import { initialValues } from '../../constants';
 import { getCoordinates } from '../../utils/gps';
 import { useParams } from 'react-router-dom';
 import DeviceWrapper from '../../common/DeviceWrapper';
-import Wrapper from '../../common/Wrapper';
 import { MdGpsFixed } from 'react-icons/md'
 import { calculateOverallRating } from '../../utils/calcOverallRating';
 import { isMobile } from 'react-device-detect';
@@ -74,7 +72,7 @@ const AddRack = (props) => {
 
     return (
         <Fade in>
-            <Wrapper justifyContent="flex-start">
+            <Box margin="0px 0px 60px 0px" display="flex" justifyContent="center" alignItems="center">
                 <DeviceWrapper>
                     <Formik
                         initialValues={locks[id] || initialValues}
@@ -85,7 +83,7 @@ const AddRack = (props) => {
                             }, 1000)
                         }}
                     >
-                        {(props) => {
+                        {(formProps) => {
                             return (
                                 <Form>
                                     {page === 1 && (
@@ -153,7 +151,7 @@ const AddRack = (props) => {
                                             <Box margin="15px" />
                                             <Box marginBottom="15px">
                                                 <Button isLoading={isGettingCoordinates} minW="100%" onClick={() => {
-                                                    handleGetGPSCoordinates(props.setFieldValue, setGpsError)
+                                                    handleGetGPSCoordinates(formProps.setFieldValue, setGpsError)
                                                 }}>Get Coordinates</Button>
                                             </Box>
                                             {gpsError && (
@@ -238,10 +236,10 @@ const AddRack = (props) => {
                                                 )}
                                             </Field>
                                             <Divider margin="15px 0px 15px 0px" />
-                                            {Object.entries(props.values.ratings).length === 3 && (
-                                                <Fade in={Object.entries(props.values.ratings).length === 3}>
+                                            {Object.entries(formProps.values.ratings).length === 3 && (
+                                                <Fade in={Object.entries(formProps.values.ratings).length === 3}>
                                                     <Tag size="lg" key="lg" variant="solid" colorScheme="gray">
-                                                        Overall Rating: {calculateOverallRating({ ratings: props.values.ratings })}
+                                                        Overall Rating: {calculateOverallRating({ ratings: formProps.values.ratings })}
                                                     </Tag>
                                                 </Fade>
                                             )}
@@ -262,13 +260,13 @@ const AddRack = (props) => {
                                                     <Photo name={locks[id].name} imageUrlAbsolute={locks[id].imageUrlAbsolute} />
                                                 </Box>
                                             )}
-                                            <AbsoluteButton disabled={validatePage3({ values: props.values })} isLoading={meta.fetching} onClick={() => {
+                                            <AbsoluteButton disabled={validatePage3({ values: formProps.values })} isLoading={meta.fetching} onClick={() => {
                                                 if (id) {
-                                                    firebaseApi.update({ postData: props.values, uid: firebase.user.uid, dispatch, history, itemId: id, toast: showSuccessEditToast })
+                                                    firebaseApi.update({ postData: formProps.values, uid: firebase.user.uid, dispatch, history, itemId: id, toast: showSuccessEditToast })
                                                 }
                                                 else {
                                                     firebaseApi.add({
-                                                        postData: props.values,
+                                                        postData: formProps.values,
                                                         uid: firebase.user.uid,
                                                         dispatch,
                                                         history,
@@ -277,7 +275,7 @@ const AddRack = (props) => {
                                                         lng: coordinates.longitude
                                                     })
                                                 }
-                                                console.log(props.values);
+                                                console.log(formProps.values);
                                             }}>
                                                 Save
                                             </AbsoluteButton>
@@ -285,27 +283,22 @@ const AddRack = (props) => {
 
                                     )}
                                     <AbsoluteButton right={100} onClick={() => {
-                                        props.resetForm();
-                                        if (id) {
-                                            history.goBack();
-                                        }
-                                        else {
-                                            history.push("/");
-                                        }
+                                        formProps.resetForm();
+                                        props.onClose();
                                     }}>Cancel</AbsoluteButton>
-                                    {page === 1 && <AbsoluteButton left={20} right="none" onClick={() => history.goBack()}><BiArrowBack /></AbsoluteButton>}
+                                    {/* {page === 1 && <AbsoluteButton left={20} right="none" onClick={() => history.goBack()}><BiArrowBack /></AbsoluteButton>} */}
                                     {page === 2 && <AbsoluteButton left={20} right="none" onClick={() => setPage(1)}><BiArrowBack /></AbsoluteButton>}
                                     {page === 3 && <AbsoluteButton left={20} right="none" onClick={() => setPage(2)}><BiArrowBack /></AbsoluteButton>}
                                     {page === 4 && <AbsoluteButton left={20} right="none" onClick={() => setPage(3)}><BiArrowBack /></AbsoluteButton>}
 
-                                    {page === 1 && <AbsoluteButton disabled={validatePage1({ values: props.values }) || isGettingCoordinates} onClick={() => setPage(2)}>Next</AbsoluteButton>}
-                                    {page === 2 && <AbsoluteButton disabled={validatePage2({ values: props.values })} onClick={() => setPage(3)}>Next</AbsoluteButton>}
+                                    {page === 1 && <AbsoluteButton disabled={validatePage1({ values: formProps.values }) || isGettingCoordinates} onClick={() => setPage(2)}>Next</AbsoluteButton>}
+                                    {page === 2 && <AbsoluteButton disabled={validatePage2({ values: formProps.values })} onClick={() => setPage(3)}>Next</AbsoluteButton>}
                                 </Form>
                             )
                         }}
                     </Formik>
                 </DeviceWrapper>
-            </Wrapper>
+            </Box>
         </Fade>
     )
 }
