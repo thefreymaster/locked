@@ -47,7 +47,7 @@ export const getCoordinatesOutsideForm = (setIsGettingCoordinates, setGpsError, 
     );
 }
 
-export const getGPSCoordinates = (dispatch, user) => {
+export const getGPSCoordinates = (dispatch, verify) => {
     const options = {
         timeout: 10000,
         enableHighAccuracy: true,
@@ -56,10 +56,11 @@ export const getGPSCoordinates = (dispatch, user) => {
         (position) => {
             const { latitude } = position.coords;
             const { longitude } = position.coords;
-            if(user){
-                addUserLocation({ user, dispatch })
-            }
-            dispatch({ type: 'SET_GPS_COORDINATES', payload: { latitude, longitude } })
+            // if(user){
+            //     addUserLocation({ user, dispatch })
+            // }
+            dispatch({ type: 'SET_GPS_COORDINATES', payload: { latitude, longitude } });
+            verify();
         },
         () => {
             dispatch({ type: 'HAS_COORDINATES_ERROR' })

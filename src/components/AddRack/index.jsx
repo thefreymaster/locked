@@ -27,7 +27,7 @@ import firebaseApi from '../../api/firebase';
 
 const AddRack = (props) => {
     let { id } = useParams();
-    const { firebase, meta, dispatch, locks } = useGlobalState();
+    const { firebase, meta, dispatch, locks, coordinates } = useGlobalState();
     const history = useHistory();
 
     const toast = useToast();
@@ -267,7 +267,15 @@ const AddRack = (props) => {
                                                     firebaseApi.update({ postData: props.values, uid: firebase.user.uid, dispatch, history, itemId: id, toast: showSuccessEditToast })
                                                 }
                                                 else {
-                                                    firebaseApi.add({ postData: props.values, uid: firebase.user.uid, dispatch, history, toast: showSuccessToast })
+                                                    firebaseApi.add({
+                                                        postData: props.values,
+                                                        uid: firebase.user.uid,
+                                                        dispatch,
+                                                        history,
+                                                        toast: showSuccessToast,
+                                                        lat: coordinates.latitude,
+                                                        lng: coordinates.longitude
+                                                    })
                                                 }
                                                 console.log(props.values);
                                             }}>

@@ -54,7 +54,7 @@ const UserMap = () => {
 
 const MapContainer = (props) => {
     let initialViewport;
-    const { locks, coordinates, firebase } = useGlobalState();
+    const { locks, coordinates, firebase, dispatch } = useGlobalState();
     const lock = locks[props.id];
 
     if (props.id) {

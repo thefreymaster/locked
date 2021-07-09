@@ -11,7 +11,7 @@ import { isInstalledApp } from './actions';
 
 const App = () => {
 
-  const { dispatch } = useGlobalState();
+  const { dispatch, coordinates } = useGlobalState();
   const toast = useToast();
 
 
@@ -30,9 +30,8 @@ const App = () => {
       dispatch(isInstalledApp)
     }
     if (navigator.geolocation) {
-      getGPSCoordinates(dispatch);
+      getGPSCoordinates(dispatch, () => firebaseApi.verify({ lat: coordinates.latitude, lng: coordinates.longitude, dispatch, showSuccessToast }));
     }
-    firebaseApi.verify(dispatch, showSuccessToast);
   }, [])
 
   return (

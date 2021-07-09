@@ -7,7 +7,7 @@ import "firebase/storage";
 
 import { authValidationComplete, fetchingComplete, isFetching } from "../actions";
 
-const verify = (dispatch, showSuccessToast) => {
+const verify = ({ lat, lng, dispatch, showSuccessToast }) => {
     firebase.auth()
         .getRedirectResult()
         .then((result) => {
@@ -29,11 +29,13 @@ const verify = (dispatch, showSuccessToast) => {
         if (user) {
             dispatch({ type: 'FIREBASE_AUTHENTICATION_SUCCESS', payload: { user } });
         }
-        var refUpdates = firebase.database().ref('locks');
+        const dbKey = `${lng.toFixed(0) + lat.toFixed(0)}`;
+        var refUpdates = firebase.database().ref(`locks/${dbKey}`);
         refUpdates.on('value', (snapshot) => {
             dispatch(isFetching);
             const snapshotValue = snapshot.val();
             if (snapshotValue) {
+                console.log(snapshotValue)
                 dispatch({
                     type: 'POPULATE_DATA',
                     payload: {
@@ -83,9 +85,9 @@ export const addUserLocation = ({ postData, user, dispatch }) => {
     });
 }
 
-const add = ({ postData, uid, dispatch, history, toast }) => {
+const add = ({ postData, uid, dispatch, history, toast, lat, lng }) => {
     dispatch(isFetching);
-    var listRef = firebase.database().ref(`locks`);
+    var listRef = firebase.database().ref(`locks/${lng.toFixed(0) + lat.toFixed(0)}`);
     listRef.push({ ...postData, createdDate: new Date().toISOString(), author: uid }).then(() => {
         toast();
         dispatch(fetchingComplete);
@@ -145,6 +147,29 @@ const getImage = ({ id, fileUrl, dispatch }) => {
         .then((url) => dispatch({ type: 'SET_IMAGE_ABSOLUTE_URL', payload: { url, id } }))
 }
 
+const refresh = ({ lat, lng, dispatch }) => {
+    const dbKey = `${lng.toFixed(0) + lat.toFixed(0)}`;
+    var refUpdates = firebase.database().ref(`locks/${dbKey}`);
+    refUpdates.on('value', (snapshot) => {
+        dispatch(isFetching);
+        const snapshotValue = snapshot.val();
+        if (snapshotValue) {
+            console.log(snapshotValue)
+            dispatch({
+                type: 'POPULATE_DATA',
+                payload: {
+                    locks: snapshotValue
+                }
+            });
+            dispatch(fetchingComplete);
+        }
+        else {
+            dispatch(fetchingComplete);
+        }
+    })
+
+}
+
 const firebaseApi = {
     verify,
     auth: {
@@ -155,6 +180,7 @@ const firebaseApi = {
     update,
     remove,
     upload,
+    refresh,
     getImage,
 }
 
