@@ -2,7 +2,7 @@ import ReactMapboxGl, { Marker, Popup } from 'react-mapbox-gl';
 import React from 'react';
 import { useGlobalState } from '../../providers/root';
 import { Redirect } from 'react-router-dom';
-import { Spinner, Box, useDisclosure } from '@chakra-ui/react';
+import { Spinner, Box, useDisclosure, useToast } from '@chakra-ui/react';
 import AbsoluteButton from '../../common/AbsoluteButton';
 import { useHistory, useParams } from 'react-router-dom';
 import { BsFillShieldLockFill } from 'react-icons/bs';
@@ -13,6 +13,7 @@ import DeviceWrapper from '../../common/DeviceWrapper';
 import DrawerContainer from '../../common/DrawerContainer';
 import AddRack from '../AddRack';
 import RackPopup from './Popup';
+import { getLiveGPSCoordinates } from '../../utils/gps';
 
 const Map = ReactMapboxGl({
     accessToken:
@@ -175,8 +176,15 @@ const BikeRacksContainer = (props) => {
 }
 
 const MarkerContainer = (props) => {
+    const { dispatch } = useGlobalState();
+    const { toast } = useToast();
+
+    React.useLayoutEffect(() => {
+        getLiveGPSCoordinates(dispatch, toast);
+    }, [])
+
     return (
-        <Marker key="you-marker" coordinates={[props.coordinates.longitude, props.coordinates.latitude]}>
+        <Marker style={{ zIndex: 2 }} key="you-marker" coordinates={[props.coordinates.longitude, props.coordinates.latitude]}>
             <div className="you" />
         </Marker>
     )

@@ -2,7 +2,7 @@ import {
     Input, Stack, Textarea, Select, FormControl, FormLabel, Box, ButtonGroup, Button, InputGroup, Alert,
     AlertIcon,
     AlertTitle,
-    AlertDescription, InputLeftElement, CloseButton, Tag, Spinner, Divider, Fade, useToast
+    AlertDescription, InputLeftElement, CloseButton, Tag, Spinner, Divider, Fade, useToast,
 } from '@chakra-ui/react';
 import { Field, Form, Formik } from 'formik';
 import { useHistory, Redirect } from 'react-router-dom';
@@ -26,6 +26,8 @@ import firebaseApi from '../../api/firebase';
 const AddRack = (props) => {
     let { id } = useParams();
     const { firebase, meta, dispatch, locks, coordinates } = useGlobalState();
+    const { dbKey} = meta;
+    const [isUploading, setIsUploading] = React.useState(false);
     const history = useHistory();
 
     const toast = useToast();
@@ -251,7 +253,7 @@ const AddRack = (props) => {
                                                 {({ field, form }) => (
                                                     <FormControl>
                                                         <FormLabel>Upload Image</FormLabel>
-                                                        <Upload form={form} />
+                                                        <Upload form={form} setIsUploading={setIsUploading} isUploading={isUploading} />
                                                     </FormControl>
                                                 )}
                                             </Field>
@@ -260,22 +262,31 @@ const AddRack = (props) => {
                                                     <Photo name={locks[id].name} imageUrlAbsolute={locks[id].imageUrlAbsolute} />
                                                 </Box>
                                             )}
-                                            <AbsoluteButton disabled={validatePage3({ values: formProps.values })} isLoading={meta.fetching} onClick={() => {
+                                            <AbsoluteButton disabled={validatePage3({ values: formProps.values }) || isUploading} loading={isUploading || meta.fetching} onClick={() => {
                                                 if (id) {
-                                                    firebaseApi.update({ postData: formProps.values, uid: firebase.user.uid, dispatch, history, itemId: id, toast: showSuccessEditToast })
+                                                    firebaseApi.update({ 
+                                                        postData: formProps.values, 
+                                                        uid: firebase.user.uid, 
+                                                        dispatch, 
+                                                        itemId: id, 
+                                                        toast: showSuccessEditToast,
+                                                        onClose: props.onClose,
+                                                        history,
+                                                        dbKey,
+                                                    })
                                                 }
                                                 else {
                                                     firebaseApi.add({
                                                         postData: formProps.values,
                                                         uid: firebase.user.uid,
                                                         dispatch,
-                                                        history,
                                                         toast: showSuccessToast,
                                                         lat: coordinates.latitude,
-                                                        lng: coordinates.longitude
+                                                        lng: coordinates.longitude,
+                                                        onClose: props.onClose,
+                                                        history,
                                                     })
                                                 }
-                                                console.log(formProps.values);
                                             }}>
                                                 Save
                                             </AbsoluteButton>

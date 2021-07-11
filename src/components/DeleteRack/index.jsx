@@ -14,7 +14,8 @@ import { useHistory } from 'react-router-dom';
 import { useGlobalState } from "../../providers/root";
 
 const DeleteRack = (props) => {
-    const { dispatch, firebase } = useGlobalState();
+    const { dispatch, firebase, meta } = useGlobalState();
+    const { dbKey } = meta;
     const history = useHistory();
 
     const onClose = () => props.setIsOpen(false);
@@ -55,7 +56,7 @@ const DeleteRack = (props) => {
                         </Button>
                         <Button isLoading={isDeleting} colorScheme="red" onClick={() => {
                             setIsDeleting(true);
-                            firebaseApi.remove({ uid: firebase.user.uid, dispatch, history, itemId: props.id, onClose, setIsDeleting, toast: showSuccessToast })
+                            firebaseApi.remove({ uid: firebase.user.uid, dispatch, history, itemId: props.id, onClose, setIsDeleting, toast: showSuccessToast, dbKey })
                         }} ml={3}>
                             Delete
                         </Button>

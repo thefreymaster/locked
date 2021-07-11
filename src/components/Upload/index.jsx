@@ -14,12 +14,13 @@ const Upload = (props) => {
         reader.onload = (e) => setPath(e.target.result);
         reader.readAsDataURL(files[0]);
         setPath("");
-        firebaseApi.upload({ file: files[0], uid: firebase.user.uid, form: props.form })
+        props.setIsUploading(true);
+        firebaseApi.upload({ file: files[0], uid: firebase.user.uid, form: props.form, setIsUploading: props.setIsUploading })
     }
     return (
         <>
             <Button minW="100%">
-                <label for="file-upload">Select Photo</label>
+                <label htmlFor="file-upload">Select Photo</label>
             </Button>
             <input onChange={(e) => handleOnChange(e)} id="file-upload" type="file" style={{ display: "none" }} />
             {path && (

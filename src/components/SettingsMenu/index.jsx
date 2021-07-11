@@ -46,7 +46,7 @@ const SettingsMenu = () => {
     }
     return (
         <Menu autoSelect={false}>
-            <MenuButton isDisabled={firebase.isValidatingAuthentication}>
+            <MenuButton disabled={firebase.isValidatingAuthentication}>
                 <SettingsMenuButton firebase={firebase} meta={meta} />
             </MenuButton>
             <MenuList>

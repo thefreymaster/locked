@@ -1,4 +1,5 @@
 import imageCompression from 'browser-image-compression';
+import { v4 as uuidv4 } from 'uuid';
 import firebase from "firebase/app";
 import "firebase/analytics";
 import "firebase/auth";
@@ -11,7 +12,6 @@ const initialize = ({ lat, lng, dispatch, showSuccessToast }) => {
     firebase.auth()
         .getRedirectResult()
         .then((result) => {
-            console.log(result)
             if (result.credential) {
                 dispatch({ type: 'FIREBASE_AUTHENTICATION_SUCCESS', payload: { user: result.user } });
                 setTimeout(() => {
@@ -30,12 +30,12 @@ const initialize = ({ lat, lng, dispatch, showSuccessToast }) => {
             dispatch({ type: 'FIREBASE_AUTHENTICATION_SUCCESS', payload: { user } });
         }
         const dbKey = `${lng.toFixed(0) + lat.toFixed(0)}`;
+        dispatch({ type: 'SET_DB_KEY', payload: { dbKey } })
         var refUpdates = firebase.database().ref(`locks/${dbKey}`);
         refUpdates.on('value', (snapshot) => {
             dispatch(isFetching);
             const snapshotValue = snapshot.val();
             if (snapshotValue) {
-                console.log(snapshotValue)
                 dispatch({
                     type: 'POPULATE_DATA',
                     payload: {
@@ -85,30 +85,32 @@ export const addUserLocation = ({ postData, user, dispatch }) => {
     });
 }
 
-const add = ({ postData, uid, dispatch, history, toast, lat, lng }) => {
+const add = ({ postData, uid, dispatch, toast, lat, lng, onClose, history }) => {
     dispatch(isFetching);
     var listRef = firebase.database().ref(`locks/${lng.toFixed(0) + lat.toFixed(0)}`);
     listRef.push({ ...postData, createdDate: new Date().toISOString(), author: uid }).then(() => {
         toast();
         dispatch(fetchingComplete);
-        history.push("/");
+        onClose();
+        history.push('/map');
     });
 }
 
-const update = ({ postData, uid, dispatch, history, itemId, toast }) => {
+const update = ({ postData, dispatch, itemId, toast, onClose, history, dbKey }) => {
     dispatch(isFetching);
-    var restaurantListRef = firebase.database().ref(`users/${uid}/restaurants/${itemId}`);
+    var restaurantListRef = firebase.database().ref(`locks/${dbKey}/${itemId}`);
     console.log({ ...postData, modifiedData: new Date().toISOString() })
     restaurantListRef.update({ ...postData, modifiedData: new Date().toISOString() }).then(() => {
         toast();
-        dispatch(fetchingComplete)
-        history.goBack();
+        dispatch(fetchingComplete);
+        onClose();
+        history.push('/map');
     });
 }
 
-const remove = ({ uid, dispatch, history, itemId, onClose, setIsDeleting, toast }) => {
+const remove = ({ dispatch, history, itemId, onClose, setIsDeleting, toast, dbKey }) => {
     dispatch(isFetching);
-    var restaurantListRef = firebase.database().ref(`locks/${itemId}`);
+    var restaurantListRef = firebase.database().ref(`locks/${dbKey}/${itemId}`);
     restaurantListRef.remove().then(() => {
         toast();
         dispatch(fetchingComplete);
@@ -118,10 +120,10 @@ const remove = ({ uid, dispatch, history, itemId, onClose, setIsDeleting, toast 
     });
 }
 
-const upload = ({ uid, file, form }) => {
+const upload = ({ uid, file, form, setIsUploading }) => {
     const storage = firebase.storage();
     const storageRef = storage.ref();
-    const imageRef = storageRef.child(`images/${uid}/${file.name}`);
+    const imageRef = storageRef.child(`images/${uid}/${uuidv4()}`);
     const options = {
         maxSizeMB: 0.5,
         useWebWorker: true
@@ -133,6 +135,7 @@ const upload = ({ uid, file, form }) => {
                 const { fullPath } = metadata;
                 form.setFieldValue("imageUrl", fullPath);
                 console.log('Uploaded a blob or file!');
+                setIsUploading(false);
             });
         })
         .catch(function (error) {
@@ -154,7 +157,6 @@ const refresh = ({ lat, lng, dispatch }) => {
         dispatch(isFetching);
         const snapshotValue = snapshot.val();
         if (snapshotValue) {
-            console.log(snapshotValue)
             dispatch({
                 type: 'POPULATE_DATA',
                 payload: {

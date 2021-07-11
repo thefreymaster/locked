@@ -15,12 +15,17 @@ export interface IDefaultState {
         isDay: boolean;
         isInstalled: boolean;
         containsLocks?: boolean;
+        dbKey: string;
     },
     coordinates: {
         latitude?: number;
         longitude?: number;
         hasCoordinates: boolean;
         hasCoordinatesError: boolean;
+        live: {
+            latitude?: number;
+            longitude?: number;
+        }
     },
     locks: Array<{
         name: string;
@@ -46,10 +51,12 @@ const defaultState: IDefaultState = {
         fetching: true,
         isDay: new Date().getHours() >= 6 && new Date().getHours() <= 17 ? true : false,
         isInstalled: false,
+        dbKey: '',
     },
     coordinates: {
         hasCoordinates: false,
         hasCoordinatesError: false,
+        live: {}
     },
     locks: [],
     dispatch: () => { },
