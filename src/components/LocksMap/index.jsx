@@ -6,6 +6,7 @@ import { Spinner, Box, useDisclosure, useToast } from '@chakra-ui/react';
 import AbsoluteButton from '../../common/AbsoluteButton';
 import { useHistory, useParams } from 'react-router-dom';
 import { BsFillShieldLockFill } from 'react-icons/bs';
+import { AiOutlineCompass } from 'react-icons/ai';
 import './users-map.scss';
 import { calculateOverallRating } from '../../utils/calcOverallRating';
 import { PRIMARY_GREEN, PRIMARY_YELLOW, PRIMARY_RED } from '../../constants';
@@ -14,6 +15,7 @@ import DrawerContainer from '../../common/DrawerContainer';
 import AddRack from '../AddRack';
 import RackPopup from './Popup';
 import { getLiveGPSCoordinates } from '../../utils/gps';
+import { isMobile } from 'react-device-detect';
 
 const Map = ReactMapboxGl({
     accessToken:
@@ -118,6 +120,16 @@ const MapContainer = (props) => {
                     onOpen();
                 }}>Add</AbsoluteButton>
             )}
+            <AbsoluteButton left={20} right="none" onClick={() => {
+                history.push("/map");
+                setViewport({
+                    ...viewport,
+                    latitude: coordinates.latitude,
+                    longitude: coordinates.longitude,
+                })
+            }}>
+                <AiOutlineCompass />
+            </AbsoluteButton>
             <DrawerContainer title="Add Bike Rack" isOpen={isOpen} onClose={() => {
                 history.push('/map');
                 onClose()
@@ -157,10 +169,13 @@ const BikeRacksContainer = (props) => {
 
     return Object.entries(locks).map(([key, value]) => {
         const { location, ratings } = value;
+        const latAdjustmentPopup = isMobile ? 0.00015590001135 : 0.00015590001135;
+        const latAdjustmentViewport = isMobile ? 0.00139590001135 : 0.00199590001135;
+
         return (
             <Marker onClick={() => {
-                props.setPopupViewport({ visible: true, coordinates: [value.location.long, value.location.lat + 0.00015590001135], lock: value, id: key })
-                props.setViewport({ zoom: 16, latitude: location.lat + 0.00199590001135, longitude: location.long });
+                props.setPopupViewport({ visible: true, coordinates: [value.location.long, value.location.lat + latAdjustmentPopup], lock: value, id: key })
+                props.setViewport({ zoom: 16, latitude: location.lat + latAdjustmentViewport, longitude: location.long });
                 history.push(`/map/${key}`);
             }}
                 key={`friend-marker-${key}`}
@@ -179,9 +194,12 @@ const MarkerContainer = (props) => {
     const { dispatch } = useGlobalState();
     const { toast } = useToast();
 
-    React.useLayoutEffect(() => {
-        getLiveGPSCoordinates(dispatch, toast);
-    }, [])
+    // React.useLayoutEffect(() => {
+    //     getLiveGPSCoordinates(dispatch, toast);
+    // }, [])
+
+    // const coordinates = getLiveGPSCoordinates(dispatch, toast);
+    // console.log(coordinates)
 
     return (
         <Marker style={{ zIndex: 2 }} key="you-marker" coordinates={[props.coordinates.longitude, props.coordinates.latitude]}>

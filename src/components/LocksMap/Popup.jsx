@@ -22,15 +22,15 @@ const RackPopup = (props) => {
     const history = useHistory();
 
     React.useLayoutEffect(() => {
-        if (lock) {
+        if (lock && lock?.imageUrl) {
             firebaseApi.getImage({ fileUrl: lock.imageUrl, dispatch, id: props.id });
         }
     }, [lock, lock.imageUrl]);
 
     const inline = {
         borderRadius: 10,
-        minWidth: 360,
-        maxWidth: 360,
+        minWidth: 320,
+        maxWidth: 320,
     }
     React.useLayoutEffect(() => {
         setTimeout(() => {
@@ -49,11 +49,9 @@ const RackPopup = (props) => {
                     }} />
                 </Box>
                 <Image minH={isMobile ? 100 : 250} objectFit="cover" bg="red.800" color="white" loading="eager" borderRadius="10px 10px 0px 0px" name={lock.name} src={lock.imageUrlAbsolute} />
-                <Box display="flex" flexDirection="row" padding="15px 15px 0px 15px">
+                <Box display="flex" flexDirection="row" padding="15px 15px 0px 15px" justifyContent="center" alignItems="center">
                     <RackRecommendation recommended={lock.recommended} />
-                    <Box mr={1} />
                     <RackSize size={lock.size} />
-                    <Box flexGrow={1} />
                     <Badge>
                         <Box display="flex" direction="row" justifyContent="center" alignItems="center">
                             <Font>Overall</Font>

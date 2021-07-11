@@ -71,26 +71,29 @@ export const getGPSCoordinates = (dispatch, verify) => {
 }
 
 export const getLiveGPSCoordinates = (dispatch, toast) => {
+    let lat, long;
     const options = {
         timeout: 10000, enableHighAccuracy: true, maximumAge: 0
     }
-    return navigator.geolocation.watchPosition(
+    navigator.geolocation.watchPosition(
         (position) => {
             const { latitude, longitude } = position.coords;
-            dispatch({ type: 'SET_USER_GPS_COORDINATES', payload: { latitude, longitude } });
+            lat = latitude;
+            long = longitude;
         },
         (e) => {
-            dispatch({ type: 'HAS_COORDINATES_ERROR' });
-            toast({
-                title: "Location error.",
-                description: "Your location could not be determined.",
-                status: "error",
-                duration: 9000,
-                isClosable: true,
-                position: "bottom-left",
-            })
+            // dispatch({ type: 'HAS_COORDINATES_ERROR' });
+            // toast({
+            //     title: "Location error.",
+            //     description: "Your location could not be determined.",
+            //     status: "error",
+            //     duration: 9000,
+            //     isClosable: true,
+            //     position: "bottom-left",
+            // })
             console.log(e)
         },
         options
     );
+    return { lat, long };
 }

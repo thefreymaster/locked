@@ -9,6 +9,7 @@ import "firebase/storage";
 import { authValidationComplete, fetchingComplete, isFetching } from "../actions";
 
 const initialize = ({ lat, lng, dispatch, showSuccessToast }) => {
+    debugger;
     firebase.auth()
         .getRedirectResult()
         .then((result) => {
@@ -29,27 +30,30 @@ const initialize = ({ lat, lng, dispatch, showSuccessToast }) => {
         if (user) {
             dispatch({ type: 'FIREBASE_AUTHENTICATION_SUCCESS', payload: { user } });
         }
-        const dbKey = `${lng.toFixed(0) + lat.toFixed(0)}`;
-        dispatch({ type: 'SET_DB_KEY', payload: { dbKey } })
-        var refUpdates = firebase.database().ref(`locks/${dbKey}`);
-        refUpdates.on('value', (snapshot) => {
-            dispatch(isFetching);
-            const snapshotValue = snapshot.val();
-            if (snapshotValue) {
-                dispatch({
-                    type: 'POPULATE_DATA',
-                    payload: {
-                        locks: snapshotValue
-                    }
-                });
-                dispatch(fetchingComplete);
-            }
-            else {
-                dispatch(fetchingComplete);
-            }
-        })
-        dispatch(fetchingComplete);
+
+
         dispatch(authValidationComplete);
+    })
+
+    const dbKey = `${lng.toFixed(0) + lat.toFixed(0)}`;
+    dispatch({ type: 'SET_DB_KEY', payload: { dbKey } });
+
+    var refUpdates = firebase.database().ref(`locks/${dbKey}`);
+    refUpdates.on('value', (snapshot) => {
+        dispatch(isFetching);
+        const snapshotValue = snapshot.val();
+        if (snapshotValue) {
+            dispatch({
+                type: 'POPULATE_DATA',
+                payload: {
+                    locks: snapshotValue
+                }
+            });
+            dispatch(fetchingComplete);
+        }
+        else {
+            dispatch(fetchingComplete);
+        }
     })
 }
 
@@ -116,7 +120,7 @@ const remove = ({ dispatch, history, itemId, onClose, setIsDeleting, toast, dbKe
         dispatch(fetchingComplete);
         setIsDeleting(false);
         onClose();
-        history.push("/");
+        history.push("/map");
     });
 }
 
