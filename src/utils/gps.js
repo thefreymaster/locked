@@ -89,7 +89,7 @@ export const getLiveGPSCoordinates = (dispatch, toast) => {
             //     status: "error",
             //     duration: 9000,
             //     isClosable: true,
-            //     position: "bottom-left",
+            //     position: "bottom",
             // })
             console.log(e)
         },

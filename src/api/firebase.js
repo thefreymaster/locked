@@ -9,7 +9,6 @@ import "firebase/storage";
 import { authValidationComplete, fetchingComplete, isFetching } from "../actions";
 
 const initialize = ({ lat, lng, dispatch, showSuccessToast }) => {
-    debugger;
     firebase.auth()
         .getRedirectResult()
         .then((result) => {
@@ -116,11 +115,11 @@ const remove = ({ dispatch, history, itemId, onClose, setIsDeleting, toast, dbKe
     dispatch(isFetching);
     var restaurantListRef = firebase.database().ref(`locks/${dbKey}/${itemId}`);
     restaurantListRef.remove().then(() => {
+        history.push("/map");
         toast();
         dispatch(fetchingComplete);
         setIsDeleting(false);
         onClose();
-        history.push("/map");
     });
 }
 

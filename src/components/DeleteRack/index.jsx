@@ -30,7 +30,7 @@ const DeleteRack = (props) => {
             status: "info",
             duration: 3000,
             isClosable: true,
-            position: 'bottom-left'
+            position: 'bottom'
         })
     }
 

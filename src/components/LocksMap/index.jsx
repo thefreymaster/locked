@@ -6,7 +6,7 @@ import { Spinner, Box, useDisclosure, useToast } from '@chakra-ui/react';
 import AbsoluteButton from '../../common/AbsoluteButton';
 import { useHistory, useParams } from 'react-router-dom';
 import { BsFillShieldLockFill } from 'react-icons/bs';
-import { AiOutlineCompass } from 'react-icons/ai';
+import { AiOutlineCompass, AiOutlinePlus } from 'react-icons/ai';
 import './users-map.scss';
 import { calculateOverallRating } from '../../utils/calcOverallRating';
 import { PRIMARY_GREEN, PRIMARY_YELLOW, PRIMARY_RED } from '../../constants';
@@ -23,7 +23,7 @@ const Map = ReactMapboxGl({
 });
 
 const UserMap = () => {
-    const { coordinates } = useGlobalState();
+    const { coordinates, locks } = useGlobalState();
     const { id } = useParams();
 
     if (!coordinates.hasCoordinates) {
@@ -34,6 +34,11 @@ const UserMap = () => {
         }
         return (
             <Redirect to="/request" />
+        )
+    }
+    if(id && !locks[id]){
+        return (
+            <Redirect to="/map" />
         )
     }
     return (
@@ -115,12 +120,14 @@ const MapContainer = (props) => {
                 <MarkerContainer coordinates={coordinates} />
             </Map>
             {firebase.isAuthenticated && (
-                <AbsoluteButton onClick={() => {
+                <AbsoluteButton round onClick={() => {
                     history.push('/add');
                     onOpen();
-                }}>Add</AbsoluteButton>
+                }}>
+                    <AiOutlinePlus />
+                </AbsoluteButton>
             )}
-            <AbsoluteButton left={20} right="none" onClick={() => {
+            <AbsoluteButton round left={20} right="none" onClick={() => {
                 history.push("/map");
                 setViewport({
                     ...viewport,

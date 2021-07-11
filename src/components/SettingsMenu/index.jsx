@@ -32,7 +32,7 @@ const SettingsMenu = () => {
             status: "success",
             duration: 3000,
             isClosable: true,
-            position: 'bottom-left'
+            position: 'bottom'
         })
     }
     const showInfoToast = () => {
@@ -41,7 +41,7 @@ const SettingsMenu = () => {
             status: "info",
             duration: 3000,
             isClosable: true,
-            position: 'bottom-left'
+            position: 'bottom'
         })
     }
     return (

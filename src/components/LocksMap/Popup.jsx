@@ -93,7 +93,9 @@ const RackPopup = (props) => {
                             size="sm"
                             icon={<BiTrash />}
                             onClick={() => setIsOpen(true)}
-                        >Delete</Button>
+                        >
+                            Remove
+                        </Button>
                         <Box flexGrow={1} />
                         <Button
                             colorScheme="gray"
@@ -104,7 +106,9 @@ const RackPopup = (props) => {
                                 history.push(`/edit/${props.id}`);
                                 props.onOpen();
                             }}
-                        >Edit</Button>
+                        >
+                            Edit
+                        </Button>
                     </Box>
                 )}
                 <DeleteRack setIsOpen={setIsOpen} isOpen={isDeleteOpenOpen} id={props.id} />
