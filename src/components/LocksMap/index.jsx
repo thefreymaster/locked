@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom';
 import { Spinner, Box, useDisclosure, useToast } from '@chakra-ui/react';
 import AbsoluteButton from '../../common/AbsoluteButton';
 import { useHistory, useParams } from 'react-router-dom';
-import { BsFillShieldLockFill } from 'react-icons/bs';
+import { BsFillLockFill } from 'react-icons/bs';
 import { AiOutlineCompass, AiOutlinePlus } from 'react-icons/ai';
 import './users-map.scss';
 import { calculateOverallRating } from '../../utils/calcOverallRating';
@@ -16,6 +16,7 @@ import AddRack from '../AddRack';
 import RackPopup from './Popup';
 import { getLiveGPSCoordinates } from '../../utils/gps';
 import { isMobile } from 'react-device-detect';
+import BikeRackMarker from './BikeRackMarker';
 
 const Map = ReactMapboxGl({
     accessToken:
@@ -178,7 +179,7 @@ const BikeRacksContainer = (props) => {
         const { location, ratings } = value;
         const latAdjustmentPopup = isMobile ? 0.00015590001135 : 0.00015590001135;
         const latAdjustmentViewport = isMobile ? 0.00139590001135 : 0.00199590001135;
-
+        const overallRating = calculateOverallRating({ ratings });
         return (
             <Marker onClick={() => {
                 props.setPopupViewport({ visible: true, coordinates: [value.location.long, value.location.lat + latAdjustmentPopup], lock: value, id: key })
@@ -189,7 +190,7 @@ const BikeRacksContainer = (props) => {
                 coordinates={[location.long, location.lat]}
                 className="rack-marker">
                 <div style={style}>
-                    <BsFillShieldLockFill style={{ transform: 'translate(6px, 6px) rotate(-45deg)', color: getColor(ratings), fontSize: 15 }} />
+                    <BikeRackMarker overallRating={overallRating} />
                 </div>
             </Marker>
         )
