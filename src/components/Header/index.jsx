@@ -6,6 +6,7 @@ import { Box, Text } from '@chakra-ui/react';
 import { useHistory } from 'react-router-dom';
 import { useGlobalState } from '../../providers/root';
 import { BsFillShieldLockFill } from 'react-icons/bs';
+import LockAndKeyLogo from '../../common/Logo';
 
 const Header = () => {
     const { meta } = useGlobalState();
@@ -28,9 +29,10 @@ const Header = () => {
         >
             <Flex display="flex" direction="column" justifyContent="center">
                 <Flex display="flex" direction="row" margin="0px 0px 0px 0px" hoverCursor alignItems="center">
-                    <BsFillShieldLockFill />
+                    {/* <BsFillShieldLockFill /> */}
+                    <LockAndKeyLogo />
                     <Box marginRight={2} />
-                    <Text onClick={() => history.push("/")} fontWeight="bold">Locked</Text>
+                    <Text onClick={() => history.push("/")} fontWeight="bold">Lock & Key</Text>
                     <Box marginRight={2} flexGrow={1} />
                 </Flex>
             </Flex>
