@@ -36,7 +36,7 @@ const UserMap = () => {
             <Redirect to="/request" />
         )
     }
-    if(id && !locks[id]){
+    if (id && !locks[id]) {
         return (
             <Redirect to="/map" />
         )
@@ -198,18 +198,15 @@ const BikeRacksContainer = (props) => {
 }
 
 const MarkerContainer = (props) => {
-    const { dispatch } = useGlobalState();
-    const { toast } = useToast();
+    const [coordinates, setCoordinates] = React.useState([props.coordinates.longitude, props.coordinates.latitude]);
+    const [long, lat] = coordinates;
 
-    // React.useLayoutEffect(() => {
-    //     getLiveGPSCoordinates(dispatch, toast);
-    // }, [])
-
-    // const coordinates = getLiveGPSCoordinates(dispatch, toast);
-    // console.log(coordinates)
+    React.useLayoutEffect(() => {
+        getLiveGPSCoordinates(setCoordinates);
+    }, [])
 
     return (
-        <Marker style={{ zIndex: 2 }} key="you-marker" coordinates={[props.coordinates.longitude, props.coordinates.latitude]}>
+        <Marker style={{ zIndex: 2 }} key="you-marker" coordinates={[long, lat]}>
             <div className="you" />
         </Marker>
     )

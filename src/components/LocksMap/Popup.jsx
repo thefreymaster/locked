@@ -44,7 +44,7 @@ const RackPopup = (props) => {
                     <CloseButton position="absolute" color="white" margin={2} size="lg" onClick={() => {
                         setFadeIn(false);
                         props.setPopupViewport({ visible: false, coordinates: [], lock: {} });
-                        props.setViewport({ ...props.viewport, zoom: 14 });
+                        props.setViewport({ ...props.viewport, zoom: 15 });
                         history.push('/map')
                     }} />
                 </Box>

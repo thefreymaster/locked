@@ -1,4 +1,4 @@
-import { addUserLocation } from "../api/firebase";
+import { throttle } from "lodash";
 
 export const getCoordinates = (setFieldValue, setIsGettingCoordinates, setGpsError) => {
     const options = {
@@ -70,30 +70,22 @@ export const getGPSCoordinates = (dispatch, verify) => {
     );
 }
 
-export const getLiveGPSCoordinates = (dispatch, toast) => {
-    let lat, long;
+export const getLiveGPSCoordinates = (setCoordinates) => {
     const options = {
-        timeout: 10000, enableHighAccuracy: true, maximumAge: 0
+        enableHighAccuracy: true, maximumAge: 0
     }
-    navigator.geolocation.watchPosition(
+    navigator.geolocation.getCurrentPosition(
         (position) => {
             const { latitude, longitude } = position.coords;
-            lat = latitude;
-            long = longitude;
+            setTimeout(() => {
+                setCoordinates([longitude, latitude]);
+                getLiveGPSCoordinates(setCoordinates);
+                console.log('coordinates set')
+            }, 5000);
         },
         (e) => {
-            // dispatch({ type: 'HAS_COORDINATES_ERROR' });
-            // toast({
-            //     title: "Location error.",
-            //     description: "Your location could not be determined.",
-            //     status: "error",
-            //     duration: 9000,
-            //     isClosable: true,
-            //     position: "bottom",
-            // })
             console.log(e)
         },
         options
     );
-    return { lat, long };
 }
