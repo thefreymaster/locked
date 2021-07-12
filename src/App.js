@@ -8,11 +8,14 @@ import firebaseApi from './api/firebase';
 import Header from './components/Header';
 import { getGPSCoordinates } from './utils/gps';
 import { isInstalledApp } from './actions';
+import Footer from './components/Footer';
+import { useHistory } from 'react-router-dom';
 
 const App = () => {
 
-  const { dispatch, coordinates } = useGlobalState();
+  const { dispatch, coordinates, meta } = useGlobalState();
   const toast = useToast();
+  const history = useHistory();
 
 
   const showSuccessToast = () => {
@@ -38,6 +41,7 @@ const App = () => {
     <Zindex zIndex={1}>
       <Header />
       <Router />
+      {meta.isInstalled && <Footer history={history} />}
     </Zindex>
   );
 }

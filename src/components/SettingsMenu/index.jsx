@@ -20,6 +20,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { useGlobalState } from '../../providers/root';
 import Authenticated from '../Authenticated';
+import { changeLog } from '../../json/changeLog';
 
 const SettingsMenu = () => {
     const { dispatch, firebase, meta } = useGlobalState();
@@ -63,7 +64,7 @@ const SettingsMenu = () => {
                 </MenuGroup>
                 <MenuGroup>
                     <MenuDivider />
-                    <MenuItem>v0.3.0</MenuItem>
+                    <MenuItem onClick={() => history.push("/changes")}>{changeLog[0].version}</MenuItem>
                 </MenuGroup>
                 <MenuGroup>
                     {firebase.isAuthenticated && (

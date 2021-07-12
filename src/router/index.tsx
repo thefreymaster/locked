@@ -2,11 +2,12 @@ import React from 'react';
 import { useGlobalState } from '../providers/root';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Welcome from '../components/Welcome';
-import { Spinner } from '@chakra-ui/react';
 import Wrapper from '../common/Wrapper';
 import LocksMap from '../components/LocksMap';
 import RequestLocation from '../components/RequestLocation';
 import LottieLoading from '../common/LottieLoading';
+import ChangeLog from '../components/ChangeLog/index';
+import Account from '../components/Account';
 
 const Router = () => {
     const { firebase, meta } = useGlobalState();
@@ -44,6 +45,12 @@ const Router = () => {
             </Route>
             <Route exact path="/add">
                 <LocksMap />
+            </Route>
+            <Route exact path="/changes">
+                <ChangeLog />
+            </Route>
+            <Route exact path="/account">
+                <Account />
             </Route>
             <Route exact path="/*">
                 <Redirect to="/" />
