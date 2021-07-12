@@ -4,7 +4,7 @@ const Font = (props) => {
     const inline = {
         color: props.color || "#424242",
         fontSize: props.fontSize,
-        fontFamily: props.variant === 'primary' ? `'Comfortaa', cursive` : `'Roboto Condensed', sans-serif`,
+        fontFamily: props.variant === 'primary' ? `'STIX Two Math', serif` : `'Roboto Condensed', sans-serif`,
         fontWeight: props.fontWeight,
         opacity: props.opacity,
         textAlign: props.textAlign,

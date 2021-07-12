@@ -1,4 +1,4 @@
-import { Box, Button, SlideFade, Spinner, toast, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Divider, SlideFade, Spinner, toast, useDisclosure } from '@chakra-ui/react';
 import React from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
 import firebaseApi from '../../api/firebase';
@@ -62,12 +62,13 @@ const Welcome = () => {
                     <Wrapper>
                         <Box display="flex" flexDir="column" justifyContent="center" alignItems="center">
                             <Font fontWeight={900} fontSize={isMobile ? 56 : 124} variant="primary">Lock & Key</Font>
-                            <Font fontWeight={600} fontSize={18}>Find a secure safe bike rack</Font>
+                            <Font fontWeight={600} fontSize={18}>Find a safe, and secure bike rack</Font>
                             <Box mt={5} />
-                            <Button size="lg" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => histroy.push('/map')}>Find a Bike Rack</Button>
+                            <Button size="lg" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => histroy.push('/map')}>Search Now</Button>
+                            <Divider mt={5} />
                             <Box mt={5} display="flex" flexDir={isMobile ? "column" : "row"}>
                                 <Button size="sm" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => firebaseApi.auth.signIn(dispatch, showSuccessToast)}>Sign Up With Google</Button>
-                                <Box m={1} d="flex" justifyContent="center" alignItems="center">
+                                <Box mr={5} ml={5} d="flex" justifyContent="center" alignItems="center">
                                     Or
                                 </Box>
                                 <Button size="sm" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => firebaseApi.auth.signIn(dispatch, showSuccessToast)}>Sign In With Google</Button>

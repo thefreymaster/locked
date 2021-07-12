@@ -7,6 +7,7 @@ import { useHistory } from 'react-router-dom';
 import { useGlobalState } from '../../providers/root';
 import { BsFillShieldLockFill } from 'react-icons/bs';
 import LockAndKeyLogo from '../../common/Logo';
+import Font from '../../common/Font';
 
 const Header = () => {
     const { meta } = useGlobalState();
@@ -32,7 +33,7 @@ const Header = () => {
                     {/* <BsFillShieldLockFill /> */}
                     <LockAndKeyLogo />
                     <Box marginRight={2} />
-                    <Text onClick={() => history.push("/")} fontWeight="bold">Lock & Key</Text>
+                    <Font variant="primary" onClick={() => history.push("/")} fontWeight="bold">Lock & Key</Font>
                     <Box marginRight={2} flexGrow={1} />
                 </Flex>
             </Flex>
