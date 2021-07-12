@@ -9,6 +9,7 @@ import { isMobile } from 'react-device-detect';
 import './welcome.scss';
 import { PRIMARY_COLOR_SCHEME } from '../../constants';
 import DeviceWrapper from '../../common/DeviceWrapper';
+import LottieLoading from '../../common/LottieLoading';
 
 const Welcome = () => {
     const { firebase, dispatch } = useGlobalState();
@@ -30,7 +31,7 @@ const Welcome = () => {
     if (firebase.isValidatingAuthentication) {
         return (
             <Box display="flex" justifyContent="center" alignItems="center">
-                <Spinner />
+                <LottieLoading />
             </Box>
         )
     }
@@ -60,7 +61,7 @@ const Welcome = () => {
                 <SlideFade direction="bottom" in={isOpen}>
                     <Wrapper>
                         <Box display="flex" flexDir="column" justifyContent="center" alignItems="center">
-                            <Font fontWeight={900} fontSize={isMobile ? 72 : 124} variant="primary">Locked</Font>
+                            <Font fontWeight={900} fontSize={isMobile ? 56 : 124} variant="primary">Lock & Key</Font>
                             <Font fontWeight={600} fontSize={18}>Find a secure safe bike rack</Font>
                             <Box mt={5} />
                             <Button size="lg" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => histroy.push('/map')}>Find a Bike Rack</Button>

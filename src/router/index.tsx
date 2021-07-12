@@ -6,6 +6,7 @@ import { Spinner } from '@chakra-ui/react';
 import Wrapper from '../common/Wrapper';
 import LocksMap from '../components/LocksMap';
 import RequestLocation from '../components/RequestLocation';
+import LottieLoading from '../common/LottieLoading';
 
 const Router = () => {
     const { firebase, meta } = useGlobalState();
@@ -13,7 +14,7 @@ const Router = () => {
     if (firebase.isValidatingAuthentication || meta.fetching) {
         return (
             <Wrapper>
-                <Spinner />
+                <LottieLoading />
             </Wrapper>
         )
     }

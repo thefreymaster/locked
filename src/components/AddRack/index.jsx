@@ -22,6 +22,7 @@ import { isMobile } from 'react-device-detect';
 import { BiArrowBack } from 'react-icons/bi';
 import Photo from '../../common/Photo';
 import firebaseApi from '../../api/firebase';
+import LottieLoading from '../../common/LottieLoading';
 
 const AddRack = (props) => {
     let { id } = useParams();
@@ -58,7 +59,7 @@ const AddRack = (props) => {
     if (firebase.isValidatingAuthentication || meta.fetching) {
         return (
             <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-                <Spinner colorScheme="red" size="md" />
+                <LottieLoading />
             </Box>
         )
     }
@@ -98,7 +99,7 @@ const AddRack = (props) => {
                                                     </FormControl>
                                                 )}
                                             </Field>
-                                            <Field name="notes">
+                                            {/* <Field name="notes">
                                                 {({ field, form }) => (
                                                     <FormControl isInvalid={form.errors.notes && form.touched.notes}>
                                                         <FormLabel htmlFor="notes">Description</FormLabel>
@@ -125,7 +126,7 @@ const AddRack = (props) => {
                                                         </FormControl>
                                                     )}
                                                 </Field>
-                                            </Stack>
+                                            </Stack> */}
                                             <Stack direction="row">
                                                 <Field name="location.lat">
                                                     {({ field }) => (
@@ -154,7 +155,7 @@ const AddRack = (props) => {
                                             <Box marginBottom="15px">
                                                 <Button isLoading={isGettingCoordinates} minW="100%" onClick={() => {
                                                     handleGetGPSCoordinates(formProps.setFieldValue, setGpsError)
-                                                }}>Get Coordinates</Button>
+                                                }}>Current Location</Button>
                                             </Box>
                                             {gpsError && (
                                                 <Alert status="error">
@@ -172,7 +173,7 @@ const AddRack = (props) => {
                                             <Field name="ratings.quality">
                                                 {({ field, form }) => (
                                                     <FormControl isRequired id="ratings.quality">
-                                                        <FormLabel>Quality</FormLabel>
+                                                        <FormLabel>Build Quality</FormLabel>
                                                         <ButtonGroup isAttached style={{ minWidth: "100%" }}>
                                                             <Button colorScheme={field.value === -1 ? "blackAlpha" : "gray"} isFullWidth mr="-px" onClick={(e) => form.setFieldValue("ratings.quality", -1)}>n/a</Button>
                                                             <Button colorScheme={field.value === 1 ? "red" : "gray"} isFullWidth mr="-px" onClick={(e) => form.setFieldValue("ratings.quality", 1)}>1</Button>
@@ -187,7 +188,7 @@ const AddRack = (props) => {
                                             <Field name="ratings.safety">
                                                 {({ field, form }) => (
                                                     <FormControl isRequired id="ratings.safety">
-                                                        <FormLabel>Safety</FormLabel>
+                                                        <FormLabel>Area Safety</FormLabel>
                                                         <ButtonGroup isAttached style={{ minWidth: "100%" }}>
                                                             <Button colorScheme={field.value === -1 ? "blackAlpha" : "gray"} isFullWidth mr="-px" onClick={(e) => form.setFieldValue("ratings.safety", -1)}>n/a</Button>
                                                             <Button colorScheme={field.value === 1 ? "red" : "gray"} isFullWidth mr="-px" onClick={(e) => form.setFieldValue("ratings.safety", 1)}>1</Button>
@@ -202,7 +203,7 @@ const AddRack = (props) => {
                                             <Field name="ratings.illumination">
                                                 {({ field, form }) => (
                                                     <FormControl isRequired id="ratings.illumination">
-                                                        <FormLabel>Illumination</FormLabel>
+                                                        <FormLabel>Area Lighting</FormLabel>
                                                         <ButtonGroup isAttached style={{ minWidth: "100%" }}>
                                                             <Button colorScheme={field.value === -1 ? "blackAlpha" : "gray"} isFullWidth mr="-px" onClick={(e) => form.setFieldValue("ratings.illumination", -1)}>n/a</Button>
                                                             <Button colorScheme={field.value === 1 ? "red" : "gray"} isFullWidth mr="-px" onClick={(e) => form.setFieldValue("ratings.illumination", 1)}>1</Button>
@@ -214,14 +215,26 @@ const AddRack = (props) => {
                                                     </FormControl>
                                                 )}
                                             </Field>
+                                            <Field name="traffic">
+                                                {({ field, form }) => (
+                                                    <FormControl isRequired id="traffic">
+                                                        <FormLabel>Foot Traffic</FormLabel>
+                                                        <ButtonGroup isAttached style={{ minWidth: "100%" }}>
+                                                            <Button colorScheme={field.value === "low" ? "red" : "gray"} isFullWidth mr="-px" onClick={(e) => form.setFieldValue("traffic", "low")}>Low</Button>
+                                                            <Button colorScheme={field.value === "medium" ? "yellow" : "gray"} isFullWidth mr="-px" onClick={(e) => form.setFieldValue("traffic", "medium")}>Medium</Button>
+                                                            <Button colorScheme={field.value === "high" ? "green" : "gray"} isFullWidth mr="-px" onClick={(e) => form.setFieldValue("traffic", "high")}>High</Button>
+                                                        </ButtonGroup>
+                                                    </FormControl>
+                                                )}
+                                            </Field>
                                             <Field name="size">
                                                 {({ field, form }) => (
                                                     <FormControl isRequired id="size">
-                                                        <FormLabel>Size</FormLabel>
+                                                        <FormLabel>Parking Spots</FormLabel>
                                                         <ButtonGroup isAttached style={{ minWidth: "100%" }}>
-                                                            <Button colorScheme={field.value === "sm" ? "red" : "gray"} isFullWidth mr="-px" onClick={(e) => form.setFieldValue("size", "sm")}>SM</Button>
-                                                            <Button colorScheme={field.value === "md" ? "yellow" : "gray"} isFullWidth mr="-px" onClick={(e) => form.setFieldValue("size", "md")}>MD</Button>
-                                                            <Button colorScheme={field.value === "lg" ? "green" : "gray"} isFullWidth mr="-px" onClick={(e) => form.setFieldValue("size", "lg")}>LG</Button>
+                                                            <Button colorScheme={field.value === "sm" ? "red" : "gray"} isFullWidth mr="-px" onClick={(e) => form.setFieldValue("size", "sm")}>1 - 2</Button>
+                                                            <Button colorScheme={field.value === "md" ? "yellow" : "gray"} isFullWidth mr="-px" onClick={(e) => form.setFieldValue("size", "md")}>3 - 4</Button>
+                                                            <Button colorScheme={field.value === "lg" ? "green" : "gray"} isFullWidth mr="-px" onClick={(e) => form.setFieldValue("size", "lg")}>5+</Button>
                                                         </ButtonGroup>
                                                     </FormControl>
                                                 )}

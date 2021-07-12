@@ -6,6 +6,7 @@ import { Redirect, useParams } from 'react-router-dom';
 import Wrapper from '../../common/Wrapper';
 import { usePageVisibility } from 'react-page-visibility';
 import DeviceWrapper from '../../common/DeviceWrapper';
+import LottieLoading from '../../common/LottieLoading';
 
 const RequestLocation = () => {
     const { coordinates, dispatch, firebase } = useGlobalState();
@@ -37,7 +38,7 @@ const RequestLocation = () => {
         return (
             <Wrapper>
                 <Box display="flex" alignItems="center" justifyContent="center">
-                    <Spinner />
+                    <LottieLoading />
                 </Box>
             </Wrapper>
         )

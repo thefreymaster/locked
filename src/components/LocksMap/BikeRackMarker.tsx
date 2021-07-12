@@ -16,7 +16,7 @@ const BikeRackMarker = (props: {
     if (props.overallRating < 4 && props.overallRating > 3) {
         return <BsShieldShaded style={{ ...style, color: PRIMARY_YELLOW }} />
     }
-    return <BsShield style={{ ...style, color: PRIMARY_RED }} />
+    return <BsShieldLockFill style={{ ...style, color: PRIMARY_RED }} />
 }
 
 export default BikeRackMarker;

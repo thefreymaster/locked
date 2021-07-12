@@ -44,7 +44,7 @@ const NewUserModal = (props: {
                 <ModalCloseButton />
                 <ModalBody>
                     <Text mb="1rem">
-                        No fences, signs, poles, or trees
+                        No fences, signs, poles or trees
                     </Text>
                     <Box display="flex" flexDir="row" justifyContent="center">
                         {/* <img src={BICYCLE} alt="bicycle" /> */}

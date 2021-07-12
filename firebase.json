@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "site": "lockandkey",
     "public": "build",
     "ignore": [
       "firebase.json",

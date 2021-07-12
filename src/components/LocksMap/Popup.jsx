@@ -1,6 +1,6 @@
 import React from 'react';
 import { useGlobalState } from '../../providers/root';
-import { Fade, Box, CloseButton, Image, Badge, Button, Divider } from '@chakra-ui/react';
+import { Fade, Box, CloseButton, Image, Badge, Button, Divider, Text } from '@chakra-ui/react';
 import { useHistory } from 'react-router-dom';
 import './users-map.scss';
 import { isMobile } from 'react-device-detect';
@@ -10,6 +10,7 @@ import RackRecommendation from './Recommendation';
 import Font from '../../common/Font';
 import { AiFillStar } from 'react-icons/ai';
 import { BiEditAlt, BiTrash } from 'react-icons/bi';
+import { BsGraphDown, BsGraphUp } from 'react-icons/bs';
 import StarRating from '../../components/StarRating';
 import DeleteRack from '../DeleteRack';
 
@@ -54,13 +55,12 @@ const RackPopup = (props) => {
                     <RackSize size={lock.size} />
                     <Badge>
                         <Box display="flex" direction="row" justifyContent="center" alignItems="center">
-                            <Font>Overall</Font>
+                            {/* <Font>Overall</Font> */}
                             <AiFillStar color="#FBB03B" />
                             <Box marginRight="1px" />
                             <Font fontSize="12px" fontWeight={900}>{lock.ratings.quality}</Font>
                         </Box>
                     </Badge>
-
                 </Box>
                 <Box pt={3}>
                     <Divider />
@@ -78,8 +78,16 @@ const RackPopup = (props) => {
                         </Box>
                         <Box display="flex" flexDir="column" justifyContent="center" alignItems="center" flexGrow={1}>
                             <StarRating overallRating={lock.ratings.illumination} />
-                            <Font>Illumination</Font>
+                            <Font>Lighting</Font>
                         </Box>
+                        {/* {lock.traffic && lock.traffic !== 'medium' && (
+                            <Box display="flex" flexDir="column" justifyContent="center" alignItems="center" flexGrow={1}>
+                                {
+                                    lock.traffic === 'high' ? <BsGraphDown /> : <BsGraphUp />
+                                }
+                                <Font>Traffic</Font>
+                            </Box>
+                        )} */}
                     </Box>
                 </Box>
                 <Box pt={3}>

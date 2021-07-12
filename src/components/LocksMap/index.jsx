@@ -17,6 +17,7 @@ import { getLiveGPSCoordinates } from '../../utils/gps';
 import { isMobile } from 'react-device-detect';
 import BikeRackMarker from './BikeRackMarker';
 import NewUserModal from '../NewUser/index';
+import LottieLoading from '../../common/LottieLoading';
 
 const Map = ReactMapboxGl({
     accessToken:
@@ -88,7 +89,7 @@ const MapContainer = (props) => {
     if (!viewport) {
         return (
             <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-                <Spinner colorScheme="red" size="md" />
+                <LottieLoading />
             </Box>
         )
     }
@@ -124,9 +125,7 @@ const MapContainer = (props) => {
             </Map>
             {firebase.isAuthenticated && (
                 <AbsoluteButton round onClick={() => {
-                    setTimeout(() => {
-                        history.push('/add');
-                    }, 1000);
+                    history.push('/add');
                     if (user.isNew) {
                         newUserOnOpen();
                     }

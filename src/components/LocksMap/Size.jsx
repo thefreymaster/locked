@@ -6,7 +6,7 @@ const RackSize = (props) => {
         return (
             <Box display="flex" alignItems="center">
                 <Box marginRight="1px" />
-                <Badge variant="subtle" colorScheme="red">SM</Badge>
+                <Badge variant="subtle" colorScheme="red">Small</Badge>
                 <Box marginRight="8px" />
             </Box>
         )
@@ -15,7 +15,7 @@ const RackSize = (props) => {
         return (
             <Box display="flex" alignItems="center">
                 <Box marginRight="1px" />
-                <Badge variant="subtle" colorScheme="yellow">MD</Badge>
+                <Badge variant="subtle" colorScheme="yellow">Medium</Badge>
                 <Box marginRight="8px" />
             </Box>
         )
@@ -23,7 +23,7 @@ const RackSize = (props) => {
     return (
         <Box display="flex" alignItems="center">
             <Box marginRight="1px" />
-            <Badge variant="subtle" colorScheme="green">LG</Badge>
+            <Badge variant="subtle" colorScheme="green">Large</Badge>
             <Box marginRight="8px" />
         </Box>
     )
