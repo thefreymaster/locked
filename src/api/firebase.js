@@ -20,7 +20,7 @@ const initialize = ({ lat, lng, dispatch, showSuccessToast }) => {
                 showSuccessToast();
             }
             if (result.additionalUserInfo && result.additionalUserInfo.isNewUser) {
-                console.log('new')
+                addUserLocation({ user: result.user, dispatch })
             }
         }).catch((error) => {
             console.error(error);
@@ -28,9 +28,8 @@ const initialize = ({ lat, lng, dispatch, showSuccessToast }) => {
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
             dispatch({ type: 'FIREBASE_AUTHENTICATION_SUCCESS', payload: { user } });
+            setUser({ dispatch, uid: user.uid })
         }
-
-
         dispatch(authValidationComplete);
     })
 
@@ -66,7 +65,7 @@ const signOut = (dispatch, showInfoToast, history) => {
         setTimeout(() => {
             dispatch({ type: 'FIREBASE_AUTHENTICATION_SIGN_OUT_SUCCESS' });
             showInfoToast();
-            history.push("/")
+            history.push("/map")
             setTimeout(() => {
                 dispatch({ type: 'TOGGLE_SETTINGS_DRAWER' });
             }, 1000);
@@ -76,13 +75,13 @@ const signOut = (dispatch, showInfoToast, history) => {
     });
 }
 
-export const addUserLocation = ({ postData, user, dispatch }) => {
+const addUserLocation = ({ user, dispatch }) => {
     const [provider] = user.providerData;
     var userListRef = firebase.database().ref(`users/${user.uid}`);
     userListRef.update({
-        ...postData,
         createdDate: new Date().toISOString(),
-        provider
+        isNew: true,
+        ...provider,
     }).then(() => {
         dispatch(fetchingComplete);
     });
@@ -102,7 +101,6 @@ const add = ({ postData, uid, dispatch, toast, lat, lng, onClose, history }) => 
 const update = ({ postData, dispatch, itemId, toast, onClose, history, dbKey }) => {
     dispatch(isFetching);
     var restaurantListRef = firebase.database().ref(`locks/${dbKey}/${itemId}`);
-    console.log({ ...postData, modifiedData: new Date().toISOString() })
     restaurantListRef.update({ ...postData, modifiedData: new Date().toISOString() }).then(() => {
         toast();
         dispatch(fetchingComplete);
@@ -175,11 +173,33 @@ const refresh = ({ lat, lng, dispatch }) => {
 
 }
 
+const oldUser = ({ uid }) => {
+    var listRef = firebase.database().ref(`users/${uid}`);
+    listRef.update({ isNew: false }).then(() => { });
+}
+
+const setUser = ({ dispatch, uid }) => {
+    var listRef = firebase.database().ref(`users/${uid}`);
+    listRef.on('value', (snapshot) => {
+        const snapshotValue = snapshot.val();
+        if (snapshotValue) {
+            dispatch({
+                type: 'POPULATE_USER_DATA',
+                payload: {
+                    user: snapshotValue
+                }
+            });
+        }
+    })
+}
+
 const firebaseApi = {
     initialize,
     auth: {
         signIn,
         signOut,
+        oldUser,
+        setUser,
     },
     add,
     update,

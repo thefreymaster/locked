@@ -2,10 +2,9 @@ import ReactMapboxGl, { Marker, Popup } from 'react-mapbox-gl';
 import React from 'react';
 import { useGlobalState } from '../../providers/root';
 import { Redirect } from 'react-router-dom';
-import { Spinner, Box, useDisclosure, useToast } from '@chakra-ui/react';
+import { Spinner, Box, useDisclosure } from '@chakra-ui/react';
 import AbsoluteButton from '../../common/AbsoluteButton';
 import { useHistory, useParams } from 'react-router-dom';
-import { BsFillLockFill } from 'react-icons/bs';
 import { AiOutlineCompass, AiOutlinePlus } from 'react-icons/ai';
 import './users-map.scss';
 import { calculateOverallRating } from '../../utils/calcOverallRating';
@@ -17,6 +16,7 @@ import RackPopup from './Popup';
 import { getLiveGPSCoordinates } from '../../utils/gps';
 import { isMobile } from 'react-device-detect';
 import BikeRackMarker from './BikeRackMarker';
+import NewUserModal from '../NewUser/index';
 
 const Map = ReactMapboxGl({
     accessToken:
@@ -51,8 +51,10 @@ const UserMap = () => {
 
 const MapContainer = (props) => {
     let initialViewport;
-    const { locks, coordinates, firebase } = useGlobalState();
+    const { locks, coordinates, firebase, user } = useGlobalState();
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { isOpen: newUserIsOpen, onOpen: newUserOnOpen, onClose: newUserOnClose } = useDisclosure()
+
     const lock = locks[props.id];
 
     if (props.id) {
@@ -122,8 +124,16 @@ const MapContainer = (props) => {
             </Map>
             {firebase.isAuthenticated && (
                 <AbsoluteButton round onClick={() => {
-                    history.push('/add');
-                    onOpen();
+                    setTimeout(() => {
+                        history.push('/add');
+                    }, 1000);
+                    if (user.isNew) {
+                        newUserOnOpen();
+                    }
+                    else {
+                        onOpen();
+                    }
+
                 }}>
                     <AiOutlinePlus />
                 </AbsoluteButton>
@@ -144,6 +154,7 @@ const MapContainer = (props) => {
             }}>
                 <AddRack onClose={onClose} />
             </DrawerContainer>
+            <NewUserModal isOpen={newUserIsOpen} onClose={newUserOnClose} onOpenAdd={onOpen} />
         </>
     )
 }

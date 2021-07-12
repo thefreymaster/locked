@@ -56,9 +56,6 @@ export const getGPSCoordinates = (dispatch, verify) => {
         (position) => {
             const { latitude } = position.coords;
             const { longitude } = position.coords;
-            // if(user){
-            //     addUserLocation({ user, dispatch })
-            // }
             dispatch({ type: 'SET_GPS_COORDINATES', payload: { latitude, longitude } });
             dispatch({ type: 'SET_USER_GPS_COORDINATES', payload: { latitude, longitude } })
             verify();

@@ -34,7 +34,15 @@ export interface IDefaultState {
         quality: number;
         safety: number;
         wouldYouLockHere: boolean;
-    }>
+    }>,
+    user: {
+        isNew?: boolean,
+        displayName?: string,
+        email?: string,
+        photoURL?: string,
+        providerId?: string,
+        uid?: string,
+    }
     dispatch: any;
 }
 
@@ -59,6 +67,7 @@ const defaultState: IDefaultState = {
         live: {}
     },
     locks: [],
+    user: {},
     dispatch: () => { },
 }
 

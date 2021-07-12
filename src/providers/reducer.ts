@@ -82,6 +82,10 @@ const reducer = (state: any, action: any) => {
             newState.meta.dbKey = payload.dbKey;
             break;
         }
+        case 'POPULATE_USER_DATA': {
+            newState.user = payload.user;
+            break;
+        }
         default:
             console.error(new Error());
     }
