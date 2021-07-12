@@ -10,9 +10,11 @@ import RackRecommendation from './Recommendation';
 import Font from '../../common/Font';
 import { AiFillStar } from 'react-icons/ai';
 import { BiEditAlt, BiTrash } from 'react-icons/bi';
-import { BsGraphDown, BsGraphUp } from 'react-icons/bs';
 import StarRating from '../../components/StarRating';
 import DeleteRack from '../DeleteRack';
+import RackTraffic from './Traffic';
+import { calculateOverallRating } from '../../utils/calcOverallRating';
+import ToolTip from '../../common/ToolTip';
 
 const RackPopup = (props) => {
     const { dispatch, firebase } = useGlobalState();
@@ -53,20 +55,21 @@ const RackPopup = (props) => {
                 <Box display="flex" flexDirection="row" padding="15px 15px 0px 15px" justifyContent="center" alignItems="center">
                     <RackRecommendation recommended={lock.recommended} />
                     <RackSize size={lock.size} />
-                    <Badge>
-                        <Box display="flex" direction="row" justifyContent="center" alignItems="center">
-                            {/* <Font>Overall</Font> */}
-                            <AiFillStar color="#FBB03B" />
-                            <Box marginRight="1px" />
-                            <Font fontSize="12px" fontWeight={900}>{lock.ratings.quality}</Font>
-                        </Box>
-                    </Badge>
+                    <RackTraffic traffic={lock.traffic} />
+                    <ToolTip label="Overall Rating">
+                        <Badge>
+                            <Box display="flex" direction="row" justifyContent="center" alignItems="center">
+                                {/* <Font>Overall</Font> */}
+                                <AiFillStar color="#FBB03B" />
+                                <Box marginRight="1px" />
+                                <Font fontSize="12px" fontWeight={900}>{calculateOverallRating({ ratings: lock.ratings })}</Font>
+                            </Box>
+                        </Badge>
+                    </ToolTip>
                 </Box>
-                <Box pt={3}>
-                    <Divider />
-                </Box>
+                <Divider pt={3} />
                 <Box padding="15px 15px 0px 15px">
-                    <Font fontSize={24} textAlign="center">{lock.name}</Font>
+                    <Font variant="primary" fontSize={24} textAlign="center" fontWeight="bold">{lock.name}</Font>
                     <Box display="flex" direction="row" alignItems="flex-start" marginTop={4}>
                         <Box display="flex" flexDir="column" justifyContent="center" alignItems="center" flexGrow={1}>
                             <StarRating overallRating={lock.ratings.quality} />

@@ -188,7 +188,7 @@ const BikeRacksContainer = (props) => {
     return Object.entries(locks).map(([key, value]) => {
         const { location, ratings } = value;
         const latAdjustmentPopup = isMobile ? 0.00015590001135 : 0.00015590001135;
-        const latAdjustmentViewport = isMobile ? 0.00139590001135 : 0.00199590001135;
+        const latAdjustmentViewport = isMobile ? 0.00209590001135 : 0.00199590001135;
         const overallRating = calculateOverallRating({ ratings });
         return (
             <Marker onClick={() => {

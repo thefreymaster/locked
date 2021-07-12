@@ -1,31 +1,38 @@
 import { Badge, Box } from '@chakra-ui/layout';
 import React from 'react';
+import ToolTip from '../../common/ToolTip';
 
 const RackSize = (props) => {
     if (props.size === 'sm') {
         return (
-            <Box display="flex" alignItems="center">
-                <Box marginRight="1px" />
-                <Badge variant="subtle" colorScheme="red">Small</Badge>
-                <Box marginRight="8px" />
-            </Box>
+            <ToolTip label="Size">
+                <Box display="flex" alignItems="center">
+                    <Box marginRight="1px" />
+                    <Badge variant="subtle" colorScheme="red">SM</Badge>
+                    <Box marginRight="8px" />
+                </Box>
+            </ToolTip>
         )
     }
     if (props.size === 'md') {
         return (
-            <Box display="flex" alignItems="center">
-                <Box marginRight="1px" />
-                <Badge variant="subtle" colorScheme="yellow">Medium</Badge>
-                <Box marginRight="8px" />
-            </Box>
+            <ToolTip label="Size">
+                <Box display="flex" alignItems="center">
+                    <Box marginRight="1px" />
+                    <Badge variant="subtle" colorScheme="yellow">MD</Badge>
+                    <Box marginRight="8px" />
+                </Box>
+            </ToolTip>
         )
     }
     return (
-        <Box display="flex" alignItems="center">
-            <Box marginRight="1px" />
-            <Badge variant="subtle" colorScheme="green">Large</Badge>
-            <Box marginRight="8px" />
-        </Box>
+        <ToolTip label="Size">
+            <Box display="flex" alignItems="center">
+                <Box marginRight="1px" />
+                <Badge variant="subtle" colorScheme="green">LG</Badge>
+                <Box marginRight="8px" />
+            </Box>
+        </ToolTip>
     )
 }
 

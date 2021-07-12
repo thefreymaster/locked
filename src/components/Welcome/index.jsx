@@ -64,7 +64,7 @@ const Welcome = () => {
                             <Font fontWeight={900} fontSize={isMobile ? 56 : 124} variant="primary">Lock & Key</Font>
                             <Font fontWeight={600} fontSize={18}>Find a safe, and secure bike rack</Font>
                             <Box mt={5} />
-                            <Button size="lg" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => histroy.push('/map')}>Search Now</Button>
+                            <Button size="lg" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => histroy.push('/map')}>Search Your Area</Button>
                             <Divider mt={5} />
                             <Box mt={5} display="flex" flexDir={isMobile ? "column" : "row"}>
                                 <Button size="sm" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => firebaseApi.auth.signIn(dispatch, showSuccessToast)}>Sign Up With Google</Button>
