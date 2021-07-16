@@ -17,7 +17,7 @@ import { calculateOverallRating } from '../../utils/calcOverallRating';
 import ToolTip from '../../common/ToolTip';
 
 const RackPopup = (props) => {
-    const { dispatch, firebase } = useGlobalState();
+    const { dispatch, firebase, meta } = useGlobalState();
     const { lock } = props;
     const [fadeIn, setFadeIn] = React.useState(false);
     const [isDeleteOpenOpen, setIsOpen] = React.useState(false);
@@ -42,9 +42,9 @@ const RackPopup = (props) => {
     }, [])
     return (
         <Fade in={fadeIn}>
-            <Box flexDir="column" maxW="lg" key={lock.name} style={inline} display="flex">
+            <Box flexDir="column" maxW="lg" key={lock.name} style={inline} display="flex" minH="400px">
                 <Box width="100%" display="flex" justifyContent="flex-end">
-                    <CloseButton position="absolute" color="white" margin={2} size="lg" onClick={() => {
+                    <CloseButton position="absolute" color="white" margin={2} mr={meta.isInstalled && 1} size="lg" onClick={() => {
                         setFadeIn(false);
                         props.setPopupViewport({ visible: false, coordinates: [], lock: {} });
                         props.setViewport({ ...props.viewport, zoom: 15 });

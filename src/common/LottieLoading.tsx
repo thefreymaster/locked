@@ -11,7 +11,8 @@ const LottieLoading = () => {
     };
     return (
         <div>
-            <Lottie options={defaultOptions}
+            <Lottie 
+                options={defaultOptions}
                 height={400}
                 width={400}
             />

@@ -39,7 +39,7 @@ const App = () => {
 
   return (
     <Zindex zIndex={1}>
-      <Header />
+      {!meta.isInstalled && <Header />}
       <Router />
       {meta.isInstalled && <Footer history={history} />}
     </Zindex>

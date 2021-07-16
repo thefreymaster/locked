@@ -8,9 +8,33 @@ import RequestLocation from '../components/RequestLocation';
 import LottieLoading from '../common/LottieLoading';
 import ChangeLog from '../components/ChangeLog/index';
 import Account from '../components/Account';
+import DeviceWrapper from '../common/DeviceWrapper';
+import {
+    Alert,
+    AlertIcon,
+    AlertTitle,
+    AlertDescription,
+    Box,
+} from "@chakra-ui/react"
 
 const Router = () => {
-    const { firebase, meta } = useGlobalState();
+    const { firebase, meta, coordinates } = useGlobalState();
+
+    if (coordinates.hasCoordinatesError) {
+        return (
+            <Wrapper>
+                <DeviceWrapper>
+                    <Alert status="error" display="flex" flexDir="row">
+                        <AlertIcon boxSize="32px" />
+                        <Box flexDir="column">
+                            <AlertTitle mr={2}>Location error!</AlertTitle>
+                            <AlertDescription>Location services are required for Lock & Key to work.  Please try again.</AlertDescription>
+                        </Box>
+                    </Alert>
+                </DeviceWrapper>
+            </Wrapper>
+        )
+    }
 
     if (firebase.isValidatingAuthentication || meta.fetching) {
         return (

@@ -2,10 +2,9 @@ import React from 'react';
 import Flex from '../../common/Flex';
 import './header.scss';
 import SettingsMenu from '../SettingsMenu';
-import { Box, Text } from '@chakra-ui/react';
+import { Box } from '@chakra-ui/react';
 import { useHistory } from 'react-router-dom';
 import { useGlobalState } from '../../providers/root';
-import { BsFillShieldLockFill } from 'react-icons/bs';
 import LockAndKeyLogo from '../../common/Logo';
 import Font from '../../common/Font';
 
@@ -17,13 +16,13 @@ const Header = () => {
         top: 0,
         width: "100%",
         zIndex: 6,
+        borderBottom: '1px solid #ffffff6b',
     }
 
     return (
         <Flex style={{ ...fixed }}
             transitionBackground
             display="flex"
-            backgroundColor={meta.isInstalled && "#ffcd38"}
             alignItems="center"
             padding={meta.isInstalled ? "50px 20px 15px 20px" : "15px 20px"}
             className="header"

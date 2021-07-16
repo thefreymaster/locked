@@ -33,7 +33,7 @@ const Authenticated = (props) => {
             )
         }
         return (
-            <Flex display="flex" alignItems="center" justifyContent="center" direction="row" width="100%" flexGrow="none">
+            <Flex display="flex" alignItems="center" justifyContent="flex-start" direction="row" width="100%" flexGrow="none">
                 <Avatar
                     size="sm"
                     name={data.displayName}

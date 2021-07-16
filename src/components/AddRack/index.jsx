@@ -275,7 +275,7 @@ const AddRack = (props) => {
                                                     <Photo name={locks[id].name} imageUrlAbsolute={locks[id].imageUrlAbsolute} />
                                                 </Box>
                                             )}
-                                            <AbsoluteButton disabled={validatePage3({ values: formProps.values }) || isUploading} loading={isUploading || meta.fetching} onClick={() => {
+                                            <AbsoluteButton bottom={20}  disabled={validatePage3({ values: formProps.values }) || isUploading} loading={isUploading || meta.fetching} onClick={() => {
                                                 if (id) {
                                                     firebaseApi.update({ 
                                                         postData: formProps.values, 
@@ -306,18 +306,18 @@ const AddRack = (props) => {
                                         </Box>
 
                                     )}
-                                    <AbsoluteButton right={100} onClick={() => {
+                                    <AbsoluteButton bottom={20} right={100} onClick={() => {
                                         formProps.resetForm();
                                         history.push('/map');
                                         props.onClose();
                                     }}>Cancel</AbsoluteButton>
                                     {/* {page === 1 && <AbsoluteButton left={20} right="none" onClick={() => history.goBack()}><BiArrowBack /></AbsoluteButton>} */}
-                                    {page === 2 && <AbsoluteButton left={20} right="none" onClick={() => setPage(1)}><BiArrowBack /></AbsoluteButton>}
-                                    {page === 3 && <AbsoluteButton left={20} right="none" onClick={() => setPage(2)}><BiArrowBack /></AbsoluteButton>}
-                                    {page === 4 && <AbsoluteButton left={20} right="none" onClick={() => setPage(3)}><BiArrowBack /></AbsoluteButton>}
+                                    {page === 2 && <AbsoluteButton bottom={20} left={20} right="none" onClick={() => setPage(1)}><BiArrowBack /></AbsoluteButton>}
+                                    {page === 3 && <AbsoluteButton bottom={20} left={20} right="none" onClick={() => setPage(2)}><BiArrowBack /></AbsoluteButton>}
+                                    {page === 4 && <AbsoluteButton bottom={20} left={20} right="none" onClick={() => setPage(3)}><BiArrowBack /></AbsoluteButton>}
 
-                                    {page === 1 && <AbsoluteButton disabled={validatePage1({ values: formProps.values }) || isGettingCoordinates} onClick={() => setPage(2)}>Next</AbsoluteButton>}
-                                    {page === 2 && <AbsoluteButton disabled={validatePage2({ values: formProps.values })} onClick={() => setPage(3)}>Next</AbsoluteButton>}
+                                    {page === 1 && <AbsoluteButton bottom={20} disabled={validatePage1({ values: formProps.values }) || isGettingCoordinates} onClick={() => setPage(2)}>Next</AbsoluteButton>}
+                                    {page === 2 && <AbsoluteButton bottom={20} disabled={validatePage2({ values: formProps.values })} onClick={() => setPage(3)}>Next</AbsoluteButton>}
                                 </Form>
                             )
                         }}

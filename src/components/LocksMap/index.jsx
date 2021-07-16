@@ -2,13 +2,13 @@ import ReactMapboxGl, { Marker, Popup } from 'react-mapbox-gl';
 import React from 'react';
 import { useGlobalState } from '../../providers/root';
 import { Redirect } from 'react-router-dom';
-import { Spinner, Box, useDisclosure } from '@chakra-ui/react';
+import { Box, useDisclosure } from '@chakra-ui/react';
 import AbsoluteButton from '../../common/AbsoluteButton';
 import { useHistory, useParams } from 'react-router-dom';
-import { AiOutlineCompass, AiOutlinePlus } from 'react-icons/ai';
+import { MdGpsFixed } from 'react-icons/md';
+import { BiAddToQueue } from 'react-icons/bi';
 import './users-map.scss';
 import { calculateOverallRating } from '../../utils/calcOverallRating';
-import { PRIMARY_GREEN, PRIMARY_YELLOW, PRIMARY_RED } from '../../constants';
 import DeviceWrapper from '../../common/DeviceWrapper';
 import DrawerContainer from '../../common/DrawerContainer';
 import AddRack from '../AddRack';
@@ -24,7 +24,7 @@ const Map = ReactMapboxGl({
         process.env.REACT_APP_MAPBOX_TOKEN
 });
 
-const UserMap = () => {
+const LocksMap = () => {
     const { coordinates, locks } = useGlobalState();
     const { id } = useParams();
 
@@ -52,7 +52,7 @@ const UserMap = () => {
 
 const MapContainer = (props) => {
     let initialViewport;
-    const { locks, coordinates, firebase, user } = useGlobalState();
+    const { locks, coordinates, firebase, user, meta } = useGlobalState();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { isOpen: newUserIsOpen, onOpen: newUserOnOpen, onClose: newUserOnClose } = useDisclosure()
 
@@ -123,8 +123,19 @@ const MapContainer = (props) => {
                 )}
                 <MarkerContainer coordinates={coordinates} />
             </Map>
+            <AbsoluteButton right={meta.isInstalled && 20} left={meta.isInstalled ? "none" : 20} top={meta.isInstalled && 100} onClick={() => {
+                history.push("/map");
+                setViewport({
+                    ...viewport,
+                    latitude: coordinates.live.latitude,
+                    longitude: coordinates.live.longitude,
+                    zoom: 14,
+                })
+            }}>
+                <MdGpsFixed />
+            </AbsoluteButton>
             {firebase.isAuthenticated && (
-                <AbsoluteButton round onClick={() => {
+                <AbsoluteButton onClick={() => {
                     history.push('/add');
                     if (user.isNew) {
                         newUserOnOpen();
@@ -134,19 +145,9 @@ const MapContainer = (props) => {
                     }
 
                 }}>
-                    <AiOutlinePlus />
+                    <BiAddToQueue />
                 </AbsoluteButton>
             )}
-            <AbsoluteButton round left={20} right="none" onClick={() => {
-                history.push("/map");
-                setViewport({
-                    ...viewport,
-                    latitude: coordinates.latitude,
-                    longitude: coordinates.longitude,
-                })
-            }}>
-                <AiOutlineCompass />
-            </AbsoluteButton>
             <DrawerContainer title="Add Bike Rack" isOpen={isOpen} onClose={() => {
                 history.push('/map');
                 onClose()
@@ -170,17 +171,6 @@ const style = {
     boxShadow: 'rgb(255 255 255 / 50%) 0px 0px 0px -1px, rgb(0 0 0 / 14%) 0px 1px 1px 0px, rgb(0 0 0 / 12%) 0px 1px 3px 0px',
 }
 
-const getColor = (ratings) => {
-    const overallRating = calculateOverallRating({ ratings });
-    if (overallRating >= 4) {
-        return PRIMARY_GREEN;
-    }
-    if (overallRating < 4 && overallRating > 3) {
-        return PRIMARY_YELLOW;
-    }
-    return PRIMARY_RED;
-}
-
 const BikeRacksContainer = (props) => {
     const { locks } = useGlobalState();
     const history = useHistory();
@@ -188,7 +178,7 @@ const BikeRacksContainer = (props) => {
     return Object.entries(locks).map(([key, value]) => {
         const { location, ratings } = value;
         const latAdjustmentPopup = isMobile ? 0.00015590001135 : 0.00015590001135;
-        const latAdjustmentViewport = isMobile ? 0.00209590001135 : 0.00199590001135;
+        const latAdjustmentViewport = isMobile ? 0.00159590001135 : 0.00199590001135;
         const overallRating = calculateOverallRating({ ratings });
         return (
             <Marker onClick={() => {
@@ -223,4 +213,4 @@ const MarkerContainer = (props) => {
     )
 }
 
-export default UserMap;
+export default LocksMap;

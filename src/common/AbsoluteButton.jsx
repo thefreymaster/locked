@@ -11,6 +11,7 @@ const AbsoluteButton = (props) => {
         bottom: props.bottom ? props.bottom : meta.isInstalled ? 100 : 20,
         right: props.right || 20,
         left: props.left,
+        top: props.top,
         borderRadius: props.round && 100,
         width: props.round && 50,
         height: props.round && 50,

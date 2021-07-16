@@ -1,4 +1,4 @@
-import { Box, Button, Divider, SlideFade, Spinner, useDisclosure, useToast } from '@chakra-ui/react';
+import { Box, Button, Divider, SlideFade, Spinner, useDisclosure, useToast, Text } from '@chakra-ui/react';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
@@ -10,6 +10,7 @@ import { useGlobalState } from '../../providers/root';
 import Authenticated from '../Authenticated';
 import { useHistory } from 'react-router-dom';
 import LottieLoading from '../../common/LottieLoading';
+import { changeLog } from '../../json/changeLog';
 
 const Account = () => {
     const { dispatch, firebase, meta } = useGlobalState();
@@ -47,11 +48,10 @@ const Account = () => {
         )
     }
     return (
-        <SlideFade direction="bottom" in={isOpen}>
-            <Wrapper justifyContent="flex-start">
-                <Box width="100%" display="flex" alignItems="flex-start" flexDirection="column">
-                    <Font fontWeight={900}>Account</Font>
-                    <Divider />
+        <Wrapper justifyContent="flex-start">
+            <Box width="100%" display="flex" alignItems="flex-start" flexDirection="column">
+                <Text fontWeight={900} fontSize={32}>Settings</Text>
+                <Box borderRadius="lg" boxShadow="md" padding={4} minW="100%">
                     <Box margin="15px">
                         {firebase.isAuthenticated ? (
                             <Authenticated />
@@ -63,7 +63,9 @@ const Account = () => {
                             </Button>
                         )}
                     </Box>
-                    <Divider />
+                    <Box margin="15px">
+                        <Text>{changeLog[0].version}</Text>
+                    </Box>
                     <Box margin="10px" />
                     {firebase.isAuthenticated && (
                         <Box minW="100%">
@@ -71,9 +73,8 @@ const Account = () => {
                         </Box>
                     )}
                 </Box>
-            </Wrapper>
-        </SlideFade>
-
+            </Box>
+        </Wrapper>
     )
 }
 

@@ -1,5 +1,3 @@
-import { throttle } from "lodash";
-
 export const getCoordinates = (setFieldValue, setIsGettingCoordinates, setGpsError) => {
     const options = {
         timeout: 10000,
@@ -47,7 +45,7 @@ export const getCoordinatesOutsideForm = (setIsGettingCoordinates, setGpsError, 
     );
 }
 
-export const getGPSCoordinates = (dispatch, verify) => {
+export const getGPSCoordinates = (dispatch, firebaseInitialize) => {
     const options = {
         timeout: 10000,
         enableHighAccuracy: true,
@@ -58,10 +56,11 @@ export const getGPSCoordinates = (dispatch, verify) => {
             const { longitude } = position.coords;
             dispatch({ type: 'SET_GPS_COORDINATES', payload: { latitude, longitude } });
             dispatch({ type: 'SET_USER_GPS_COORDINATES', payload: { latitude, longitude } })
-            verify();
+            firebaseInitialize();
         },
-        () => {
-            dispatch({ type: 'HAS_COORDINATES_ERROR' })
+        (e) => {
+            console.log(e);
+            dispatch({ type: 'HAS_COORDINATES_ERROR' });
         },
         options
     );
@@ -77,7 +76,6 @@ export const getLiveGPSCoordinates = (setCoordinates) => {
             setTimeout(() => {
                 setCoordinates([longitude, latitude]);
                 getLiveGPSCoordinates(setCoordinates);
-                console.log('coordinates set')
             }, 5000);
         },
         (e) => {
