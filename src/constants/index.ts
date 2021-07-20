@@ -54,7 +54,8 @@ export const initialValues = {
 
 export const PRIMARY_COLOR = "#9B2C2C";
 export const PRIMARY_COLOR_SCHEME = "gray";
-export const PRIMARY_GREEN = "#38A169";
+export const PRIMARY_GREEN = "#46c782";
+export const PRIMARY_YELLOW = "#f4b900";
 export const PRIMARY_RED = "#E53E3E";
 
 export const MARKER_ICON = `M20.2,15.7L20.2,15.7c1.1-1.6,1.8-3.6,1.8-5.7c0-5.6-4.5-10-10-10S2,4.5,2,10c0,2,0.6,3.9,1.6,5.4c0,0.1,0.1,0.2,0.2,0.3

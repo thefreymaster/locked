@@ -44,6 +44,11 @@ const reducer = (state: any, action: any) => {
             newState.coordinates.hasCoordinates = true;
             break;
         }
+        case 'SET_USER_GPS_COORDINATES': {
+            newState.coordinates.live.latitude = payload.latitude;
+            newState.coordinates.live.longitude = payload.longitude;
+            break;
+        }
         case 'SET_HAS_GPS_COORDINATES': {
             newState.coordinates.hasCoordinates = true;
             break;
@@ -62,6 +67,23 @@ const reducer = (state: any, action: any) => {
         }
         case 'HAS_COORDINATES_ERROR': {
             newState.coordinates.hasCoordinatesError = true;
+            break;
+        }
+        case 'POPULATE_DATA': {
+            newState.locks = payload.locks;
+            newState.meta.containsLocks = true;
+            break;
+        }
+        case 'SET_IMAGE_ABSOLUTE_URL': {
+            newState.locks[payload.id].imageUrlAbsolute = payload.url;
+            break;
+        }
+        case 'SET_DB_KEY': {
+            newState.meta.dbKey = payload.dbKey;
+            break;
+        }
+        case 'POPULATE_USER_DATA': {
+            newState.user = payload.user;
             break;
         }
         default:

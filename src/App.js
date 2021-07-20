@@ -6,10 +6,12 @@ import { useGlobalState } from './providers/root';
 import { useToast } from '@chakra-ui/react';
 import firebaseApi from './api/firebase';
 import Header from './components/Header';
+import { getGPSCoordinates } from './utils/gps';
+import { isInstalledApp } from './actions';
 
 const App = () => {
 
-  const { dispatch } = useGlobalState();
+  const { dispatch, coordinates } = useGlobalState();
   const toast = useToast();
 
 
@@ -24,7 +26,12 @@ const App = () => {
   }
 
   React.useEffect(() => {
-    firebaseApi.verify(dispatch, showSuccessToast);
+    if (navigator.standalone) {
+      dispatch(isInstalledApp)
+    }
+    if (navigator.geolocation) {
+      getGPSCoordinates(dispatch, () => firebaseApi.initialize({ lat: coordinates.latitude, lng: coordinates.longitude, dispatch, showSuccessToast }));
+    }
   }, [])
 
   return (

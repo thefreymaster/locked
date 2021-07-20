@@ -1,6 +1,6 @@
-import { Box, Button, SlideFade, Spinner, toast, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Divider, SlideFade, Spinner, toast, useDisclosure } from '@chakra-ui/react';
 import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import firebaseApi from '../../api/firebase';
 import Font from '../../common/Font';
 import Wrapper from '../../common/Wrapper';
@@ -8,10 +8,13 @@ import { useGlobalState } from '../../providers/root';
 import { isMobile } from 'react-device-detect';
 import './welcome.scss';
 import { PRIMARY_COLOR_SCHEME } from '../../constants';
+import DeviceWrapper from '../../common/DeviceWrapper';
+import LottieLoading from '../../common/LottieLoading';
 
 const Welcome = () => {
     const { firebase, dispatch } = useGlobalState();
     const { isOpen, onToggle } = useDisclosure();
+    const histroy = useHistory();
 
     React.useEffect(() => {
         onToggle();
@@ -28,7 +31,7 @@ const Welcome = () => {
     if (firebase.isValidatingAuthentication) {
         return (
             <Box display="flex" justifyContent="center" alignItems="center">
-                <Spinner />
+                <LottieLoading />
             </Box>
         )
     }
@@ -58,14 +61,17 @@ const Welcome = () => {
                 <SlideFade direction="bottom" in={isOpen}>
                     <Wrapper>
                         <Box display="flex" flexDir="column" justifyContent="center" alignItems="center">
-                            <Font fontWeight={900} fontSize={isMobile ? 72 : 124} variant="primary">Locked</Font>
-                            <Font fontWeight={600} fontSize={18}>Find a secure safe bike rack</Font>
+                            <Font fontWeight={900} fontSize={isMobile ? 56 : 124} variant="primary">Lock & Key</Font>
+                            <Font fontWeight={600} fontSize={18}>Find a safe, and secure bike rack</Font>
+                            <Box mt={5} />
+                            <Button size="lg" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => histroy.push('/map')}>Search Your Area</Button>
+                            <Divider mt={5} />
                             <Box mt={5} display="flex" flexDir={isMobile ? "column" : "row"}>
-                                <Button size="lg" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => firebaseApi.auth.signIn(dispatch, showSuccessToast)}>Sign Up With Google</Button>
-                                <Box ml={2} mr={2} mt={2}>
+                                <Button size="sm" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => firebaseApi.auth.signIn(dispatch, showSuccessToast)}>Sign Up With Google</Button>
+                                <Box mr={5} ml={5} d="flex" justifyContent="center" alignItems="center">
                                     Or
                                 </Box>
-                                <Button size="lg" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => firebaseApi.auth.signIn(dispatch, showSuccessToast)}>Sign In With Google</Button>
+                                <Button size="sm" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => firebaseApi.auth.signIn(dispatch, showSuccessToast)}>Sign In With Google</Button>
                             </Box>
                         </Box>
                     </Wrapper>

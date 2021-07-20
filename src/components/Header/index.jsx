@@ -5,6 +5,9 @@ import SettingsMenu from '../SettingsMenu';
 import { Box, Text } from '@chakra-ui/react';
 import { useHistory } from 'react-router-dom';
 import { useGlobalState } from '../../providers/root';
+import { BsFillShieldLockFill } from 'react-icons/bs';
+import LockAndKeyLogo from '../../common/Logo';
+import Font from '../../common/Font';
 
 const Header = () => {
     const { meta } = useGlobalState();
@@ -13,15 +16,24 @@ const Header = () => {
         position: 'fixed',
         top: 0,
         width: "100%",
-        zIndex: 6
+        zIndex: 6,
     }
 
     return (
-        <Flex style={{ ...fixed }} transitionBackground display="flex" backgroundColor="#ffffff00" alignItems="center" padding={meta.isInstalled ? "50px 20px 15px 20px" : "15px 20px"}>
+        <Flex style={{ ...fixed }}
+            transitionBackground
+            display="flex"
+            // backgroundColor="#ffffff80"
+            alignItems="center"
+            padding={meta.isInstalled ? "50px 20px 15px 20px" : "15px 20px"}
+            className="header"
+        >
             <Flex display="flex" direction="column" justifyContent="center">
                 <Flex display="flex" direction="row" margin="0px 0px 0px 0px" hoverCursor alignItems="center">
+                    {/* <BsFillShieldLockFill /> */}
+                    <LockAndKeyLogo />
                     <Box marginRight={2} />
-                    <Text onClick={() => history.push("/")} fontWeight="bold">Locked</Text>
+                    <Font variant="primary" onClick={() => history.push("/")} fontWeight="bold">Lock & Key</Font>
                     <Box marginRight={2} flexGrow={1} />
                 </Flex>
             </Flex>

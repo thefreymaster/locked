@@ -14,12 +14,18 @@ export interface IDefaultState {
         fetching: boolean;
         isDay: boolean;
         isInstalled: boolean;
+        containsLocks?: boolean;
+        dbKey: string;
     },
     coordinates: {
         latitude?: number;
         longitude?: number;
         hasCoordinates: boolean;
         hasCoordinatesError: boolean;
+        live: {
+            latitude?: number;
+            longitude?: number;
+        }
     },
     locks: Array<{
         name: string;
@@ -28,7 +34,15 @@ export interface IDefaultState {
         quality: number;
         safety: number;
         wouldYouLockHere: boolean;
-    }>
+    }>,
+    user: {
+        isNew?: boolean,
+        displayName?: string,
+        email?: string,
+        photoURL?: string,
+        providerId?: string,
+        uid?: string,
+    }
     dispatch: any;
 }
 
@@ -45,12 +59,15 @@ const defaultState: IDefaultState = {
         fetching: true,
         isDay: new Date().getHours() >= 6 && new Date().getHours() <= 17 ? true : false,
         isInstalled: false,
+        dbKey: '',
     },
     coordinates: {
         hasCoordinates: false,
         hasCoordinatesError: false,
+        live: {}
     },
     locks: [],
+    user: {},
     dispatch: () => { },
 }
 

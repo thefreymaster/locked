@@ -6,22 +6,26 @@ import { Spinner } from '@chakra-ui/react';
 import Wrapper from '../common/Wrapper';
 import LocksMap from '../components/LocksMap';
 import RequestLocation from '../components/RequestLocation';
-import AddRack from '../components/AddRack';
+import LottieLoading from '../common/LottieLoading';
 
 const Router = () => {
-    const { firebase } = useGlobalState();
+    const { firebase, meta } = useGlobalState();
 
-    if (firebase.isValidatingAuthentication) {
+    if (firebase.isValidatingAuthentication || meta.fetching) {
         return (
             <Wrapper>
-                <Spinner />
+                <LottieLoading />
             </Wrapper>
         )
     }
     return (
         <Switch>
             <Route exact path="/">
-                <Welcome />
+                {
+                    firebase.isAuthenticated ?
+                        <Redirect to="/map" /> :
+                        <Welcome />
+                }
             </Route>
             <Route exact path="/request">
                 <RequestLocation />
@@ -35,8 +39,11 @@ const Router = () => {
             <Route exact path="/map/:id">
                 <LocksMap />
             </Route>
+            <Route exact path="/edit/:id">
+                <LocksMap />
+            </Route>
             <Route exact path="/add">
-                <AddRack />
+                <LocksMap />
             </Route>
             <Route exact path="/*">
                 <Redirect to="/" />

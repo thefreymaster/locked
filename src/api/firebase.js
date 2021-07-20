@@ -1,3 +1,5 @@
+import imageCompression from 'browser-image-compression';
+import { v4 as uuidv4 } from 'uuid';
 import firebase from "firebase/app";
 import "firebase/analytics";
 import "firebase/auth";
@@ -5,13 +7,11 @@ import "firebase/database";
 import "firebase/storage";
 
 import { authValidationComplete, fetchingComplete, isFetching } from "../actions";
-import { generateKey } from "../utils/generateKey";
 
-const verify = (dispatch, showSuccessToast) => {
+const initialize = ({ lat, lng, dispatch, showSuccessToast }) => {
     firebase.auth()
         .getRedirectResult()
         .then((result) => {
-            console.log(result)
             if (result.credential) {
                 dispatch({ type: 'FIREBASE_AUTHENTICATION_SUCCESS', payload: { user: result.user } });
                 setTimeout(() => {
@@ -20,7 +20,7 @@ const verify = (dispatch, showSuccessToast) => {
                 showSuccessToast();
             }
             if (result.additionalUserInfo && result.additionalUserInfo.isNewUser) {
-                console.log('new')
+                addUserLocation({ user: result.user, dispatch })
             }
         }).catch((error) => {
             console.error(error);
@@ -28,23 +28,30 @@ const verify = (dispatch, showSuccessToast) => {
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
             dispatch({ type: 'FIREBASE_AUTHENTICATION_SUCCESS', payload: { user } });
-            // var userRefUpdates = firebase.database().ref('users/' + user.uid);
-            // userRefUpdates.on('value', (snapshot) => {
-            //     dispatch(isFetching);
-            //     const snapshotValue = snapshot.val();
-            //     if (snapshotValue) {
-            //         if (snapshotValue.groupId) {
-            //             dispatch({ type: 'SET_GROUP_ID', payload: { groupId: snapshotValue.groupId } })
-            //         }
-            //         readGroupId(snapshotValue.groupId, user.uid, dispatch)
-            //     }
-            // })
+            setUser({ dispatch, uid: user.uid })
         }
-        else {
-            dispatch(authValidationComplete);
+        dispatch(authValidationComplete);
+    })
+
+    const dbKey = `${lng.toFixed(0) + lat.toFixed(0)}`;
+    dispatch({ type: 'SET_DB_KEY', payload: { dbKey } });
+
+    var refUpdates = firebase.database().ref(`locks/${dbKey}`);
+    refUpdates.on('value', (snapshot) => {
+        dispatch(isFetching);
+        const snapshotValue = snapshot.val();
+        if (snapshotValue) {
+            dispatch({
+                type: 'POPULATE_DATA',
+                payload: {
+                    locks: snapshotValue
+                }
+            });
             dispatch(fetchingComplete);
         }
-
+        else {
+            dispatch(fetchingComplete);
+        }
     })
 }
 
@@ -58,7 +65,7 @@ const signOut = (dispatch, showInfoToast, history) => {
         setTimeout(() => {
             dispatch({ type: 'FIREBASE_AUTHENTICATION_SIGN_OUT_SUCCESS' });
             showInfoToast();
-            history.push("/")
+            history.push("/map")
             setTimeout(() => {
                 dispatch({ type: 'TOGGLE_SETTINGS_DRAWER' });
             }, 1000);
@@ -68,71 +75,73 @@ const signOut = (dispatch, showInfoToast, history) => {
     });
 }
 
-export const addUserLocation = ({ postData, user, dispatch }) => {
+const addUserLocation = ({ user, dispatch }) => {
     const [provider] = user.providerData;
     var userListRef = firebase.database().ref(`users/${user.uid}`);
     userListRef.update({
-        ...postData,
         createdDate: new Date().toISOString(),
-        provider
+        isNew: true,
+        ...provider,
     }).then(() => {
         dispatch(fetchingComplete);
     });
 }
 
-const add = ({ postData, uid, dispatch, history, toast }) => {
+const add = ({ postData, uid, dispatch, toast, lat, lng, onClose, history }) => {
     dispatch(isFetching);
-    var restaurantListRef = firebase.database().ref(`users/${uid}/restaurants`);
-    restaurantListRef.push({ ...postData, createdDate: new Date().toISOString() }).then(() => {
+    var listRef = firebase.database().ref(`locks/${lng.toFixed(0) + lat.toFixed(0)}`);
+    listRef.push({ ...postData, createdDate: new Date().toISOString(), author: uid }).then(() => {
         toast();
         dispatch(fetchingComplete);
-        history.push("/");
+        onClose();
+        history.push('/map');
     });
 }
 
-const update = ({ postData, uid, dispatch, history, itemId, toast }) => {
+const update = ({ postData, dispatch, itemId, toast, onClose, history, dbKey }) => {
     dispatch(isFetching);
-    var restaurantListRef = firebase.database().ref(`users/${uid}/restaurants/${itemId}`);
-    console.log({ ...postData, modifiedData: new Date().toISOString() })
+    var restaurantListRef = firebase.database().ref(`locks/${dbKey}/${itemId}`);
     restaurantListRef.update({ ...postData, modifiedData: new Date().toISOString() }).then(() => {
         toast();
-        dispatch(fetchingComplete)
-        history.goBack();
+        dispatch(fetchingComplete);
+        onClose();
+        history.push('/map');
     });
 }
 
-const remove = ({ uid, dispatch, history, itemId, onClose, setIsDeleting, toast }) => {
+const remove = ({ dispatch, history, itemId, onClose, setIsDeleting, toast, dbKey }) => {
     dispatch(isFetching);
-    var restaurantListRef = firebase.database().ref(`users/${uid}/restaurants/${itemId}`);
+    var restaurantListRef = firebase.database().ref(`locks/${dbKey}/${itemId}`);
     restaurantListRef.remove().then(() => {
+        history.push("/map");
         toast();
         dispatch(fetchingComplete);
         setIsDeleting(false);
         onClose();
-        history.push("/");
     });
 }
 
-const upload = ({ uid, file, form }) => {
+const upload = ({ uid, file, form, setIsUploading }) => {
     const storage = firebase.storage();
     const storageRef = storage.ref();
-    const imageRef = storageRef.child(`images/${uid}/${file.name}`);
+    const imageRef = storageRef.child(`images/${uid}/${uuidv4()}`);
     const options = {
         maxSizeMB: 0.5,
         useWebWorker: true
     }
-    // imageCompression(file, options)
-    //     .then(function (compressedFile) {
-    //         imageRef.put(compressedFile).then((snapshot) => {
-    //             const { metadata } = snapshot;
-    //             const { fullPath } = metadata;
-    //             form.setFieldValue("imageUrl", fullPath);
-    //             console.log('Uploaded a blob or file!');
-    //         });
-    //     })
-    //     .catch(function (error) {
-    //         console.log(error.message);
-    //     });
+    imageCompression(file, options)
+        .then(function (compressedFile) {
+            imageRef.put(compressedFile).then((snapshot) => {
+                const { metadata } = snapshot;
+                const { fullPath } = metadata;
+                form.setFieldValue("imageUrl", fullPath);
+                console.log('Uploaded a blob or file!');
+                setIsUploading(false);
+            });
+        })
+        .catch(function (error) {
+            console.log(error.message);
+        });
 }
 
 const getImage = ({ id, fileUrl, dispatch }) => {
@@ -142,16 +151,61 @@ const getImage = ({ id, fileUrl, dispatch }) => {
         .then((url) => dispatch({ type: 'SET_IMAGE_ABSOLUTE_URL', payload: { url, id } }))
 }
 
+const refresh = ({ lat, lng, dispatch }) => {
+    const dbKey = `${lng.toFixed(0) + lat.toFixed(0)}`;
+    var refUpdates = firebase.database().ref(`locks/${dbKey}`);
+    refUpdates.on('value', (snapshot) => {
+        dispatch(isFetching);
+        const snapshotValue = snapshot.val();
+        if (snapshotValue) {
+            dispatch({
+                type: 'POPULATE_DATA',
+                payload: {
+                    locks: snapshotValue
+                }
+            });
+            dispatch(fetchingComplete);
+        }
+        else {
+            dispatch(fetchingComplete);
+        }
+    })
+
+}
+
+const oldUser = ({ uid }) => {
+    var listRef = firebase.database().ref(`users/${uid}`);
+    listRef.update({ isNew: false }).then(() => { });
+}
+
+const setUser = ({ dispatch, uid }) => {
+    var listRef = firebase.database().ref(`users/${uid}`);
+    listRef.on('value', (snapshot) => {
+        const snapshotValue = snapshot.val();
+        if (snapshotValue) {
+            dispatch({
+                type: 'POPULATE_USER_DATA',
+                payload: {
+                    user: snapshotValue
+                }
+            });
+        }
+    })
+}
+
 const firebaseApi = {
-    verify,
+    initialize,
     auth: {
         signIn,
         signOut,
+        oldUser,
+        setUser,
     },
     add,
     update,
     remove,
     upload,
+    refresh,
     getImage,
 }
 

@@ -32,7 +32,7 @@ const SettingsMenu = () => {
             status: "success",
             duration: 3000,
             isClosable: true,
-            position: 'top'
+            position: 'bottom'
         })
     }
     const showInfoToast = () => {
@@ -41,12 +41,12 @@ const SettingsMenu = () => {
             status: "info",
             duration: 3000,
             isClosable: true,
-            position: 'top'
+            position: 'bottom'
         })
     }
     return (
         <Menu autoSelect={false}>
-            <MenuButton isDisabled={firebase.isValidatingAuthentication}>
+            <MenuButton disabled={firebase.isValidatingAuthentication}>
                 <SettingsMenuButton firebase={firebase} meta={meta} />
             </MenuButton>
             <MenuList>
@@ -63,7 +63,7 @@ const SettingsMenu = () => {
                 </MenuGroup>
                 <MenuGroup>
                     <MenuDivider />
-                    <MenuItem onClick={() => history.push("/about")}>About</MenuItem>
+                    <MenuItem>v0.3.0</MenuItem>
                 </MenuGroup>
                 <MenuGroup>
                     {firebase.isAuthenticated && (

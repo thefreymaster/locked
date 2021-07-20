@@ -1,4 +1,4 @@
-import { addUserLocation } from "../api/firebase";
+import { throttle } from "lodash";
 
 export const getCoordinates = (setFieldValue, setIsGettingCoordinates, setGpsError) => {
     const options = {
@@ -47,18 +47,40 @@ export const getCoordinatesOutsideForm = (setIsGettingCoordinates, setGpsError, 
     );
 }
 
-export const getGPSCoordinates = (dispatch, user) => {
+export const getGPSCoordinates = (dispatch, verify) => {
     const options = {
-        timeout: 10000, enableHighAccuracy: true, maximumAge: 0
+        timeout: 10000,
+        enableHighAccuracy: true,
     }
-    return navigator.geolocation.watchPosition(
+    return navigator.geolocation.getCurrentPosition(
+        (position) => {
+            const { latitude } = position.coords;
+            const { longitude } = position.coords;
+            dispatch({ type: 'SET_GPS_COORDINATES', payload: { latitude, longitude } });
+            dispatch({ type: 'SET_USER_GPS_COORDINATES', payload: { latitude, longitude } })
+            verify();
+        },
+        () => {
+            dispatch({ type: 'HAS_COORDINATES_ERROR' })
+        },
+        options
+    );
+}
+
+export const getLiveGPSCoordinates = (setCoordinates) => {
+    const options = {
+        enableHighAccuracy: true, maximumAge: 0
+    }
+    navigator.geolocation.getCurrentPosition(
         (position) => {
             const { latitude, longitude } = position.coords;
-            addUserLocation({ postData: { coordinates: { latitude, longitude } }, user, dispatch })
-            dispatch({ type: 'SET_GPS_COORDINATES', payload: { latitude, longitude } })
+            setTimeout(() => {
+                setCoordinates([longitude, latitude]);
+                getLiveGPSCoordinates(setCoordinates);
+                console.log('coordinates set')
+            }, 5000);
         },
         (e) => {
-            dispatch({ type: 'HAS_COORDINATES_ERROR' })
             console.log(e)
         },
         options

@@ -1,32 +1,36 @@
-import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Button, Spinner } from '@chakra-ui/react';
-import React, { useEffect } from 'react';
+import { Alert, AlertDescription, AlertIcon, AlertTitle, Box, Spinner } from '@chakra-ui/react';
+import React from 'react';
 import { useGlobalState } from '../../providers/root';
 import { getGPSCoordinates } from '../../utils/gps';
 import { Redirect, useParams } from 'react-router-dom';
 import Wrapper from '../../common/Wrapper';
 import { usePageVisibility } from 'react-page-visibility';
+import DeviceWrapper from '../../common/DeviceWrapper';
+import LottieLoading from '../../common/LottieLoading';
 
 const RequestLocation = () => {
     const { coordinates, dispatch, firebase } = useGlobalState();
     const { id } = useParams();
     const isVisible = usePageVisibility()
 
-    useEffect(() => {
+    React.useLayoutEffect(() => {
         if (firebase.isAuthenticated && isVisible) {
             getGPSCoordinates(dispatch, firebase.user)
         }
-    }, [isVisible])
+    }, [])
 
     if (coordinates.hasCoordinatesError) {
         return (
             <Wrapper>
-                <Box display="flex" alignItems="center" justifyContent="center">
-                    <Alert status="error">
-                        <AlertIcon />
-                        <AlertTitle mr={2}>GPS Error!</AlertTitle>
-                        <AlertDescription>Your location could not be determined.</AlertDescription>
-                    </Alert>
-                </Box>
+                <DeviceWrapper>
+                    <Box display="flex" alignItems="center" justifyContent="center">
+                        <Alert status="error">
+                            <AlertIcon />
+                            <AlertTitle mr={2}>GPS Error!</AlertTitle>
+                            <AlertDescription>Your location could not be determined.</AlertDescription>
+                        </Alert>
+                    </Box>
+                </DeviceWrapper>
             </Wrapper>
         )
     }
@@ -34,7 +38,7 @@ const RequestLocation = () => {
         return (
             <Wrapper>
                 <Box display="flex" alignItems="center" justifyContent="center">
-                    <Spinner />
+                    <LottieLoading />
                 </Box>
             </Wrapper>
         )
