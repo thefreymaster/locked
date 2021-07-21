@@ -26,8 +26,14 @@ const AbsoluteButton = (props) => {
             colorScheme={PRIMARY_COLOR_SCHEME} 
             isLoading={props.loading} 
             disabled={props.disabled} 
-            boxShadow={'0 0px 0px -1px #ffffff80, 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12)'}
+            boxShadow="base"
             style={fixedButton} 
+            _active={{
+                boxShadow: "xs"
+            }}
+            _focus={{
+                boxShadow: "xs"
+            }}
             onClick={props.onClick}>
                 {props.children}
         </Button>

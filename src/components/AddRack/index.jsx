@@ -27,7 +27,7 @@ import LottieLoading from '../../common/LottieLoading';
 const AddRack = (props) => {
     let { id } = useParams();
     const { firebase, meta, dispatch, locks, coordinates } = useGlobalState();
-    const { dbKey} = meta;
+    const { dbKey } = meta;
     const [isUploading, setIsUploading] = React.useState(false);
     const history = useHistory();
 
@@ -75,7 +75,7 @@ const AddRack = (props) => {
 
     return (
         <Fade in>
-            <Box margin="0px 0px 60px 0px" display="flex" justifyContent="center" alignItems="center">
+            <Box margin="0px 0px 60px 0px" display="flex" justifyContent="center" alignItems="center" style={{ zIndex: 20 }}>
                 <DeviceWrapper>
                     <Formik
                         initialValues={locks[id] || initialValues}
@@ -99,15 +99,15 @@ const AddRack = (props) => {
                                                     </FormControl>
                                                 )}
                                             </Field>
-                                            {/* <Field name="notes">
+                                            <Field name="notes">
                                                 {({ field, form }) => (
                                                     <FormControl isInvalid={form.errors.notes && form.touched.notes}>
-                                                        <FormLabel htmlFor="notes">Description</FormLabel>
+                                                        <FormLabel htmlFor="notes">Notes</FormLabel>
                                                         <Textarea {...field} variant="filled" id="notes" placeholder="What made it memoriable" />
                                                     </FormControl>
                                                 )}
                                             </Field>
-                                            <Stack direction="row">
+                                            {/* <Stack direction="row">
                                                 <Field name="location.city">
                                                     {({ field, form }) => (
                                                         <FormControl isInvalid={form.errors.city && form.touched.city}>
@@ -275,13 +275,13 @@ const AddRack = (props) => {
                                                     <Photo name={locks[id].name} imageUrlAbsolute={locks[id].imageUrlAbsolute} />
                                                 </Box>
                                             )}
-                                            <AbsoluteButton bottom={20}  disabled={validatePage3({ values: formProps.values }) || isUploading} loading={isUploading || meta.fetching} onClick={() => {
+                                            <AbsoluteButton bottom={20} disabled={validatePage3({ values: formProps.values }) || isUploading} loading={isUploading || meta.fetching} onClick={() => {
                                                 if (id) {
-                                                    firebaseApi.update({ 
-                                                        postData: formProps.values, 
-                                                        uid: firebase.user.uid, 
-                                                        dispatch, 
-                                                        itemId: id, 
+                                                    firebaseApi.update({
+                                                        postData: formProps.values,
+                                                        uid: firebase.user.uid,
+                                                        dispatch,
+                                                        itemId: id,
                                                         toast: showSuccessEditToast,
                                                         onClose: props.onClose,
                                                         history,

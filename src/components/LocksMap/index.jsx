@@ -18,6 +18,7 @@ import { isMobile } from 'react-device-detect';
 import BikeRackMarker from './BikeRackMarker';
 import NewUserModal from '../NewUser/index';
 import LottieLoading from '../../common/LottieLoading';
+import MapActions from './MapActions';
 
 const Map = ReactMapboxGl({
     accessToken:
@@ -123,31 +124,12 @@ const MapContainer = (props) => {
                 )}
                 <MarkerContainer coordinates={coordinates} />
             </Map>
-            <AbsoluteButton right={meta.isInstalled && 20} left={meta.isInstalled ? "none" : 20} top={meta.isInstalled && 100} onClick={() => {
-                history.push("/map");
-                setViewport({
-                    ...viewport,
-                    latitude: coordinates.live.latitude,
-                    longitude: coordinates.live.longitude,
-                    zoom: 14,
-                })
-            }}>
-                <MdGpsFixed />
-            </AbsoluteButton>
-            {firebase.isAuthenticated && (
-                <AbsoluteButton onClick={() => {
-                    history.push('/add');
-                    if (user.isNew) {
-                        newUserOnOpen();
-                    }
-                    else {
-                        onOpen();
-                    }
-
-                }}>
-                    <BiAddToQueue />
-                </AbsoluteButton>
-            )}
+            <MapActions
+                setViewport={setViewport}
+                viewport={viewport}
+                newUserOnOpen={newUserOnOpen}
+                onOpen={onOpen}
+            />
             <DrawerContainer title="Add Bike Rack" isOpen={isOpen} onClose={() => {
                 history.push('/map');
                 onClose()
@@ -189,9 +171,9 @@ const BikeRacksContainer = (props) => {
                 key={`friend-marker-${key}`}
                 coordinates={[location.long, location.lat]}
                 className="rack-marker">
-                <div style={style}>
+                {/* <div style={style}> */}
                     <BikeRackMarker overallRating={overallRating} />
-                </div>
+                {/* </div> */}
             </Marker>
         )
     })

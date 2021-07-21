@@ -18,7 +18,7 @@ const Footer = (props) => {
         bottom: 0,
         left: 0,
         width: "100%",
-        zIndex: 2,
+        zIndex: 5,
         minHeight: 90,
         maxHeight: 90,
         borderTop: "1px solid #edf2f7",

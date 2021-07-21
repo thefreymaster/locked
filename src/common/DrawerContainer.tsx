@@ -1,4 +1,6 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
+
 import {
     Drawer,
     DrawerOverlay,
@@ -16,8 +18,9 @@ interface IDrawerContainer {
 }
 
 const DrawerContainer = (props: IDrawerContainer) => {
+    const location: any = useLocation();
     return (
-        <Drawer placement="bottom" isOpen={props.isOpen} onClose={props.onClose} size="lg" motionPreset="slideInBottom">
+        <Drawer placement="bottom" isOpen={props.isOpen || location.pathname.includes('/add')} onClose={props.onClose} size="lg" motionPreset="slideInBottom">
             <DrawerOverlay />
             <DrawerContent>
                 <DrawerHeader>{props.title}</DrawerHeader>

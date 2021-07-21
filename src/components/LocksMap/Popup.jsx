@@ -44,14 +44,14 @@ const RackPopup = (props) => {
         <Fade in={fadeIn}>
             <Box flexDir="column" maxW="lg" key={lock.name} style={inline} display="flex" minH="400px">
                 <Box width="100%" display="flex" justifyContent="flex-end">
-                    <CloseButton position="absolute" color="white" margin={2} mr={meta.isInstalled && 1} size="lg" onClick={() => {
+                    <CloseButton position="absolute" color="white" size="lg" onClick={() => {
                         setFadeIn(false);
                         props.setPopupViewport({ visible: false, coordinates: [], lock: {} });
                         props.setViewport({ ...props.viewport, zoom: 15 });
                         history.push('/map')
                     }} />
                 </Box>
-                <Image minH={isMobile ? 100 : 250} objectFit="cover" bg="red.800" color="white" loading="eager" borderRadius="10px 10px 0px 0px" name={lock.name} src={lock.imageUrlAbsolute} />
+                <Image minH={275} objectFit="cover" bg="red.800" color="white" loading="eager" borderRadius="10px 10px 0px 0px" name={lock.name} src={lock.imageUrlAbsolute} />
                 <Box display="flex" flexDirection="row" padding="15px 15px 0px 15px" justifyContent="center" alignItems="center">
                     <RackRecommendation recommended={lock.recommended} />
                     <RackSize size={lock.size} />
@@ -70,6 +70,7 @@ const RackPopup = (props) => {
                 <Divider pt={3} />
                 <Box padding="15px 15px 0px 15px">
                     <Font variant="primary" fontSize={24} textAlign="center" fontWeight="bold">{lock.name}</Font>
+                    <Text textAlign="center">{lock.notes}</Text>
                     <Box display="flex" direction="row" alignItems="flex-start" marginTop={4}>
                         <Box display="flex" flexDir="column" justifyContent="center" alignItems="center" flexGrow={1}>
                             <StarRating overallRating={lock.ratings.quality} />
