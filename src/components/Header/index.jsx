@@ -2,7 +2,7 @@ import React from 'react';
 import Flex from '../../common/Flex';
 import './header.scss';
 import SettingsMenu from '../SettingsMenu';
-import { Box, Slide } from '@chakra-ui/react';
+import { Box, Button, Slide } from '@chakra-ui/react';
 import { useHistory } from 'react-router-dom';
 import { useGlobalState } from '../../providers/root';
 import LockAndKeyLogo from '../../common/Logo';

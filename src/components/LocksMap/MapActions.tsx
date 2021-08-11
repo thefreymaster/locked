@@ -2,7 +2,7 @@ import React from 'react';
 import AbsoluteButton from '../../common/AbsoluteButton';
 import { useGlobalState } from '../../providers/root';
 import { useHistory } from 'react-router-dom';
-import { RiAddCircleLine } from 'react-icons/ri';
+import { HiOutlineDocumentAdd } from 'react-icons/hi';
 
 interface IMapActions {
     setViewport(viewPort: any): void;
@@ -35,7 +35,7 @@ const MapActions = (props: IMapActions) => {
                 <MdGpsFixed />
             </AbsoluteButton> */}
             {firebase.isAuthenticated && (
-                <AbsoluteButton onClick={() => {
+                <AbsoluteButton rightIcon={<HiOutlineDocumentAdd />} onClick={() => {
                     history.push('/add');
                     if (user.isNew) {
                         props.newUserOnOpen();

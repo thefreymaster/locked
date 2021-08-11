@@ -2,7 +2,7 @@ import ReactMapboxGl, { Marker, Popup } from 'react-mapbox-gl';
 import React from 'react';
 import { useGlobalState } from '../../providers/root';
 import { Redirect } from 'react-router-dom';
-import { Box, useDisclosure } from '@chakra-ui/react';
+import { Box, Fade, useDisclosure } from '@chakra-ui/react';
 import { useHistory, useParams } from 'react-router-dom';
 import './users-map.scss';
 import { calculateOverallRating } from '../../utils/calcOverallRating';
@@ -16,6 +16,7 @@ import BikeRackMarker from './BikeRackMarker';
 import NewUserModal from '../NewUser/index';
 import LottieLoading from '../../common/LottieLoading';
 import MapActions from './MapActions';
+import { CurrentCoordinates } from '../CurrentCoordinates/index';
 
 const Map = ReactMapboxGl({
     accessToken:
@@ -85,6 +86,7 @@ const MapContainer = (props) => {
     }
 
     const [viewport, setViewport] = React.useState({ ...initialViewport });
+    const [center, setCenter] = React.useState({ latitude: initialViewport.latitude, longitude: initialViewport.longitude })
     const [popupViewport, setPopupViewport] = React.useState({
         visible: props.id ? true : false,
         coordinates: lock ? [lock.location.long, lock.location.lat + 0.00009590001135] : [],
@@ -92,15 +94,15 @@ const MapContainer = (props) => {
         id: props.id,
     })
 
-    if (!viewport) {
-        return (
-            <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-                <LottieLoading />
-            </Box>
-        )
-    }
-    return (
-        <>
+    const MemorizedMap = React.useMemo(() => {
+        if (!viewport) {
+            return (
+                <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
+                    <LottieLoading />
+                </Box>
+            )
+        }
+        return (<>
             <Map
                 style="mapbox://styles/thefreymaster/ckke447ga0wla19k1cqupmrrz"
                 containerStyle={{
@@ -109,6 +111,10 @@ const MapContainer = (props) => {
                 }}
                 center={[viewport.longitude, viewport.latitude]}
                 zoom={[viewport.zoom]}
+                onDragEnd={({ transform }) => {
+                    const { center } = transform;
+                    setCenter({ latitude: center.lat, longitude: center.lng })
+                }}
             >
                 <BikeRacksContainer setViewport={setViewport} viewport={viewport} setPopupViewport={setPopupViewport} />
                 {popupViewport.visible && (
@@ -136,8 +142,15 @@ const MapContainer = (props) => {
                 onOpen={onOpen}
             />
             <NewUserModal isOpen={newUserIsOpen} onClose={newUserOnClose} onOpenAdd={onOpen} />
+        </>)
+    }, [viewport, popupViewport])
+
+    return (
+        <>
+            <CurrentCoordinates lat={center.latitude} long={center.longitude} />
+            {MemorizedMap}
         </>
-    )
+    );
 }
 
 const style = {
@@ -189,7 +202,9 @@ const MarkerContainer = (props) => {
 
     return (
         <Marker style={{ zIndex: 2 }} key="you-marker" coordinates={[long, lat]}>
-            <div className="you" />
+            <Fade in>
+                <div className="you" />
+            </Fade>
         </Marker>
     )
 }
