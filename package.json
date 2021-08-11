@@ -28,7 +28,6 @@
     "react-lottie": "^1.2.3",
     "react-mapbox-gl": "4.8.6",
     "react-page-visibility": "^6.4.0",
-    "react-router-cache-route": "^1.11.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "uuid": "^8.3.2",

@@ -1,5 +1,9 @@
 export const changeLog = [
     {
+        version: 'v0.5.2',
+        changes: 'Router caching removal',
+    },
+    {
         version: 'v0.5.1',
         changes: 'Fixed left alignment of auth badge',
     },

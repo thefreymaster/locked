@@ -1,10 +1,8 @@
 import React from 'react';
 import AbsoluteButton from '../../common/AbsoluteButton';
 import { useGlobalState } from '../../providers/root';
-import { MdGpsFixed } from 'react-icons/md';
 import { useHistory } from 'react-router-dom';
-import { BiAddToQueue } from 'react-icons/bi';
-import { RiAddLine, RiSubtractLine } from 'react-icons/ri';
+import { RiAddCircleLine } from 'react-icons/ri';
 
 interface IMapActions {
     setViewport(viewPort: any): void;
@@ -14,7 +12,7 @@ interface IMapActions {
 }
 
 const MapActions = (props: IMapActions) => {
-    const { meta, coordinates, firebase, user } = useGlobalState();
+    const { firebase, user } = useGlobalState();
     const history = useHistory();
     return (
         <>
@@ -26,7 +24,7 @@ const MapActions = (props: IMapActions) => {
                     <RiSubtractLine />
                 </AbsoluteButton>
             </>} */}
-            <AbsoluteButton left={20} onClick={() => {
+            {/* <AbsoluteButton left={20} onClick={() => {
                 props.setViewport({
                     ...props.viewport,
                     latitude: coordinates.live.latitude,
@@ -35,7 +33,7 @@ const MapActions = (props: IMapActions) => {
                 })
             }}>
                 <MdGpsFixed />
-            </AbsoluteButton>
+            </AbsoluteButton> */}
             {firebase.isAuthenticated && (
                 <AbsoluteButton onClick={() => {
                     history.push('/add');
@@ -46,7 +44,7 @@ const MapActions = (props: IMapActions) => {
                         props.onOpen();
                     }
                 }}>
-                    <BiAddToQueue />
+                    Add
                 </AbsoluteButton>
             )}
         </>
