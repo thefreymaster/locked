@@ -25,7 +25,12 @@ export interface IDefaultState {
         live: {
             latitude?: number;
             longitude?: number;
-        }
+        };
+        center: {
+            latitude?: number;
+            longitude?: number;
+            showCenter: boolean;
+        };
     },
     locks: Array<{
         name: string;
@@ -64,7 +69,10 @@ const defaultState: IDefaultState = {
     coordinates: {
         hasCoordinates: false,
         hasCoordinatesError: false,
-        live: {}
+        live: {},
+        center: {
+            showCenter: false,
+        },
     },
     locks: [],
     user: {},

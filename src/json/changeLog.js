@@ -1,5 +1,9 @@
 export const changeLog = [
     {
+        version: 'v0.5.4',
+        changes: 'Added current center, added center as default gps coordinates, added center toggle',
+    },
+    {
         version: 'v0.5.3',
         changes: 'Footer fix',
     },

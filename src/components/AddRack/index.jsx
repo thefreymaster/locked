@@ -78,7 +78,7 @@ const AddRack = (props) => {
             <Box margin="0px 0px 60px 0px" display="flex" justifyContent="center" alignItems="center" style={{ zIndex: 20 }}>
                 <DeviceWrapper>
                     <Formik
-                        initialValues={locks[id] || initialValues}
+                        initialValues={locks[id] || { ...initialValues, location: { lat: coordinates.center.latitude, long: coordinates.center.longitude } }}
                         onSubmit={(values, actions) => {
                             setTimeout(() => {
                                 alert(JSON.stringify(values, null, 2))
@@ -155,7 +155,7 @@ const AddRack = (props) => {
                                             <Box marginBottom="15px">
                                                 <Button isLoading={isGettingCoordinates} minW="100%" onClick={() => {
                                                     handleGetGPSCoordinates(formProps.setFieldValue, setGpsError)
-                                                }}>Current Location</Button>
+                                                }}>Use Current Location</Button>
                                             </Box>
                                             {gpsError && (
                                                 <Alert status="error">

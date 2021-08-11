@@ -49,6 +49,11 @@ const reducer = (state: any, action: any) => {
             newState.coordinates.live.longitude = payload.longitude;
             break;
         }
+        case 'SET_CENTER_GPS_COORDINATES': {
+            newState.coordinates.center.latitude = payload.latitude;
+            newState.coordinates.center.longitude = payload.longitude;
+            break;
+        }
         case 'SET_HAS_GPS_COORDINATES': {
             newState.coordinates.hasCoordinates = true;
             break;
@@ -84,6 +89,14 @@ const reducer = (state: any, action: any) => {
         }
         case 'POPULATE_USER_DATA': {
             newState.user = payload.user;
+            break;
+        }
+        case 'SHOW_CENTER': {
+            newState.coordinates.center.showCenter = true;
+            break;
+        }
+        case 'HIDE_CENTER': {
+            newState.coordinates.center.showCenter = false;
             break;
         }
         default:

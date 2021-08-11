@@ -17,6 +17,8 @@ import NewUserModal from '../NewUser/index';
 import LottieLoading from '../../common/LottieLoading';
 import MapActions from './MapActions';
 import { CurrentCoordinates } from '../CurrentCoordinates/index';
+import { MdClear } from 'react-icons/md';
+import { Center } from './Center';
 
 const Map = ReactMapboxGl({
     accessToken:
@@ -60,7 +62,7 @@ const LocksMap = () => {
 
 const MapContainer = (props) => {
     let initialViewport;
-    const { locks, coordinates } = useGlobalState();
+    const { locks, coordinates, dispatch } = useGlobalState();
     const { onOpen, onClose } = useDisclosure();
     const { isOpen: newUserIsOpen, onOpen: newUserOnOpen, onClose: newUserOnClose } = useDisclosure()
 
@@ -113,7 +115,7 @@ const MapContainer = (props) => {
                 zoom={[viewport.zoom]}
                 onDragEnd={({ transform }) => {
                     const { center } = transform;
-                    setCenter({ latitude: center.lat, longitude: center.lng })
+                    dispatch({ type: "SET_CENTER_GPS_COORDINATES", payload: { latitude: center.lat, longitude: center.lng } })
                 }}
             >
                 <BikeRacksContainer setViewport={setViewport} viewport={viewport} setPopupViewport={setPopupViewport} />
@@ -147,7 +149,8 @@ const MapContainer = (props) => {
 
     return (
         <>
-            <CurrentCoordinates lat={center.latitude} long={center.longitude} />
+            <CurrentCoordinates />
+            <Center />
             {MemorizedMap}
         </>
     );
