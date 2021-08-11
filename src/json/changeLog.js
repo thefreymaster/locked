@@ -1,5 +1,9 @@
 export const changeLog = [
     {
+        version: 'v0.5.3',
+        changes: 'Footer fix',
+    },
+    {
         version: 'v0.5.2',
         changes: 'Router caching removal',
     },

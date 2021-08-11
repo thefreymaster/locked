@@ -10,6 +10,7 @@ import './welcome.scss';
 import { PRIMARY_COLOR_SCHEME } from '../../constants';
 import DeviceWrapper from '../../common/DeviceWrapper';
 import LottieLoading from '../../common/LottieLoading';
+import LockAndKeyLogo from '../../common/Logo';
 
 const Welcome = () => {
     const { firebase, dispatch } = useGlobalState();
@@ -61,6 +62,7 @@ const Welcome = () => {
                 <SlideFade direction="bottom" in={isOpen}>
                     <Wrapper>
                         <Box display="flex" flexDir="column" justifyContent="center" alignItems="center">
+                            <LockAndKeyLogo />
                             <Font fontWeight={900} fontSize={isMobile ? 56 : 124} variant="primary">Lock & Key</Font>
                             <Font fontWeight={600} fontSize={18}>Find a safe, and secure bike rack</Font>
                             <Box mt={5} />

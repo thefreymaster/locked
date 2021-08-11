@@ -41,9 +41,9 @@ const App = () => {
 
   return (
     <Zindex zIndex={1}>
-      {!firebase.isValidatingAuthentication && coordinates.hasCoordinates && <Header />}
+      {!meta.isInstalled && <Header />}
       <Router />
-      {meta.isInstalled && !firebase.isValidatingAuthentication && coordinates.hasCoordinates && <Footer history={history} />}
+      {meta.isInstalled && <Footer history={history} />}
     </Zindex>
   );
 }
