@@ -170,7 +170,9 @@ const BikeRacksContainer = (props) => {
                 key={`friend-marker-${key}`}
                 coordinates={[location.long, location.lat]}
                 className="rack-marker">
+                {/* <div style={style}> */}
                 <BikeRackMarker overallRating={overallRating} />
+                {/* </div> */}
             </Marker>
         )
     })
