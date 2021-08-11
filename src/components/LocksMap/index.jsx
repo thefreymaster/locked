@@ -80,7 +80,7 @@ const MapContainer = (props) => {
             height: window.innerHeight,
             latitude: coordinates.latitude,
             longitude: coordinates.longitude,
-            zoom: 14,
+            zoom: 15,
         }
     }
 
