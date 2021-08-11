@@ -3,10 +3,7 @@ import React from 'react';
 import { useGlobalState } from '../../providers/root';
 import { Redirect } from 'react-router-dom';
 import { Box, useDisclosure } from '@chakra-ui/react';
-import AbsoluteButton from '../../common/AbsoluteButton';
 import { useHistory, useParams } from 'react-router-dom';
-import { MdGpsFixed } from 'react-icons/md';
-import { BiAddToQueue } from 'react-icons/bi';
 import './users-map.scss';
 import { calculateOverallRating } from '../../utils/calcOverallRating';
 import DeviceWrapper from '../../common/DeviceWrapper';
@@ -28,6 +25,8 @@ const Map = ReactMapboxGl({
 const LocksMap = () => {
     const { coordinates, locks } = useGlobalState();
     const { id } = useParams();
+    const history = useHistory();
+    const { isOpen, onOpen, onClose } = useDisclosure();
 
     if (!coordinates.hasCoordinates) {
         if (id) {
@@ -47,14 +46,21 @@ const LocksMap = () => {
     return (
         <DeviceWrapper>
             <MapContainer id={id} />
+            <DrawerContainer title="Add Bike Rack" isOpen={isOpen} onClose={() => {
+                history.push('/map');
+                onClose();
+            }}>
+                <AddRack onClose={onClose} />
+            </DrawerContainer>
         </DeviceWrapper>
     )
 }
 
+
 const MapContainer = (props) => {
     let initialViewport;
-    const { locks, coordinates, firebase, user, meta } = useGlobalState();
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const { locks, coordinates } = useGlobalState();
+    const { onOpen, onClose } = useDisclosure();
     const { isOpen: newUserIsOpen, onOpen: newUserOnOpen, onClose: newUserOnClose } = useDisclosure()
 
     const lock = locks[props.id];
@@ -85,7 +91,6 @@ const MapContainer = (props) => {
         lock: lock || {},
         id: props.id,
     })
-    const history = useHistory();
 
     if (!viewport) {
         return (
@@ -130,12 +135,6 @@ const MapContainer = (props) => {
                 newUserOnOpen={newUserOnOpen}
                 onOpen={onOpen}
             />
-            <DrawerContainer title="Add Bike Rack" isOpen={isOpen} onClose={() => {
-                history.push('/map');
-                onClose()
-            }}>
-                <AddRack onClose={onClose} />
-            </DrawerContainer>
             <NewUserModal isOpen={newUserIsOpen} onClose={newUserOnClose} onOpenAdd={onOpen} />
         </>
     )
@@ -171,9 +170,7 @@ const BikeRacksContainer = (props) => {
                 key={`friend-marker-${key}`}
                 coordinates={[location.long, location.lat]}
                 className="rack-marker">
-                {/* <div style={style}> */}
-                    <BikeRackMarker overallRating={overallRating} />
-                {/* </div> */}
+                <BikeRackMarker overallRating={overallRating} />
             </Marker>
         )
     })

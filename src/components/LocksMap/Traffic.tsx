@@ -1,4 +1,5 @@
 import { Badge, Box } from '@chakra-ui/react';
+import { capitalize } from 'lodash';
 import React from 'react';
 import { RiWalkFill } from 'react-icons/ri';
 import ToolTip from '../../common/ToolTip';
@@ -17,7 +18,7 @@ const Traffic = (props: { traffic: string }) => {
         return 'red';
     }
     return (
-        <ToolTip label="Foot Traffic">
+        <ToolTip label={`${capitalize(props.traffic)} Foot Traffic`}>
             <Box display="flex" alignItems="center">
                 <Box marginRight="1px" />
                 <Badge variant="subtle" colorScheme={getColor()}>

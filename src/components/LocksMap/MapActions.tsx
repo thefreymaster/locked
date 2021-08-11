@@ -18,14 +18,14 @@ const MapActions = (props: IMapActions) => {
     const history = useHistory();
     return (
         <>
-            {!meta.isInstalled && <>
+            {/* {!meta.isInstalled && <>
                 <AbsoluteButton right="none" left={20} bottom={120} onClick={() => props.setViewport({ ...props.viewport, zoom: props.viewport.zoom + 1 })}>
                     <RiAddLine />
                 </AbsoluteButton>
                 <AbsoluteButton right="none" left={20} bottom={75} onClick={() => props.setViewport({ ...props.viewport, zoom: props.viewport.zoom - 1 })}>
                     <RiSubtractLine />
                 </AbsoluteButton>
-            </>}
+            </>} */}
             <AbsoluteButton right={meta.isInstalled ? 20 : "none"} left={meta.isInstalled ? "none" : 20} top={meta.isInstalled && 60} onClick={() => {
                 props.setViewport({
                     ...props.viewport,

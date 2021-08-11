@@ -20,7 +20,7 @@ interface IDrawerContainer {
 const DrawerContainer = (props: IDrawerContainer) => {
     const location: any = useLocation();
     return (
-        <Drawer placement="bottom" isOpen={props.isOpen || location.pathname.includes('/add')} onClose={props.onClose} size="lg" motionPreset="slideInBottom">
+        <Drawer placement="bottom" isOpen={props.isOpen || location.pathname.includes('/add') || location.pathname.includes('/edit')} onClose={props.onClose} size="lg" motionPreset="slideInBottom">
             <DrawerOverlay />
             <DrawerContent>
                 <DrawerHeader>{props.title}</DrawerHeader>

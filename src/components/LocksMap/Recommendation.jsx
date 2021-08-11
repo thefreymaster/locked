@@ -6,7 +6,7 @@ import ToolTip from '../../common/ToolTip';
 const RackRecommendation = (props) => {
     return (
         props.recommended ? (
-            <ToolTip label="Recommendation">
+            <ToolTip label="Recommended">
                 <Box display="flex" alignItems="center">
                     <Box marginRight="1px" />
                     <Badge variant="subtle" colorScheme="green">
@@ -16,7 +16,7 @@ const RackRecommendation = (props) => {
                 </Box>
             </ToolTip>
         ) : (
-            <ToolTip label="Recommendation">
+            <ToolTip label="Not Recommended">
                 <Box display="flex" alignItems="center">
                     <Box marginRight="1px" />
                     <Badge variant="subtle" colorScheme="red">

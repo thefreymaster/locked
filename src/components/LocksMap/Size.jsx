@@ -5,7 +5,7 @@ import ToolTip from '../../common/ToolTip';
 const RackSize = (props) => {
     if (props.size === 'sm') {
         return (
-            <ToolTip label="Size">
+            <ToolTip label={`${props.size.toUpperCase()} Size`}>
                 <Box display="flex" alignItems="center">
                     <Box marginRight="1px" />
                     <Badge variant="subtle" colorScheme="red">SM</Badge>
@@ -16,7 +16,7 @@ const RackSize = (props) => {
     }
     if (props.size === 'md') {
         return (
-            <ToolTip label="Size">
+            <ToolTip label={`${props.size.toUpperCase()} Size`}>
                 <Box display="flex" alignItems="center">
                     <Box marginRight="1px" />
                     <Badge variant="subtle" colorScheme="yellow">MD</Badge>
@@ -26,7 +26,7 @@ const RackSize = (props) => {
         )
     }
     return (
-        <ToolTip label="Size">
+        <ToolTip label={`${props.size.toUpperCase()} Size`}>
             <Box display="flex" alignItems="center">
                 <Box marginRight="1px" />
                 <Badge variant="subtle" colorScheme="green">LG</Badge>
