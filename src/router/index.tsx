@@ -15,7 +15,9 @@ import {
     AlertTitle,
     AlertDescription,
     Box,
-} from "@chakra-ui/react"
+} from "@chakra-ui/react";
+import CacheRoute, { CacheSwitch } from 'react-router-cache-route'
+
 
 const Router = () => {
     const { firebase, meta, coordinates } = useGlobalState();

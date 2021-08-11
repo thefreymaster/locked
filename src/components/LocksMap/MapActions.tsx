@@ -26,7 +26,7 @@ const MapActions = (props: IMapActions) => {
                     <RiSubtractLine />
                 </AbsoluteButton>
             </>} */}
-            <AbsoluteButton right={meta.isInstalled ? 20 : "none"} left={meta.isInstalled ? "none" : 20} top={meta.isInstalled && 60} onClick={() => {
+            <AbsoluteButton left={20} onClick={() => {
                 props.setViewport({
                     ...props.viewport,
                     latitude: coordinates.live.latitude,
