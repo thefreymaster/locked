@@ -66,7 +66,19 @@
 }
 
 .rack-marker {
+    transition: box-shadow 250ms ease-in-out;
+
     &:hover {
         cursor: pointer;
+        transition: box-shadow 250ms ease-in-out;
+    }
+}
+
+.rack-marker-icon {
+    transition: box-shadow 250ms ease-in-out;
+
+    &:hover {
+        transition: box-shadow 250ms ease-in-out;
+        // box-shadow: rgb(255 255 255 / 50%) 0px 0px 0px -1px, rgb(0 0 0 / 14%) 0px 1px 1px 0px, rgb(0 0 0 / 12%) 0px 1px 3px 0px
     }
 }

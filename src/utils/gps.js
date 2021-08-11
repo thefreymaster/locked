@@ -1,3 +1,5 @@
+import firebaseApi from '../api/firebase';
+
 export const getCoordinates = (setFieldValue, setIsGettingCoordinates, setGpsError) => {
     const options = {
         timeout: 10000,
@@ -45,7 +47,7 @@ export const getCoordinatesOutsideForm = (setIsGettingCoordinates, setGpsError, 
     );
 }
 
-export const getGPSCoordinates = (dispatch, firebaseInitialize) => {
+export const getGPSCoordinates = ({ dispatch, showSuccessToast }) => {
     const options = {
         timeout: 10000,
         enableHighAccuracy: true,
@@ -55,8 +57,9 @@ export const getGPSCoordinates = (dispatch, firebaseInitialize) => {
             const { latitude } = position.coords;
             const { longitude } = position.coords;
             dispatch({ type: 'SET_GPS_COORDINATES', payload: { latitude, longitude } });
-            dispatch({ type: 'SET_USER_GPS_COORDINATES', payload: { latitude, longitude } })
-            firebaseInitialize();
+            dispatch({ type: 'SET_USER_GPS_COORDINATES', payload: { latitude, longitude } });
+            firebaseApi.db.openDbConnection({ lat: latitude, lng: longitude, dispatch, showSuccessToast });
+            // firebaseApi.openAuthConnection({ lat: latitude, lng: longitude, dispatch, showSuccessToast });
         },
         (e) => {
             console.log(e);

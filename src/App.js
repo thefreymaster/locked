@@ -13,7 +13,7 @@ import { useHistory } from 'react-router-dom';
 
 const App = () => {
 
-  const { dispatch, coordinates, meta } = useGlobalState();
+  const { dispatch, coordinates, meta, firebase } = useGlobalState();
   const toast = useToast();
   const history = useHistory();
 
@@ -33,7 +33,9 @@ const App = () => {
       dispatch(isInstalledApp)
     }
     if (navigator.geolocation) {
-      getGPSCoordinates(dispatch, () => firebaseApi.initialize({ lat: coordinates.latitude, lng: coordinates.longitude, dispatch, showSuccessToast }));
+      firebaseApi.auth.onAuthChange({ dispatch });
+      firebaseApi.db.openAuthConnection({ dispatch, showSuccessToast })
+      getGPSCoordinates({ dispatch, firebaseApi, showSuccessToast, firebase });
     }
   }, [])
 
@@ -41,7 +43,7 @@ const App = () => {
     <Zindex zIndex={1}>
       {!meta.isInstalled && <Header />}
       <Router />
-      {meta.isInstalled && <Footer history={history} />}
+      {meta.isInstalled && !firebase.isValidatingAuthentication && <Footer history={history} />}
     </Zindex>
   );
 }

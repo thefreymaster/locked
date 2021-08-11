@@ -1,5 +1,9 @@
 export const changeLog = [
     {
+        version: 'v0.5.0',
+        changes: 'Loading logic reordered, new icons',
+    },
+    {
         version: 'v0.4.3',
         changes: 'Changed installed footer component structure',
     },

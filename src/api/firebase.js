@@ -8,31 +8,17 @@ import "firebase/storage";
 
 import { authValidationComplete, fetchingComplete, isFetching } from "../actions";
 
-const initialize = ({ lat, lng, dispatch, showSuccessToast }) => {
-    firebase.auth()
-        .getRedirectResult()
-        .then((result) => {
-            if (result.credential) {
-                dispatch({ type: 'FIREBASE_AUTHENTICATION_SUCCESS', payload: { user: result.user } });
-                setTimeout(() => {
-                    dispatch({ type: 'TOGGLE_SETTINGS_DRAWER' });
-                }, 500);
-                showSuccessToast();
-            }
-            if (result.additionalUserInfo && result.additionalUserInfo.isNewUser) {
-                addUserLocation({ user: result.user, dispatch })
-            }
-        }).catch((error) => {
-            console.error(error);
-        });
+const onAuthChange = ({ dispatch }) => {
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
             dispatch({ type: 'FIREBASE_AUTHENTICATION_SUCCESS', payload: { user } });
-            setUser({ dispatch, uid: user.uid })
+            firebaseApi.auth.setUser({ dispatch, uid: user.uid })
         }
         dispatch(authValidationComplete);
     })
+}
 
+const openDbConnection = ({ lat, lng, dispatch }) => {
     const dbKey = `${lng.toFixed(0) + lat.toFixed(0)}`;
     dispatch({ type: 'SET_DB_KEY', payload: { dbKey } });
 
@@ -55,7 +41,27 @@ const initialize = ({ lat, lng, dispatch, showSuccessToast }) => {
     })
 }
 
-const signIn = (dispatch, showSuccessToast) => {
+const openAuthConnection = ({ dispatch, showSuccessToast }) => {
+    firebase.auth()
+        .getRedirectResult()
+        .then((result) => {
+            if (result.credential) {
+                dispatch({ type: 'FIREBASE_AUTHENTICATION_SUCCESS', payload: { user: result.user } });
+                setTimeout(() => {
+                    dispatch({ type: 'TOGGLE_SETTINGS_DRAWER' });
+                }, 500);
+                showSuccessToast();
+            }
+            if (result.additionalUserInfo && result.additionalUserInfo.isNewUser) {
+                addUserLocation({ user: result.user, dispatch })
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
+        
+}
+
+const signIn = () => {
     var provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithRedirect(provider);
 }
@@ -194,14 +200,18 @@ const setUser = ({ dispatch, uid }) => {
 }
 
 const firebaseApi = {
-    initialize,
     auth: {
         signIn,
         signOut,
         oldUser,
         setUser,
+        onAuthChange,
     },
     add,
+    db: {
+        openDbConnection,
+        openAuthConnection,
+    },
     update,
     remove,
     upload,
