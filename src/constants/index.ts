@@ -53,7 +53,7 @@ export const initialValues = {
 }
 
 export const PRIMARY_COLOR = "#9B2C2C";
-export const PRIMARY_COLOR_SCHEME = "yellow";
+export const PRIMARY_COLOR_SCHEME = "gray";
 export const PRIMARY_GREEN = "#46c782";
 export const PRIMARY_YELLOW = "#f4b900";
 export const PRIMARY_RED = "#E53E3E";
