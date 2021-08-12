@@ -1,5 +1,9 @@
 export const changeLog = [
     {
+        version: 'v0.6.0',
+        changes: 'Change Firebase key structure to fetch on change of dbKey',
+    },
+    {
         version: 'v0.5.4',
         changes: 'Added current center, added center as default gps coordinates, added center toggle',
     },

@@ -42,6 +42,25 @@ const openDbConnection = ({ lat, lng, dispatch }) => {
     })
 }
 
+const openNewDbConnection = ({ dbKey, dispatch }) => {
+    var refUpdates = firebase.database().ref(`locks/${dbKey}`);
+    refUpdates.on('value', (snapshot) => {
+        const snapshotValue = snapshot.val();
+        if (snapshotValue) {
+            dispatch({
+                type: 'POPULATE_NEW_DATA',
+                payload: {
+                    locks: snapshotValue
+                }
+            });
+            dispatch(fetchingComplete);
+        }
+        else {
+            dispatch(fetchingComplete);
+        }
+    })
+}
+
 const openAuthConnection = ({ dispatch, showSuccessToast }) => {
     firebase.auth()
         .getRedirectResult()
@@ -211,6 +230,7 @@ const firebaseApi = {
     add,
     db: {
         openDbConnection,
+        openNewDbConnection,
         openAuthConnection,
     },
     update,

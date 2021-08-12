@@ -74,6 +74,10 @@ const reducer = (state: any, action: any) => {
             newState.coordinates.hasCoordinatesError = true;
             break;
         }
+        case 'POPULATE_NEW_DATA': {
+            newState.locks = payload.locks;
+            break;
+        }
         case 'POPULATE_DATA': {
             newState.locks = payload.locks;
             newState.meta.containsLocks = true;

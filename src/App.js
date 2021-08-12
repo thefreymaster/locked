@@ -41,7 +41,7 @@ const App = () => {
 
   React.useEffect(() => {
     if(coordinates.hasCoordinates){
-      firebaseApi.db.openDbConnection({ lat: coordinates.center.latitude, lng: coordinates.center.longitude, dispatch });
+      firebaseApi.db.openNewDbConnection({ dbKey: meta.dbKey, dispatch });
     }
   }, [meta.dbKey])
 

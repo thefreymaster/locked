@@ -119,7 +119,6 @@ const MapContainer = (props) => {
                     const { center } = transform;
                     dispatch({ type: "SET_CENTER_GPS_COORDINATES", payload: { latitude: center.lat, longitude: center.lng } });
                     dispatch({ type: 'SET_DB_KEY', payload: { dbKey: generateDbKey({ lat: center.lat, lng: center.lng }) } });
-                    // firebaseApi.db.openDbConnection({ lat: center.lat, lng: center.lng, dispatch });
                 }}
             >
                 <BikeRacksContainer setViewport={setViewport} viewport={viewport} setPopupViewport={setPopupViewport} />
