@@ -13,13 +13,13 @@ interface IMapActions {
 }
 
 const MapActions = (props: IMapActions) => {
-    const { firebase, user, dispatch, coordinates } = useGlobalState();
+    const { firebase, user, dispatch, coordinates, meta } = useGlobalState();
     const { center } = coordinates;
     const history = useHistory();
     return (
         <>
             {firebase.isAuthenticated && (
-                <AbsoluteButton rightIcon={<HiOutlineDocumentAdd />} onClick={() => {
+                <AbsoluteButton onClick={() => {
                     history.push('/add');
                     if (user.isNew) {
                         props.newUserOnOpen();
@@ -31,11 +31,10 @@ const MapActions = (props: IMapActions) => {
                     Add To Map
                 </AbsoluteButton>
             )}
-            <Tag boxShadow="base" borderRadius="md" backgroundColor="orange.100" padding={1} position="absolute" top="70px" right="20px" zIndex="10" display="flex" flexDir="row" alignItems="center" justifyContent="center">
+            <Tag boxShadow="base" borderRadius="md" backgroundColor="gray.50" padding={1} position="absolute" top={meta.isInstalled ? 100 : 70} right="20px" zIndex="10" display="flex" flexDir="row" alignItems="center" justifyContent="center">
                 <Box pr="2" pl="2">Center Marker</Box>
                 <Switch onChange={() => center.showCenter ? dispatch({ type: 'HIDE_CENTER' }) : dispatch({ type: 'SHOW_CENTER' })} colorScheme="orange" size="md" />
             </Tag>
-            {/* <AbsoluteButton right="180px" onClick={() => center.showCenter ? dispatch({ type: 'HIDE_CENTER' }) : dispatch({ type: 'SHOW_CENTER' })}>Center Marker</AbsoluteButton> */}
         </>
     )
 }

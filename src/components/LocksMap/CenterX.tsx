@@ -3,7 +3,7 @@ import { useGlobalState } from '../../providers/root';
 import { MdClear } from 'react-icons/md';
 import { Box, Fade } from '@chakra-ui/react';
 
-export const Center = () => {
+export const CenterX = () => {
     const { coordinates } = useGlobalState();
     const { center } = coordinates;
 

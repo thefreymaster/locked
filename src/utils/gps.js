@@ -60,8 +60,7 @@ export const getGPSCoordinates = ({ dispatch, showSuccessToast }) => {
             dispatch({ type: 'SET_USER_GPS_COORDINATES', payload: { latitude, longitude } });
             dispatch({ type: "SET_CENTER_GPS_COORDINATES", payload: { latitude, longitude } })
 
-            firebaseApi.db.openDbConnection({ lat: latitude, lng: longitude, dispatch, showSuccessToast });
-            // firebaseApi.openAuthConnection({ lat: latitude, lng: longitude, dispatch, showSuccessToast });
+            firebaseApi.db.openDbConnection({ lat: latitude, lng: longitude, dispatch });
         },
         (e) => {
             console.log(e);

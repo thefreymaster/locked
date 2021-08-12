@@ -7,6 +7,7 @@ import "firebase/database";
 import "firebase/storage";
 
 import { authValidationComplete, fetchingComplete, isFetching } from "../actions";
+import { generateDbKey } from '../utils/generateDbKey';
 
 const onAuthChange = ({ dispatch }) => {
     firebase.auth().onAuthStateChanged((user) => {
@@ -19,7 +20,7 @@ const onAuthChange = ({ dispatch }) => {
 }
 
 const openDbConnection = ({ lat, lng, dispatch }) => {
-    const dbKey = `${lng.toFixed(0) + lat.toFixed(0)}`;
+    const dbKey = generateDbKey({ lat, lng })
     dispatch({ type: 'SET_DB_KEY', payload: { dbKey } });
 
     var refUpdates = firebase.database().ref(`locks/${dbKey}`);

@@ -1,18 +1,21 @@
 import { Tag } from '@chakra-ui/react';
 import React from 'react';
 import { useGlobalState } from '../../providers/root';
+import { isMobile } from 'react-device-detect';
 
 export const CurrentCoordinates = () => {
     const { coordinates } = useGlobalState();
     const { center } = coordinates;
     return (
         <Tag
-            backgroundColor="orange.100"
+            padding="1.5"
+            backgroundColor="gray.50"
             boxShadow="xs"
             position="absolute"
             top="70px"
             zIndex="1000"
-            left={(window.innerWidth - 154) / 2}>{center.latitude.toFixed(5)}, {center.longitude.toFixed(5)}
+            right="none"
+            left={isMobile ? 2 : (window.innerWidth - 154) / 2}>{center.latitude.toFixed(5)}, {center.longitude.toFixed(5)}
         </Tag>
     )
 }

@@ -39,6 +39,12 @@ const App = () => {
     }
   }, [])
 
+  React.useEffect(() => {
+    if(coordinates.hasCoordinates){
+      firebaseApi.db.openDbConnection({ lat: coordinates.center.latitude, lng: coordinates.center.longitude, dispatch });
+    }
+  }, [meta.dbKey])
+
   return (
     <Zindex zIndex={1}>
       <Header />

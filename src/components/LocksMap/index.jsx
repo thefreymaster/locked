@@ -18,7 +18,9 @@ import LottieLoading from '../../common/LottieLoading';
 import MapActions from './MapActions';
 import { CurrentCoordinates } from '../CurrentCoordinates/index';
 import { MdClear } from 'react-icons/md';
-import { Center } from './Center';
+import { CenterX } from './CenterX';
+import { generateDbKey } from '../../utils/generateDbKey';
+import firebaseApi from '../../api/firebase';
 
 const Map = ReactMapboxGl({
     accessToken:
@@ -115,7 +117,9 @@ const MapContainer = (props) => {
                 zoom={[viewport.zoom]}
                 onDragEnd={({ transform }) => {
                     const { center } = transform;
-                    dispatch({ type: "SET_CENTER_GPS_COORDINATES", payload: { latitude: center.lat, longitude: center.lng } })
+                    dispatch({ type: "SET_CENTER_GPS_COORDINATES", payload: { latitude: center.lat, longitude: center.lng } });
+                    dispatch({ type: 'SET_DB_KEY', payload: { dbKey: generateDbKey({ lat: center.lat, lng: center.lng }) } });
+                    // firebaseApi.db.openDbConnection({ lat: center.lat, lng: center.lng, dispatch });
                 }}
             >
                 <BikeRacksContainer setViewport={setViewport} viewport={viewport} setPopupViewport={setPopupViewport} />
@@ -150,7 +154,7 @@ const MapContainer = (props) => {
     return (
         <>
             <CurrentCoordinates />
-            <Center />
+            <CenterX />
             {MemorizedMap}
         </>
     );
