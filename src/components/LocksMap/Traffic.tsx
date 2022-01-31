@@ -21,7 +21,7 @@ const Traffic = (props: { traffic: string }) => {
         <ToolTip label={`${capitalize(props.traffic)} Foot Traffic`}>
             <Box display="flex" alignItems="center">
                 <Box marginRight="1px" />
-                <Badge variant="subtle" colorScheme={getColor()}>
+                <Badge size="xl" variant="subtle" colorScheme={getColor()}>
                     <RiWalkFill style={{ fontSize: 20, padding: 5 }} />
                 </Badge>
                 <Box marginRight="8px" />

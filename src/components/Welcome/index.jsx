@@ -64,7 +64,7 @@ const Welcome = () => {
                         <Box display="flex" flexDir="column" justifyContent="center" alignItems="center">
                             <LockAndKeyLogo />
                             <Font fontWeight={900} fontSize={isMobile ? 56 : 124} variant="primary">Lock & Key</Font>
-                            <Font fontWeight={600} fontSize={18}>Find a safe, and secure bike rack</Font>
+                            <Font fontWeight={600} fontSize={18}>Lock your bike up with confidence</Font>
                             <Box mt={5} />
                             <Button size="lg" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => histroy.push('/map')}>Search Your Area</Button>
                             <Divider mt={5} />

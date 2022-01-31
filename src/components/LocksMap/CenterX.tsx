@@ -9,7 +9,7 @@ export const CenterX = () => {
 
     return (
         <Fade in={center.showCenter}>
-            <Box position="absolute" left="50%" top="50%" zIndex="1">
+            <Box position="absolute" left="calc(50% - 20px)" top="calc(50% - 20px)" zIndex="1">
                 <MdClear size="32px" />
             </Box>
         </Fade>

@@ -1,5 +1,13 @@
 export const changeLog = [
     {
+        version: 'v0.6.2',
+        changes: 'Fixed issue that was blocking add action',
+    },
+    {
+        version: 'v0.6.1',
+        changes: 'Fixed issue where map would reload on drag',
+    },
+    {
         version: 'v0.6.0',
         changes: 'Change Firebase key structure to fetch on change of dbKey',
     },

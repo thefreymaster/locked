@@ -68,7 +68,7 @@ const MapContainer = (props) => {
     const { onOpen, onClose } = useDisclosure();
     const { isOpen: newUserIsOpen, onOpen: newUserOnOpen, onClose: newUserOnClose } = useDisclosure()
 
-    const lock = locks[props.id];
+    const lock = locks?.[props.id];
 
     if (props.id) {
         initialViewport = {
@@ -190,7 +190,9 @@ const BikeRacksContainer = (props) => {
                 coordinates={[location.long, location.lat]}
                 className="rack-marker">
                 {/* <div style={style}> */}
-                <BikeRackMarker overallRating={overallRating} />
+                <Fade in>
+                    <BikeRackMarker overallRating={overallRating} />
+                </Fade>
                 {/* </div> */}
             </Marker>
         )

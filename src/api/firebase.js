@@ -113,9 +113,9 @@ const addUserLocation = ({ user, dispatch }) => {
     });
 }
 
-const add = ({ postData, uid, dispatch, toast, lat, lng, onClose, history }) => {
+const add = ({ postData, uid, dispatch, toast, dbKey, onClose, history }) => {
     dispatch(isFetching);
-    var listRef = firebase.database().ref(`locks/${lng.toFixed(0) + lat.toFixed(0)}`);
+    var listRef = firebase.database().ref(`locks/${dbKey}`);
     listRef.push({ ...postData, createdDate: new Date().toISOString(), author: uid }).then(() => {
         toast();
         dispatch(fetchingComplete);

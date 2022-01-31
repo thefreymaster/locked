@@ -1,13 +1,12 @@
 import {
-    Input, Stack, Textarea, Select, FormControl, FormLabel, Box, ButtonGroup, Button, InputGroup, Alert,
+    Input, Stack, Textarea, FormControl, FormLabel, Box, ButtonGroup, Button, InputGroup, Alert,
     AlertIcon,
     AlertTitle,
-    AlertDescription, InputLeftElement, CloseButton, Tag, Spinner, Divider, Fade, useToast,
+    AlertDescription, InputLeftElement, CloseButton, Tag, Divider, Fade, useToast,
 } from '@chakra-ui/react';
 import { Field, Form, Formik } from 'formik';
 import { useHistory, Redirect } from 'react-router-dom';
 import React from 'react';
-import { states } from '../../json/states';
 import AbsoluteButton from '../../common/AbsoluteButton';
 import { useGlobalState } from '../../providers/root';
 import Upload from '../Upload';
@@ -294,8 +293,7 @@ const AddRack = (props) => {
                                                         uid: firebase.user.uid,
                                                         dispatch,
                                                         toast: showSuccessToast,
-                                                        lat: coordinates.latitude,
-                                                        lng: coordinates.longitude,
+                                                        dbKey,
                                                         onClose: props.onClose,
                                                         history,
                                                     })
@@ -308,7 +306,7 @@ const AddRack = (props) => {
                                     )}
                                     <AbsoluteButton bottom={20} right={100} onClick={() => {
                                         formProps.resetForm();
-                                        history.push('/map');
+                                        history.push(id ? `/map/${id}` : '/map');
                                         props.onClose();
                                     }}>Cancel</AbsoluteButton>
                                     {/* {page === 1 && <AbsoluteButton left={20} right="none" onClick={() => history.goBack()}><BiArrowBack /></AbsoluteButton>} */}

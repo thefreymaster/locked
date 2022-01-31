@@ -67,6 +67,9 @@ const Router = () => {
             <Route exact path="/edit/:id">
                 <LocksMap />
             </Route>
+            <Route exact path="/details/:id">
+                <LocksMap />
+            </Route>
             <Route exact path="/add">
                 <LocksMap />
             </Route>

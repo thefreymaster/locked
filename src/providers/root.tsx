@@ -7,7 +7,8 @@ export interface IDefaultState {
         isAuthenticated: boolean,
         isInitialized: boolean,
         isAuthenticatedError: boolean,
-        user: object,
+        user?: any
+        provider?: any,
     },
     meta: {
         isServerError: boolean,
