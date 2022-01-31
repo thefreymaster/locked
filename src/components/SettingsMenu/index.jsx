@@ -112,9 +112,8 @@ const SettingsMenuButton = ({ firebase, meta, isOpen }) => {
   ) : (
     <IconButton
       borderRadius="md"
-      backgroundColor="yellow.500"
       className={meta.isDay ? "menu-button" : "menu-button-dark"}
-      colorScheme="orange"
+      colorScheme="gray"
       icon={isOpen ? <AiOutlineClose color="black" /> : <AiOutlineMenu color="black" />}
     />
   );

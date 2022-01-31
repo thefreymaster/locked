@@ -1,5 +1,9 @@
 export const changeLog = [
     {
+        version: 'v0.7.0',
+        changes: 'Added details drawer',
+    },
+    {
         version: 'v0.6.2',
         changes: 'Fixed issue that was blocking add action',
     },

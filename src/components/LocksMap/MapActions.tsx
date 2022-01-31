@@ -40,7 +40,7 @@ const MapActions = (props: IMapActions) => {
         position="absolute"
         top={meta.isInstalled ? '100px' : "80px"}
         right="10px"
-        zIndex="10"
+        zIndex="1"
         display="flex"
         flexDir="row"
         alignItems="center"

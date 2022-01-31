@@ -113,12 +113,12 @@ const RackPopup = (props) => {
             maxH={
               isMobile
                 ? `calc(100vh - ${props.lock.notes ? "304px" : "278px"})`
-                : "calc(100vh - 334px)"
+                : `calc(100vh - ${props.lock.notes ? "278px" : "278px"})`
             }
             minH={
               isMobile
                 ? `calc(100vh - ${props.lock.notes ? "304px" : "278px"})`
-                : "calc(100vh - 334px)"
+                : `calc(100vh - ${props.lock.notes ? "278px" : "278px"})`
             }
             minW="100%"
             variant="drawer"
