@@ -1,5 +1,9 @@
 export const changeLog = [
     {
+        version: 'v0.8.2',
+        changes: 'PWA fixes',
+    },
+    {
         version: 'v0.8.1',
         changes: 'Updated manifest theme colors',
     },
