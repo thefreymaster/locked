@@ -28,6 +28,10 @@ export const DetailsDrawer = (props: {
   onClose(): void;
   isOpen: boolean;
   title: string;
+  location?: {
+    city?: string;
+    state?: string;
+  };
   children: React.ReactNode;
   closeButton: React.ReactNode;
 }) => {
@@ -42,7 +46,11 @@ export const DetailsDrawer = (props: {
       <DrawerContent>
         <DrawerCloseButton size="lg" />
         <DrawerHeader borderBottomWidth="1px">
-          <Box>{props.title}</Box>
+          <Box>
+            {props.title}{" "}
+            {props.location?.city &&
+              `${props.location?.city}, ${props.location?.state}`}
+          </Box>
         </DrawerHeader>
         <DrawerBody padding="0">{props.children}</DrawerBody>
       </DrawerContent>

@@ -3,24 +3,27 @@ import React from 'react';
 import { RiThumbUpFill, RiThumbDownFill } from 'react-icons/ri';
 import ToolTip from '../../common/ToolTip';
 
-const RackRecommendation = (props) => {
+const RackRecommendation = (props: {
+    variant: "drawer" | "modal";
+    recommended: boolean;
+}) => {
     return (
         props.recommended ? (
-            <ToolTip label="Recommended">
+            <ToolTip label="Recommendation">
                 <Box display="flex" alignItems="center">
                     <Box marginRight="1px" />
                     <Badge variant="subtle" colorScheme="green">
-                        <RiThumbUpFill style={{ fontSize: 20, padding: 5 }} />
+                        {props.variant === "drawer" ? "Recommended" : <RiThumbUpFill style={{ fontSize: 20, padding: 5 }} />}
                     </Badge>
                     <Box marginRight="8px" />
                 </Box>
             </ToolTip>
         ) : (
-            <ToolTip label="Not Recommended">
+            <ToolTip label="Recommendation">
                 <Box display="flex" alignItems="center">
                     <Box marginRight="1px" />
                     <Badge variant="subtle" colorScheme="red">
-                        <RiThumbDownFill style={{ fontSize: 20, padding: 5 }} />
+                        {props.variant === "drawer" ? "Not Recommended" : <RiThumbDownFill style={{ fontSize: 20, padding: 5 }} />}
                     </Badge>
                     <Box marginRight="8px" />
                 </Box>

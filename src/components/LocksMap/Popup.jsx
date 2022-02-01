@@ -10,7 +10,7 @@ import { RackInformation } from "./RackInformation";
 import { isMobile } from "react-device-detect";
 
 const RackPopup = (props) => {
-  const { dispatch } = useGlobalState();
+  const { dispatch, meta } = useGlobalState();
   const {
     isOpen: isOpenDetails,
     onOpen: onOpenDetails,
@@ -50,6 +50,14 @@ const RackPopup = (props) => {
       onOpenDetails();
     }
   }, []);
+
+  const calculateHeight = () => {
+    if (isMobile) {
+      return `100%`;
+    }
+    return `100%`;
+  };
+
   return (
     <Fade in={fadeIn}>
       <Box
@@ -80,6 +88,7 @@ const RackPopup = (props) => {
         />
         <DetailsDrawer
           title={lock.name}
+          location={lock.location}
           isOpen={isOpenDetails}
           onClose={onCloseDetails}
           closeButton={
@@ -110,16 +119,7 @@ const RackPopup = (props) => {
             onOpen={props.onOpen}
             viewport={props.viewport}
             lock={lock}
-            maxH={
-              isMobile
-                ? `calc(100vh - ${props.lock.notes ? "304px" : "278px"})`
-                : `calc(100vh - ${props.lock.notes ? "278px" : "278px"})`
-            }
-            minH={
-              isMobile
-                ? `calc(100vh - ${props.lock.notes ? "304px" : "278px"})`
-                : `calc(100vh - ${props.lock.notes ? "278px" : "278px"})`
-            }
+            minH={calculateHeight}
             minW="100%"
             variant="drawer"
           />

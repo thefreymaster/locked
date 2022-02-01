@@ -22,7 +22,7 @@ const DrawerContainer = (props: IDrawerContainer) => {
     return (
         <Drawer placement="bottom" isOpen={props.isOpen || location.pathname.includes('/add') || location.pathname.includes('/edit')} onClose={props.onClose} size="lg" motionPreset="slideInBottom">
             <DrawerOverlay />
-            <DrawerContent>
+            <DrawerContent boxShadow="dark-lg">
                 <DrawerHeader>{props.title}</DrawerHeader>
                 <DrawerCloseButton />
                 <DrawerBody>
