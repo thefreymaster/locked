@@ -38,7 +38,7 @@ const MapActions = (props: IMapActions) => {
         backgroundColor="gray.50"
         padding={1}
         position="absolute"
-        top={meta.isInstalled ? '100px' : "80px"}
+        top={meta.isInstalled ? '120px' : "80px"}
         right="10px"
         zIndex="1"
         display="flex"

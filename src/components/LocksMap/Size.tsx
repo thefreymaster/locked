@@ -11,7 +11,7 @@ const RackSize = (props: {
       <ToolTip label={`${props.size.toUpperCase()} Size`}>
         <Box display="flex" alignItems="center">
           <Box marginRight="1px" />
-          <Badge variant="subtle" colorScheme="red">
+          <Badge variant="solid" colorScheme="red" minH="25px" display="flex" alignItems="center" justifyContent="center">
             {props.variant === "drawer" ? "Small" : "SM"}
           </Badge>
           <Box marginRight="8px" />
@@ -24,7 +24,7 @@ const RackSize = (props: {
       <ToolTip label={`${props.size.toUpperCase()} Size`}>
         <Box display="flex" alignItems="center">
           <Box marginRight="1px" />
-          <Badge variant="subtle" colorScheme="yellow">
+          <Badge variant="solid" colorScheme="yellow" minH="25px" display="flex" alignItems="center" justifyContent="center">
             {props.variant === "drawer" ? "Medium" : "MD"}
           </Badge>
           <Box marginRight="8px" />
@@ -36,7 +36,7 @@ const RackSize = (props: {
     <ToolTip label={`${props.size.toUpperCase()} Size`}>
       <Box display="flex" alignItems="center">
         <Box marginRight="1px" />
-        <Badge variant="subtle" colorScheme="green">
+        <Badge variant="solid" colorScheme="green" minH="25px" display="flex" alignItems="center" justifyContent="center">
           {props.variant === "drawer" ? "Large" : "LG"}
         </Badge>
         <Box marginRight="8px" />

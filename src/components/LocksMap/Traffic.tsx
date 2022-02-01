@@ -21,7 +21,7 @@ const Traffic = (props: { traffic: string; variant: "drawer" | "modal" }) => {
     <ToolTip label={`${capitalize(props.traffic)} Foot Traffic`}>
       <Box display="flex" alignItems="center">
         <Box marginRight="1px" />
-        <Badge size="xl" variant="subtle" colorScheme={getColor()}>
+        <Badge size="xl" variant="solid" colorScheme={getColor()} minH="25px" display="flex" alignItems="center" justifyContent="center">
           <RiWalkFill style={{ fontSize: 20, padding: 5 }} />
         </Badge>
         <Box marginRight="8px" />

@@ -44,7 +44,7 @@ const DeleteRack = (props) => {
             <AlertDialogOverlay>
                 <AlertDialogContent margin={15}>
                     <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                        Delete Bike Rack
+                        Remove Bike Rack
                     </AlertDialogHeader>
                     <AlertDialogBody>
                         Are you sure? You can't undo this action afterwards.
@@ -58,7 +58,7 @@ const DeleteRack = (props) => {
                             setIsDeleting(true);
                             firebaseApi.remove({ uid: firebase.user.uid, dispatch, history, itemId: props.id, onClose, setIsDeleting, toast: showSuccessToast, dbKey })
                         }} ml={3}>
-                            Delete
+                            Remove
                         </Button>
                     </AlertDialogFooter>
                 </AlertDialogContent>

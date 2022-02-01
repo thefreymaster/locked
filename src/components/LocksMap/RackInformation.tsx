@@ -1,5 +1,4 @@
 import {
-  Fade,
   Box,
   CloseButton,
   Image,
@@ -7,7 +6,6 @@ import {
   Button,
   Divider,
   Text,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
 import "./users-map.scss";
@@ -15,6 +13,7 @@ import RackSize from "./Size";
 import RackRecommendation from "./Recommendation";
 import Font from "../../common/Font";
 import { AiFillStar } from "react-icons/ai";
+import { IoHappyOutline } from "react-icons/io5";
 import { BiEditAlt, BiTrash } from "react-icons/bi";
 import StarRating from "../../components/StarRating";
 import RackTraffic from "./Traffic";
@@ -108,19 +107,31 @@ export const RackInformation = (props: {
           <RackSize size={props.lock.size} variant={props.variant} />
           <RackTraffic traffic={props.lock.traffic} variant={props.variant} />
           <ToolTip label="Overall Rating">
-            <Badge>
+            <Badge minH="25px" display="flex" alignItems="center" justifyContent="center">
               <Box
                 display="flex"
                 direction="row"
                 justifyContent="center"
                 alignItems="center"
               >
-                {/* <Font>Overall</Font> */}
                 <AiFillStar color="#FBB03B" fontSize="14px" />
                 <Box marginRight="3px" />
                 <Font fontSize="14px" fontWeight={900}>
                   {calculateOverallRating({ ratings: props.lock.ratings })}
                 </Font>
+              </Box>
+            </Badge>
+          </ToolTip>
+          <ToolTip label="Added by you!">
+            <Badge variant="subtle" marginLeft="2" minH="25px" display="flex" alignItems="center" justifyContent="center">
+              <Box
+                display="flex"
+                direction="row"
+                justifyContent="center"
+                alignItems="center"
+                padding="3.5px"
+              >
+                <IoHappyOutline color="#000" fontSize="14px" />
               </Box>
             </Badge>
           </ToolTip>
@@ -150,7 +161,7 @@ export const RackInformation = (props: {
               flexGrow={1}
             >
               <StarRating overallRating={props.lock.ratings.quality} />
-              <Font>Quality</Font>
+              <Font fontWeight="bold">Quality</Font>
             </Box>
             <Box
               display="flex"
@@ -160,7 +171,7 @@ export const RackInformation = (props: {
               flexGrow={1}
             >
               <StarRating overallRating={props.lock.ratings.safety} />
-              <Font>Safety</Font>
+              <Font fontWeight="bold">Safety</Font>
             </Box>
             <Box
               display="flex"
@@ -170,7 +181,7 @@ export const RackInformation = (props: {
               flexGrow={1}
             >
               <StarRating overallRating={props.lock.ratings.illumination} />
-              <Font>Lighting</Font>
+              <Font fontWeight="bold">Lighting</Font>
             </Box>
             {/* {lock.traffic && lock.traffic !== 'medium' && (
                 <Box display="flex" flexDir="column" justifyContent="center" alignItems="center" flexGrow={1}>
@@ -200,6 +211,7 @@ export const RackInformation = (props: {
             >
               Remove
             </Button>
+            <Box flexGrow={1} />
             <Button
               colorScheme="gray"
               margin="2"
@@ -212,7 +224,6 @@ export const RackInformation = (props: {
             >
               Edit
             </Button>
-            <Box flexGrow={1} />
             {props.variant === "modal" && (
               <Button
                 colorScheme="gray"
@@ -230,20 +241,24 @@ export const RackInformation = (props: {
             )}
           </Box>
         )}
+
         {props.variant === "modal" && !canEditDelete && (
-          <Button
-            colorScheme="gray"
-            margin="2"
-            marginLeft="1"
-            size="sm"
-            icon={<BiEditAlt />}
-            onClick={() => {
-              history.push(`/details/${props.id}`);
-              props.onOpenDetails();
-            }}
-          >
-            Details
-          </Button>
+          <Box width="100%" display="flex" justifyContent="flex-end">
+            <Box flexGrow={1} />
+            <Button
+              colorScheme="gray"
+              margin="2"
+              marginLeft="1"
+              size="sm"
+              icon={<BiEditAlt />}
+              onClick={() => {
+                history.push(`/details/${props.id}`);
+                props.onOpenDetails();
+              }}
+            >
+              Details
+            </Button>
+          </Box>
         )}
       </Box>
     </>

@@ -278,7 +278,7 @@ const AddRack = (props) => {
                                                 if (id) {
                                                     firebaseApi.update({
                                                         postData: formProps.values,
-                                                        uid: firebase.user.uid,
+                                                        uid: firebase.provider.uid,
                                                         dispatch,
                                                         itemId: id,
                                                         toast: showSuccessEditToast,
@@ -290,7 +290,7 @@ const AddRack = (props) => {
                                                 else {
                                                     firebaseApi.add({
                                                         postData: formProps.values,
-                                                        uid: firebase.user.uid,
+                                                        uid: firebase.provider.uid,
                                                         dispatch,
                                                         toast: showSuccessToast,
                                                         dbKey,
