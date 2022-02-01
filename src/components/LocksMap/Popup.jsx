@@ -10,14 +10,14 @@ import { RackInformation } from "./RackInformation";
 import { isMobile } from "react-device-detect";
 
 const RackPopup = (props) => {
-  const { dispatch, meta } = useGlobalState();
+  const { dispatch, locks } = useGlobalState();
   const {
     isOpen: isOpenDetails,
     onOpen: onOpenDetails,
     onClose: onCloseDetails,
   } = useDisclosure();
 
-  const { lock } = props;
+  const lock = locks?.[props.id];
   const [fadeIn, setFadeIn] = React.useState(false);
   const [isDeleteOpenOpen, setIsOpen] = React.useState(false);
   const history = useHistory();
@@ -33,7 +33,7 @@ const RackPopup = (props) => {
       }
     };
     getUrl();
-  }, [lock, lock.imageUrl]);
+  }, [lock, lock?.imageUrl]);
 
   const inline = {
     borderRadius: 10,
@@ -67,6 +67,7 @@ const RackPopup = (props) => {
         style={inline}
         display="flex"
         minH="400px"
+        zIndex={10000}
       >
         <RackInformation
           id={props.id}

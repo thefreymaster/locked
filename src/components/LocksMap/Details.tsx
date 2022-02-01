@@ -9,6 +9,7 @@ import {
   Tag,
 } from "@chakra-ui/react";
 import { ILock } from "../../interfaces/ILock";
+import { useGlobalState } from "../../providers/root";
 
 export const Details = (props: { lock: ILock }) => {
   return (
@@ -35,6 +36,7 @@ export const DetailsDrawer = (props: {
   children: React.ReactNode;
   closeButton: React.ReactNode;
 }) => {
+  const { meta } = useGlobalState();
   return (
     <Drawer
       placement="right"
@@ -44,15 +46,15 @@ export const DetailsDrawer = (props: {
     >
       <DrawerOverlay />
       <DrawerContent>
-        <DrawerCloseButton size="lg" />
-        <DrawerHeader borderBottomWidth="1px">
+        <DrawerCloseButton marginTop={meta.isInstalled && "60px"} size="lg" />
+        <DrawerHeader borderBottomWidth="1px" borderTopWidth="1px">
           <Box>
             {props.title}{" "}
             {props.location?.city &&
               `${props.location?.city}, ${props.location?.state}`}
           </Box>
         </DrawerHeader>
-        <DrawerBody padding="0">{props.children}</DrawerBody>
+        <DrawerBody padding="0px" margin={meta.isInstalled ? "0px 0px 30px 0px" : "0px"}>{props.children}</DrawerBody>
       </DrawerContent>
     </Drawer>
   );

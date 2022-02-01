@@ -40,7 +40,7 @@ export const RackInformation = (props: {
   variant: "drawer" | "modal";
 }) => {
   const history = useHistory();
-  const { firebase } = useGlobalState();
+  const { firebase, meta } = useGlobalState();
 
   const canEditDelete =
     firebase.isAuthenticated &&
@@ -91,6 +91,7 @@ export const RackInformation = (props: {
         position={props.variant === "drawer" ? "fixed" : "inherit"}
         minW="100%"
         bottom="0px"
+        paddingBottom={meta.isInstalled ? "80px" : "0px"}
         backgroundColor="white"
       >
         <Box
@@ -107,7 +108,12 @@ export const RackInformation = (props: {
           <RackSize size={props.lock.size} variant={props.variant} />
           <RackTraffic traffic={props.lock.traffic} variant={props.variant} />
           <ToolTip label="Overall Rating">
-            <Badge minH="25px" display="flex" alignItems="center" justifyContent="center">
+            <Badge
+              minH="25px"
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+            >
               <Box
                 display="flex"
                 direction="row"
@@ -123,7 +129,7 @@ export const RackInformation = (props: {
             </Badge>
           </ToolTip>
           <ToolTip label="Added by you!">
-            <Badge variant="subtle" marginLeft="2" minH="25px" display="flex" alignItems="center" justifyContent="center">
+            <Badge variant="subtle" marginLeft="2" minH="25px">
               <Box
                 display="flex"
                 direction="row"
@@ -139,7 +145,6 @@ export const RackInformation = (props: {
         <Divider pt={3} />
         <Box padding="15px 15px 0px 15px">
           <Font
-            variant="primary"
             fontSize={24}
             textAlign="center"
             fontWeight="bold"

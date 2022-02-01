@@ -1,5 +1,13 @@
 export const changeLog = [
     {
+        version: 'v0.8.1',
+        changes: 'Updated manifest theme colors',
+    },
+    {
+        version: 'v0.8.0',
+        changes: 'Refactor of Maps components',
+    },
+    {
         version: 'v0.7.0',
         changes: 'Added details drawer',
     },

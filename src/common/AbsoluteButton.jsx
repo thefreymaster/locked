@@ -22,7 +22,7 @@ const AbsoluteButton = (props) => {
     return (
         <Button
             leftIcon={props.leftIcon}
-            zIndex={1000}
+            zIndex={1}
             margin={props.margin}
             backgroundColor="gray.50"
             color="gray.900"
