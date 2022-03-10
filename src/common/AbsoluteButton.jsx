@@ -24,8 +24,7 @@ const AbsoluteButton = (props) => {
             leftIcon={props.leftIcon}
             zIndex={1}
             margin={props.margin}
-            backgroundColor="gray.50"
-            color="gray.900"
+            colorScheme={props.colorScheme ?? PRIMARY_COLOR_SCHEME}
             isLoading={props.loading}
             disabled={props.disabled}
             boxShadow="base"

@@ -6,6 +6,8 @@ import {
   Button,
   Divider,
   Text,
+  Spinner,
+  ScaleFade,
 } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
 import "./users-map.scss";
@@ -22,6 +24,7 @@ import ToolTip from "../../common/ToolTip";
 import { useGlobalState } from "../../providers/root";
 import { Details } from "./Details";
 import { isDesktop } from "react-device-detect";
+import React from "react";
 
 export const RackInformation = (props: {
   setFadeIn(v: boolean): void;
@@ -47,7 +50,7 @@ export const RackInformation = (props: {
     firebase.provider &&
     firebase.user?.uid === props.lock?.author;
 
-  console.log(props.lock);
+  const [isLoaded, setIsLoaded] = React.useState(false);
 
   return (
     <>
@@ -75,24 +78,32 @@ export const RackInformation = (props: {
           />
         </Box>
       )}
+      {/* <ScaleFade initialScale={0.9} in={isLoaded}> */}
       <Image
-        minH={props.minH || 275}
-        minW={props.minW}
+        minH={props.variant === "modal" ? 275 : props.minH}
+        minW={props.variant === "modal" ? "100%" : props.minW}
         maxH={props.maxH}
         objectFit="cover"
-        bg="red.800"
+        bg="yellow.400"
         color="white"
-        loading="eager"
+        loading="lazy"
         borderRadius={props.borderRadius}
         name={props.lock.name}
         src={props.lock.imageUrlAbsolute}
+        onLoad={() => {
+          setIsLoaded(true);
+        }}
       />
+      {/* </ScaleFade> */}
       <Box
         position={props.variant === "drawer" ? "fixed" : "inherit"}
         minW="100%"
         bottom="0px"
-        paddingBottom={meta.isInstalled ? "80px" : "0px"}
+        paddingBottom={
+          meta.isInstalled && props.variant === "drawer" ? "80px" : "0px"
+        }
         backgroundColor="white"
+        borderRadius={props.variant === "modal" ? "10px" : "0px"}
       >
         <Box
           display="flex"
@@ -128,27 +139,25 @@ export const RackInformation = (props: {
               </Box>
             </Badge>
           </ToolTip>
-          <ToolTip label="Added by you!">
-            <Badge variant="subtle" marginLeft="2" minH="25px">
-              <Box
-                display="flex"
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-                padding="3.5px"
-              >
-                <IoHappyOutline color="#000" fontSize="14px" />
-              </Box>
-            </Badge>
-          </ToolTip>
+          {canEditDelete && (
+            <ToolTip label="Added by you!">
+              <Badge variant="subtle" marginLeft="2" minH="25px">
+                <Box
+                  display="flex"
+                  direction="row"
+                  justifyContent="center"
+                  alignItems="center"
+                  padding="3.5px"
+                >
+                  <IoHappyOutline color="#000" fontSize="14px" />
+                </Box>
+              </Badge>
+            </ToolTip>
+          )}
         </Box>
         <Divider pt={3} />
         <Box padding="15px 15px 0px 15px">
-          <Font
-            fontSize={24}
-            textAlign="center"
-            fontWeight="bold"
-          >
+          <Font fontSize={24} textAlign="center" fontWeight="bold">
             {props.lock.name}
           </Font>
           <Text textAlign="center">{props.lock.notes}</Text>

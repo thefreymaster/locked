@@ -1,5 +1,5 @@
 import { useGlobalState } from '../../providers/root';
-import { MdFilterCenterFocus } from 'react-icons/md';
+import { CgMathPlus } from 'react-icons/cg';
 import { Box, Fade } from '@chakra-ui/react';
 
 export const CenterX = () => {
@@ -9,7 +9,7 @@ export const CenterX = () => {
     return (
         <Fade in={center.showCenter}>
             <Box position="absolute" left="calc(50% - 20px)" top="calc(50% - 20px)" zIndex="1000">
-                <MdFilterCenterFocus size="32px" />
+                <CgMathPlus size="32px" />
             </Box>
         </Fade>
     )

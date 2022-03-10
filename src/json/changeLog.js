@@ -1,5 +1,17 @@
 export const changeLog = [
     {
+        version: 'v0.9.0',
+        changes: 'Visual updates, reduced clutter',
+    },
+    {
+        version: 'v0.8.4',
+        changes: 'Small bug fixes',
+    },
+    {
+        version: 'v0.8.3',
+        changes: 'Additional PWA fixes',
+    },
+    {
         version: 'v0.8.2',
         changes: 'PWA fixes',
     },

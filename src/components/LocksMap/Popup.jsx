@@ -67,6 +67,7 @@ const RackPopup = (props) => {
         style={inline}
         display="flex"
         minH="400px"
+        borderRadius="10px"
         zIndex={10000}
       >
         <RackInformation

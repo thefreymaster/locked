@@ -17,12 +17,14 @@ export interface IDefaultState {
     isInstalled: boolean;
     containsLocks?: boolean;
     dbKey: string;
+    supported: boolean;
   };
   coordinates: {
     latitude?: number;
     longitude?: number;
     hasCoordinates: boolean;
     hasCoordinatesError: boolean;
+    showCoordinates: boolean;
     live: {
       latitude?: number;
       longitude?: number;
@@ -37,8 +39,8 @@ export interface IDefaultState {
     name: string;
     notes: string;
     location: {
-        lat?: number;
-        long?: number;
+      lat?: number;
+      long?: number;
     };
     quality: number;
     safety: number;
@@ -60,6 +62,9 @@ export interface IDefaultState {
     uid?: string;
   };
   dispatch: any;
+  alpha: {
+    minimal: boolean;
+  };
 }
 
 const defaultState: IDefaultState = {
@@ -75,20 +80,27 @@ const defaultState: IDefaultState = {
     fetching: true,
     isDay:
       new Date().getHours() >= 6 && new Date().getHours() <= 17 ? true : false,
-    isInstalled: false,
+    isInstalled:
+      localStorage.getItem("isInstalled") === "true" ? true : false || false,
     dbKey: "",
+    supported: false,
   },
   coordinates: {
     hasCoordinates: false,
     hasCoordinatesError: false,
+    showCoordinates:
+      localStorage.getItem("center-coordinates") === "true" ? true : false,
     live: {},
     center: {
-      showCenter: false,
+      showCenter: localStorage.getItem("center-marker") === "true" ? true : false,
     },
   },
   locks: [],
   user: {},
   dispatch: () => {},
+  alpha: {
+    minimal: false,
+  },
 };
 
 const Context = React.createContext(defaultState);

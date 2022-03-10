@@ -16,6 +16,7 @@ import {
     AlertDescription,
     Box,
 } from "@chakra-ui/react";
+import MapSettings from '../components/MapSettings';
 
 const Router = () => {
     const { firebase, meta, coordinates } = useGlobalState();
@@ -79,6 +80,11 @@ const Router = () => {
             <Route exact path="/account">
                 <Account />
             </Route>
+            <Route exact path="/account/map-settings">
+                <MapSettings />
+            </Route>
+            
+        
             <Route exact path="/*">
                 <Redirect to="/" />
             </Route>

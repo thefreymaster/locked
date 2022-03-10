@@ -1,10 +1,12 @@
-import React from "react";
-import AbsoluteButton from "../../common/AbsoluteButton";
 import { useGlobalState } from "../../providers/root";
+import { Box, Tag, Switch } from "@chakra-ui/react";
+import { isDesktop } from "react-device-detect";
+import { CurrentCoordinates } from "../CurrentCoordinates";
+import { CenterX } from "./CenterX";
+import AbsoluteButton from "../../common/AbsoluteButton";
 import { useHistory } from "react-router-dom";
-import { HiOutlineDocumentAdd } from "react-icons/hi";
-import { Box, FormControl, Tag, Switch, Text } from "@chakra-ui/react";
-import { isMobile } from "react-device-detect";
+import { FiPlusCircle } from "react-icons/fi";
+import { useModalControlState } from "../../providers/ModalControl";
 
 interface IMapActions {
   setViewport(viewPort: any): void;
@@ -14,53 +16,62 @@ interface IMapActions {
 }
 
 const MapActions = (props: IMapActions) => {
-  const { firebase, user, dispatch, coordinates, meta } = useGlobalState();
+  const { dispatch, coordinates, meta, firebase, user } = useGlobalState();
   const { center } = coordinates;
+  const { onOpenNewUser, onOpenAddToMap } = useModalControlState();
+
   const history = useHistory();
   return (
     <>
       {firebase.isAuthenticated && (
         <AbsoluteButton
+          colorScheme="yellow"
           onClick={() => {
-            history.push("/add");
             if (user.isNew) {
-              props.newUserOnOpen();
+              onOpenNewUser();
             } else {
-              props.onOpen();
+              history.push("/add");
+              onOpenAddToMap();
             }
           }}
         >
-          Add To Map
+          <FiPlusCircle />
         </AbsoluteButton>
       )}
-      <Tag
-        boxShadow="base"
-        borderRadius="md"
-        backgroundColor="gray.50"
-        padding={1}
-        position="absolute"
-        top={meta.isInstalled ? "110px" : "80px"}
-        right="10px"
-        zIndex="1"
-        display="flex"
-        flexDir="row"
-        alignItems="center"
-        justifyContent="center"
-        minH="25px"
-      >
-        <Box pr="2" pl="2">
-          Center Marker
-        </Box>
-        <Switch
-          onChange={() =>
-            center.showCenter
-              ? dispatch({ type: "HIDE_CENTER" })
-              : dispatch({ type: "SHOW_CENTER" })
-          }
+      {coordinates.showCoordinates && <CurrentCoordinates />}
+      <CenterX />
+      {isDesktop && (
+        <Tag
+          boxShadow="base"
+          borderRadius="md"
           colorScheme="yellow"
-          size={isMobile || meta.isInstalled ? "md" : "lg"}
-        />
-      </Tag>
+          variant="solid"
+          padding={1}
+          position="absolute"
+          top={meta.isInstalled ? "110px" : "70px"}
+          right="10px"
+          zIndex="4"
+          display="flex"
+          flexDir="row"
+          alignItems="center"
+          justifyContent="center"
+          minH="25px"
+        >
+          <Box pr="2" pl="2">
+            Center Marker
+          </Box>
+          <Switch
+            onChange={() =>
+              center.showCenter
+                ? dispatch({ type: "HIDE_CENTER" })
+                : dispatch({ type: "SHOW_CENTER" })
+            }
+            colorScheme="yellow"
+            isChecked={center.showCenter}
+            size="md"
+          />
+        </Tag>
+      )}
     </>
   );
 };

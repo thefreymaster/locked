@@ -27,7 +27,7 @@
     border-radius      : 100px;
     border             : 2px solid white;
     // animation       : pulseDot 4s cubic-bezier(0.455, 0.03, 0.515, 0.955) -.4s infinite;
-    background-color   : #e7be05;
+    background-color   : #fcd31b;
     border-radius      : 50%;
     box-sizing         : border-box;
     box-shadow         : rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
@@ -37,7 +37,7 @@
 
 .you:before {
     animation       : pulseRing 4s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
-    background-color: #fff9a0;
+    background-color: #f7c900;
     content         : "";
     display         : block;
     height          : 300%;
@@ -67,6 +67,7 @@
 
 .rack-marker {
     transition: box-shadow 250ms ease-in-out;
+    z-index: 1 !important;
 
     &:hover {
         cursor: pointer;

@@ -1,5 +1,4 @@
-import { Box, Icon } from '@chakra-ui/react';
-import React from 'react';
+import { Icon } from '@chakra-ui/react';
 import { HiOutlineBadgeCheck, HiOutlineXCircle, HiOutlineMinusCircle } from 'react-icons/hi';
 import { PRIMARY_GREEN, PRIMARY_YELLOW, PRIMARY_RED } from '../../constants';
 
@@ -11,7 +10,6 @@ const BikeRackMarker = (props: {
         width: 25,
         height: 25,
         backgroundColor: 'white',
-        zIndex: -1,
         top: '0px',
         left: '0px',
         borderRadius: '50px 50px 50px 50px',
@@ -22,6 +20,7 @@ const BikeRackMarker = (props: {
         return (
             <Icon
                 boxShadow="base"
+                zIndex={1}
                 _hover={{
                     boxShadow: "dark-lg",
                 }}

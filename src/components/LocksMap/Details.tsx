@@ -46,15 +46,24 @@ export const DetailsDrawer = (props: {
     >
       <DrawerOverlay />
       <DrawerContent>
-        <DrawerCloseButton marginTop={meta.isInstalled && "60px"} size="lg" />
-        <DrawerHeader borderBottomWidth="1px" borderTopWidth="1px">
+        <DrawerCloseButton marginTop={meta.isInstalled && "50px"} size="lg" />
+        <DrawerHeader
+          borderBottomWidth="1px"
+          borderTopWidth="1px"
+          paddingTop={meta.isInstalled ? "60px" : "16px"}
+        >
           <Box>
             {props.title}{" "}
             {props.location?.city &&
               `${props.location?.city}, ${props.location?.state}`}
           </Box>
         </DrawerHeader>
-        <DrawerBody padding="0px" margin={meta.isInstalled ? "0px 0px 30px 0px" : "0px"}>{props.children}</DrawerBody>
+        <DrawerBody
+          padding="0px"
+          margin={meta.isInstalled ? "0px 0px 30px 0px" : "0px"}
+        >
+          {props.children}
+        </DrawerBody>
       </DrawerContent>
     </Drawer>
   );

@@ -10,19 +10,18 @@ import {
   Box,
   Text,
 } from "@chakra-ui/react";
-import React from "react";
 import { GiSpikedFence, GiWoodenSign, GiPineTree } from "react-icons/gi";
 import firebaseApi from "../../api/firebase";
 import { useGlobalState } from "../../providers/root";
-import BICYCLE from "../../assets/bicycle.svg";
 import { isMobile } from "react-device-detect";
+import { useModalControlState } from "../../providers/ModalControl";
+import { useHistory } from "react-router-dom";
 
-const NewUserModal = (props: {
-  isOpen: boolean;
-  onClose(): void;
-  onOpenAdd(): void;
-}) => {
+const NewUserModal = () => {
+  const { isOpenNewUser, onCloseNewUser, onOpenAddToMap } =
+    useModalControlState();
   const { firebase } = useGlobalState();
+  const history = useHistory();
   const { user } = firebase;
   const circle = {
     width: 100,
@@ -39,8 +38,8 @@ const NewUserModal = (props: {
     <Modal
       closeOnOverlayClick={false}
       isCentered
-      isOpen={props.isOpen}
-      onClose={props.onClose}
+      isOpen={isOpenNewUser}
+      onClose={onCloseNewUser}
     >
       <ModalOverlay />
       <ModalContent>
@@ -49,7 +48,6 @@ const NewUserModal = (props: {
         <ModalBody>
           <Text mb="1rem">No fences, signs, poles or trees</Text>
           <Box display="flex" flexDir="row" justifyContent="center">
-            {/* <img src={BICYCLE} alt="bicycle" /> */}
             <Box
               transform={
                 isMobile
@@ -111,15 +109,16 @@ const NewUserModal = (props: {
           </Box>
         </ModalBody>
         <ModalFooter>
-          <Button variant="ghost" onClick={props.onClose} mr={2}>
+          <Button variant="ghost" onClick={onCloseNewUser} mr={2}>
             Cancel
           </Button>
           <Button
             onClick={() => {
-              props.onClose();
+              onCloseNewUser();
               // @ts-ignore
               firebaseApi.auth.oldUser({ uid: user!.uid });
-              props.onOpenAdd();
+              history.push('/add')
+              onOpenAddToMap();
             }}
           >
             Let's roll

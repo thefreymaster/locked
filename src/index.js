@@ -1,10 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { ChakraProvider } from "@chakra-ui/react"
-import * as Root from './providers/root';
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { ChakraProvider } from "@chakra-ui/react";
+import * as Root from "./providers/root";
+import * as Modal from "./providers/ModalControl";
 import { BrowserRouter as RouterProvider } from "react-router-dom";
 import firebase from "firebase/app";
 
@@ -16,21 +17,23 @@ var firebaseConfig = {
   storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSING_SENDER_ID,
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
-  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 };
 firebase.initializeApp(firebaseConfig);
 
 ReactDOM.render(
   <React.StrictMode>
     <RouterProvider>
-      <Root.Provider>
-        <ChakraProvider>
-          <App />
-        </ChakraProvider>
-      </Root.Provider>
+      <Modal.Provider>
+        <Root.Provider>
+          <ChakraProvider>
+            <App />
+          </ChakraProvider>
+        </Root.Provider>
+      </Modal.Provider>
     </RouterProvider>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function

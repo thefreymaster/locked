@@ -3,15 +3,16 @@ import React from "react";
 import LottieLoading from "../../../../common/LottieLoading";
 import { useGlobalState } from "../../../../providers/root";
 import { generateDbKey } from "../../../../utils/generateDbKey";
-import { CurrentCoordinates } from "../../../CurrentCoordinates";
 import NewUserModal from "../../../NewUser";
 import MapActions from "../../MapActions";
-import { CenterX } from "../../CenterX";
 import ReactMapboxGl, { Popup } from "react-mapbox-gl";
 import RackPopup from "../../Popup";
 import { UserLocation } from "../UserLocation/index";
 import { RacksRenderer } from "../RacksRenderer";
 import { useParams } from "react-router-dom";
+import AbsoluteButton from "../../../../common/AbsoluteButton";
+import { CgMathPlus, CgMathMinus } from "react-icons/cg";
+import { calcIsSupportedLocation } from "../../../../utils/calcIsSupportedLocation";
 
 const Mapbox = ReactMapboxGl({
   accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
@@ -20,6 +21,7 @@ const Mapbox = ReactMapboxGl({
 export const MapRenderer = (props) => {
   let initialViewport;
   const { locks, coordinates, dispatch } = useGlobalState();
+  const { center } = coordinates;
   const { id }: any = useParams();
   const { onOpen, onClose } = useDisclosure();
   const {
@@ -58,6 +60,28 @@ export const MapRenderer = (props) => {
     id: props.id,
   });
 
+  const handleZoomUp = () => {
+    setViewport({
+      ...viewport,
+      latitude: center?.latitude,
+      longitude: center?.longitude,
+      zoom: viewport.zoom + 1,
+    });
+  };
+
+  const handleZoomDown = () => {
+    setViewport({
+      ...viewport,
+      latitude: center?.latitude,
+      longitude: center?.longitude,
+      zoom: viewport.zoom - 1,
+    });
+  };
+
+  const handleIsSupported = (center: any, dbKey: string) => {
+    calcIsSupportedLocation(dispatch, parseInt(dbKey));
+  };
+
   const MemorizedMap = React.useMemo(() => {
     if (!viewport) {
       return (
@@ -79,11 +103,7 @@ export const MapRenderer = (props) => {
           newUserOnOpen={newUserOnOpen}
           onOpen={onOpen}
         />
-        <NewUserModal
-          isOpen={newUserIsOpen}
-          onClose={newUserOnClose}
-          onOpenAdd={onOpen}
-        />
+        <NewUserModal />
         <Mapbox
           style="mapbox://styles/thefreymaster/ckke447ga0wla19k1cqupmrrz"
           containerStyle={{
@@ -92,8 +112,9 @@ export const MapRenderer = (props) => {
           }}
           center={[viewport.longitude, viewport.latitude]}
           zoom={[viewport.zoom]}
-          onDragEnd={({ transform }) => {
-            const { center } = transform;
+          onDragEnd={(mapEnd) => {
+            const { center } = mapEnd?.transform;
+            const dbKey = generateDbKey({ lat: center.lat, lng: center.lng });
             dispatch({
               type: "SET_CENTER_GPS_COORDINATES",
               payload: { latitude: center.lat, longitude: center.lng },
@@ -101,7 +122,7 @@ export const MapRenderer = (props) => {
             dispatch({
               type: "SET_DB_KEY",
               payload: {
-                dbKey: generateDbKey({ lat: center.lat, lng: center.lng }),
+                dbKey,
               },
             });
           }}
@@ -129,15 +150,34 @@ export const MapRenderer = (props) => {
           )}
           <UserLocation coordinates={coordinates} />
         </Mapbox>
+        {/* <AbsoluteButton
+          borderRadius="100px"
+          minHeight="45px"
+          minWidth="45px"
+          padding="0px"
+          fontSize="20px"
+          left={20}
+          right="none"
+          bottom={70}
+          onClick={handleZoomUp}
+        >
+          <CgMathPlus />
+        </AbsoluteButton>
+        <AbsoluteButton
+          borderRadius="100px"
+          minHeight="45px"
+          minWidth="45px"
+          padding="0px"
+          fontSize="20px"
+          left={20}
+          right="none"
+          onClick={handleZoomDown}
+        >
+          <CgMathMinus />
+        </AbsoluteButton> */}
       </>
     );
   }, [viewport, popupViewport, lock]);
 
-  return (
-    <>
-      <CurrentCoordinates />
-      <CenterX />
-      {MemorizedMap}
-    </>
-  );
+  return <>{MemorizedMap}</>;
 };

@@ -1,23 +1,26 @@
-import React from "react";
 import Flex from "../../common/Flex";
 import "./header.scss";
 import SettingsMenu from "../SettingsMenu";
-import { Box, Slide } from "@chakra-ui/react";
-import { Link } from 'react-router-dom';
-import { useHistory } from "react-router-dom";
+import { Box, Slide, IconButton } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
+import { FiPlusCircle } from "react-icons/fi";
 import { useGlobalState } from "../../providers/root";
 import LockAndKeyLogo from "../../common/Logo";
 import Font from "../../common/Font";
+import { useModalControlState } from "../../providers/ModalControl";
 
 const Header = () => {
-  const { meta, coordinates, firebase } = useGlobalState();
+  const { onOpenNewUser, onOpenAddToMap } = useModalControlState();
+  const { meta, user, firebase } = useGlobalState();
   const history = useHistory();
+  const location = useLocation();
   const fixed = {
     position: "fixed",
     top: 0,
     width: "100%",
     zIndex: 6,
-    borderBottom: "1px solid #ffffff6b",
+    borderBottom: location.pathname !== "/" && "1px solid #ffffff6b",
   };
 
   return (
@@ -50,11 +53,26 @@ const Header = () => {
             >
               Lock & Key
             </Font>
-            <Box marginRight={2} flexGrow={1} />
           </Flex>
         </Flex>
-        <Flex />
-        <Flex flexGrow="none" margin="0px 10px 0px 0px" />
+        <Box marginRight={2} flexGrow={1} />
+        {/* {firebase.isAuthenticated && (
+          <IconButton
+            onClick={() => {
+              if (user.isNew) {
+                onOpenNewUser();
+              } else {
+                history.push("/add");
+                onOpenAddToMap();
+              }
+            }}
+            size="sm"
+            marginRight={5}
+            colorScheme="yellow"
+            borderRadius={3}
+            icon={<FiPlusCircle />}
+          />
+        )} */}
         {!meta.isInstalled && <SettingsMenu />}
       </Flex>
     </Slide>

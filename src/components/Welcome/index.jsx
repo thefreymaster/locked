@@ -1,6 +1,7 @@
-import { Box, Button, Divider, SlideFade, Spinner, toast, useDisclosure } from '@chakra-ui/react';
+import { Box, Button, Divider, SlideFade, toast, useDisclosure } from '@chakra-ui/react';
 import React from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
+import { BsSearch } from 'react-icons/bs';
 import firebaseApi from '../../api/firebase';
 import Font from '../../common/Font';
 import Wrapper from '../../common/Wrapper';
@@ -8,9 +9,8 @@ import { useGlobalState } from '../../providers/root';
 import { isMobile } from 'react-device-detect';
 import './welcome.scss';
 import { PRIMARY_COLOR_SCHEME } from '../../constants';
-import DeviceWrapper from '../../common/DeviceWrapper';
 import LottieLoading from '../../common/LottieLoading';
-import LockAndKeyLogo from '../../common/Logo';
+import MAP_IMAGE from '../../assets/map.jpeg'
 
 const Welcome = () => {
     const { firebase, dispatch } = useGlobalState();
@@ -40,7 +40,7 @@ const Welcome = () => {
         return <Redirect to="/map" />
     }
     const background = {
-        // backgroundImage: `url(${CUTTING_BOARD})`,
+        backgroundImage: `url(${MAP_IMAGE})`,
         width: window.innerWidth,
         height: window.innerHeight,
         position: 'absolute',
@@ -52,7 +52,7 @@ const Welcome = () => {
     return (
         <div style={{
             minHeight: "100%",
-            minWidth: "100%"
+            minWidth: "100%",
         }}>
             <div style={{
                 display: "flex",
@@ -62,22 +62,21 @@ const Welcome = () => {
                 <SlideFade direction="bottom" in={isOpen}>
                     <Wrapper>
                         <Box display="flex" flexDir="column" justifyContent="center" alignItems="center">
-                            <LockAndKeyLogo />
                             <Font fontWeight={900} fontSize={isMobile ? 56 : 124} variant="primary">Lock & Key</Font>
                             <Font fontWeight={600} fontSize={18}>Lock your bike up with confidence</Font>
                             <Box mt={5} />
-                            <Button size="lg" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => histroy.push('/map')}>Search Your Area</Button>
+                            <Button leftIcon={<BsSearch />} size="lg" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => histroy.push('/map')}>Search Your Area</Button>
                             <Divider mt={5} />
                             <Box mt={5} display="flex" flexDir={isMobile ? "column" : "row"}>
-                                <Button size="sm" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => firebaseApi.auth.signIn(dispatch, showSuccessToast)}>Sign Up With Google</Button>
+                                {/* <Button size="sm" colorScheme="linkedin" disabled={firebase.isValidatingAuthentication} onClick={() => firebaseApi.auth.signIn(dispatch, showSuccessToast)}>Sign Up With Google</Button>
                                 <Box mr={5} ml={5} d="flex" justifyContent="center" alignItems="center">
                                     Or
-                                </Box>
-                                <Button size="sm" colorScheme={PRIMARY_COLOR_SCHEME} disabled={firebase.isValidatingAuthentication} onClick={() => firebaseApi.auth.signIn(dispatch, showSuccessToast)}>Sign In With Google</Button>
+                                </Box> */}
+                                <Button size="sm" colorScheme="blackAlpha" disabled={firebase.isValidatingAuthentication} onClick={() => firebaseApi.auth.signIn(dispatch, showSuccessToast)}>Sign In With Google</Button>
                             </Box>
                         </Box>
                     </Wrapper>
-                    {/* <div style={background} className="cover-background" /> */}
+                    <div style={background} className="cover-background" />
                 </SlideFade>
             </div>
         </div>
