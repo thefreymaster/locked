@@ -31,6 +31,7 @@ const openDbConnection = ({ lat, lng, dispatch }) => {
   refUpdates.on("value", (snapshot) => {
     dispatch(isFetching);
     const snapshotValue = snapshot.val();
+
     if (snapshotValue) {
       dispatch({
         type: "POPULATE_DATA",
@@ -184,9 +185,10 @@ const upload = ({ uid, file, form, setIsUploading }) => {
   const storageRef = storage.ref();
   const imageRef = storageRef.child(`images/${uid}/${uuidv4()}`);
   const options = {
-    maxSizeMB: 0.5,
+    maxSizeMB: 0.25,
     useWebWorker: true,
   };
+
   imageCompression(file, options)
     .then(function (compressedFile) {
       imageRef.put(compressedFile).then((snapshot) => {

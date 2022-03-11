@@ -8,7 +8,7 @@ export const CenterX = () => {
 
     return (
         <Fade in={center.showCenter}>
-            <Box position="absolute" left="calc(50% - 20px)" top="calc(50% - 20px)" zIndex="1000">
+            <Box position="absolute" left="calc(50% - 20px)" top="calc(50% - 20px)" zIndex="2">
                 <CgMathPlus size="32px" />
             </Box>
         </Fade>

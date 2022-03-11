@@ -1,6 +1,6 @@
 import React from "react";
 import { useGlobalState } from "../../providers/root";
-import { Fade, Box, useDisclosure, CloseButton } from "@chakra-ui/react";
+import { Fade, Box, useDisclosure, CloseButton, useOutsideClick } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
 import "./users-map.scss";
 import firebaseApi from "../../api/firebase";
@@ -10,12 +10,17 @@ import { RackInformation } from "./RackInformation";
 import { isMobile } from "react-device-detect";
 
 const RackPopup = (props) => {
+  const ref = React.useRef();
   const { dispatch, locks } = useGlobalState();
   const {
     isOpen: isOpenDetails,
     onOpen: onOpenDetails,
     onClose: onCloseDetails,
   } = useDisclosure();
+  useOutsideClick({
+    ref: ref,
+    handler: () => onCloseDetails(false),
+  })
 
   const lock = locks?.[props.id];
   const [fadeIn, setFadeIn] = React.useState(false);
@@ -61,6 +66,7 @@ const RackPopup = (props) => {
   return (
     <Fade in={fadeIn}>
       <Box
+        ref={ref}
         flexDir="column"
         maxW="lg"
         key={lock.name}

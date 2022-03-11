@@ -147,7 +147,6 @@ const AddRack = (props) => {
                       <Field name="notes">
                         {({ field, form }) => (
                           <FormControl
-                            isRequired
                             isInvalid={form.errors.notes && form.touched.notes}
                           >
                             <FormLabel htmlFor="notes">Description</FormLabel>
@@ -160,26 +159,6 @@ const AddRack = (props) => {
                           </FormControl>
                         )}
                       </Field>
-                      {/* <Stack direction="row">
-                                                <Field name="location.city">
-                                                    {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.city && form.touched.city}>
-                                                            <FormLabel htmlFor="location.city">City</FormLabel>
-                                                            <Input {...field} variant="filled" id="location.city" placeholder="City" />
-                                                        </FormControl>
-                                                    )}
-                                                </Field>
-                                                <Field name="location.state">
-                                                    {({ field, form }) => (
-                                                        <FormControl isInvalid={form.errors.state && form.touched.state}>
-                                                            <FormLabel htmlFor="location.state">State</FormLabel>
-                                                            <Select {...field} name="location.state" variant="filled" placeholder="Select State">
-                                                                {states.map(state => <option value={state}>{state}</option>)}
-                                                            </Select>
-                                                        </FormControl>
-                                                    )}
-                                                </Field>
-                                            </Stack> */}
                       <Stack direction="row">
                         <Field name="location.lat">
                           {({ field }) => (
@@ -684,6 +663,8 @@ const AddRack = (props) => {
                       )}
                       <AbsoluteButton
                         bottom={20}
+                        color="white"
+                        colorScheme="yellow"
                         disabled={
                           validatePage3({ values: formProps.values }) ||
                           isUploading
@@ -730,7 +711,6 @@ const AddRack = (props) => {
                   >
                     Cancel
                   </AbsoluteButton>
-                  {/* {page === 1 && <AbsoluteButton left={20} right="none" onClick={() => history.goBack()}><BiArrowBack /></AbsoluteButton>} */}
                   {page === 2 && (
                     <AbsoluteButton
                       bottom={20}

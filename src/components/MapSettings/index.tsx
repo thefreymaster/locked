@@ -3,6 +3,8 @@ import DeviceWrapper from "../../common/DeviceWrapper";
 import Wrapper from "../../common/Wrapper";
 import Font from "../../common/Font";
 import { useGlobalState } from "../../providers/root";
+import { isDesktop } from "react-device-detect";
+import { BackButton } from "../../common/BackButton";
 
 const MapSettings = () => {
   const { dispatch, coordinates } = useGlobalState();
@@ -13,6 +15,7 @@ const MapSettings = () => {
       <DeviceWrapper>
         <Box>
           <Box display="flex" flexDir="row" alignItems="center">
+            <BackButton />
             <Box>
               <Font variant="primary" fontWeight="bold" fontSize="32px">
                 Map Settings
@@ -38,7 +41,7 @@ const MapSettings = () => {
             }
             isChecked={center.showCenter}
             colorScheme="yellow"
-            size="md"
+            size={isDesktop ? "md" : "lg"}
           />
         </Box>
         <Divider mt={2} mb={2} />
@@ -49,13 +52,13 @@ const MapSettings = () => {
           <Box flexGrow={1} />
           <Switch
             onChange={() =>
-                coordinates.showCoordinates
+              coordinates.showCoordinates
                 ? dispatch({ type: "HIDE_CURRENT_COORDINATES" })
                 : dispatch({ type: "SHOW_CURRENT_COORDINATES" })
             }
             isChecked={coordinates.showCoordinates}
             colorScheme="yellow"
-            size="md"
+            size={isDesktop ? "md" : "lg"}
           />
         </Box>
       </DeviceWrapper>

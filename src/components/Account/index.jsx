@@ -1,4 +1,4 @@
-import { Box, Button, useDisclosure, useToast } from "@chakra-ui/react";
+import { Box, Button, useDisclosure, useToast, Slide } from "@chakra-ui/react";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
@@ -13,9 +13,11 @@ import { IoCloseOutline } from "react-icons/io5";
 import LottieLoading from "../../common/LottieLoading";
 import DeviceWrapper from "../../common/DeviceWrapper";
 import Font from "../../common/Font";
+import { BackButton } from "../../common/BackButton";
 
 const Account = () => {
-  const { dispatch, firebase, meta, alpha } = useGlobalState();
+  const [signOutConfirm, setSignOutConfirm] = React.useState(false);
+  const { dispatch, firebase, meta } = useGlobalState();
   const { onToggle } = useDisclosure();
   const history = useHistory();
 
@@ -63,9 +65,18 @@ const Account = () => {
           alignItems="flex-start"
           flexDirection="column"
         >
-          <Font variant="primary" fontWeight="bold" fontSize="32px">
-            Settings
-          </Font>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="center"
+            flexDirection="row"
+          >
+            <BackButton />
+            <Box flexGrow={1} />
+            <Font variant="primary" fontWeight="bold" fontSize="32px">
+              Settings
+            </Font>
+          </Box>
           <Box borderRadius="lg" boxShadow="md" padding={4} minW="100%">
             {firebase.isAuthenticated ? (
               <Authenticated justifyContent="flex-start" />
@@ -86,8 +97,11 @@ const Account = () => {
               <Button
                 minW="100%"
                 size="md"
+                backgroundColor="white"
+                borderTop="1px solid #80808021"
                 borderBottomRightRadius="0px"
                 borderBottomLeftRadius="0px"
+                _hover={{ backgroundColor: "#edf2f778" }}
               >
                 Change Log
                 <Box flexGrow={1} />
@@ -99,6 +113,8 @@ const Account = () => {
                 minW="100%"
                 size="md"
                 borderRadius="0px"
+                backgroundColor="white"
+                _hover={{ backgroundColor: "#edf2f778" }}
               >
                 Map Settings
                 <Box flexGrow={1} />
@@ -110,13 +126,47 @@ const Account = () => {
                 minW="100%"
                 borderTopRightRadius="0px"
                 borderTopLeftRadius="0px"
-                onClick={() =>
-                  firebaseApi.auth.signOut(dispatch, showInfoToast, history)
-                }
+                backgroundColor="white"
+                _hover={{ backgroundColor: "#edf2f778" }}
+                onClick={() => {
+                  setSignOutConfirm(true);
+                }}
               >
-                Sign Out
-                <Box flexGrow={1} />
-                <IoCloseOutline />
+                {signOutConfirm ? (
+                  <Box display="flex" justifyContent="flex-end" minW="100%">
+                    <Button
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        setSignOutConfirm(false);
+                      }}
+                      colorScheme="gray"
+                      size="sm"
+                      marginRight={2}
+                    >
+                      Cancel
+                    </Button>
+                    <Box flexGrow={1} />
+                    <Button
+                      onClick={() =>
+                        firebaseApi.auth.signOut(
+                          dispatch,
+                          showInfoToast,
+                          history
+                        )
+                      }
+                      colorScheme="red"
+                      size="sm"
+                    >
+                      Confirm Sign Out?
+                    </Button>
+                  </Box>
+                ) : (
+                  <Box display="flex" alignItems="center" minW="100%">
+                    <Box>Sign Out</Box>
+                    <Box flexGrow={1} />
+                    <IoCloseOutline />
+                  </Box>
+                )}
               </Button>
             )}
           </Box>

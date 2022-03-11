@@ -14,6 +14,29 @@ export const RacksRenderer = (props: {
   const { locks } = global;
   const history = useHistory();
 
+  const handleClick = (
+    value: any,
+    key: string,
+    latAdjustmentPopup: number,
+    latAdjustmentViewport: number
+  ) => {
+    props.setPopupViewport({
+      visible: true,
+      coordinates: [
+        value.location.long,
+        value.location.lat + latAdjustmentPopup,
+      ],
+      lock: value,
+      id: key,
+    });
+    props.setViewport({
+      zoom: 16,
+      latitude: value.location.lat + latAdjustmentViewport,
+      longitude: value.location.long,
+    });
+    history.push(`/map/${key}`);
+  };
+
   return (
     <>
       {Object.entries(locks).map(([key, value]) => {
@@ -27,23 +50,9 @@ export const RacksRenderer = (props: {
         const overallRating = calculateOverallRating({ ratings });
         return (
           <Marker
-            onClick={() => {
-              props.setPopupViewport({
-                visible: true,
-                coordinates: [
-                  value.location.long,
-                  value.location.lat + latAdjustmentPopup,
-                ],
-                lock: value,
-                id: key,
-              });
-              props.setViewport({
-                zoom: 16,
-                latitude: location.lat + latAdjustmentViewport,
-                longitude: location.long,
-              });
-              history.push(`/map/${key}`);
-            }}
+            onClick={() =>
+              handleClick(value, key, latAdjustmentPopup, latAdjustmentViewport)
+            }
             key={`friend-marker-${key}`}
             coordinates={[location.long, location.lat]}
             className="rack-marker"

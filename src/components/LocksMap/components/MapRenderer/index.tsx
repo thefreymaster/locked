@@ -10,9 +10,6 @@ import RackPopup from "../../Popup";
 import { UserLocation } from "../UserLocation/index";
 import { RacksRenderer } from "../RacksRenderer";
 import { useParams } from "react-router-dom";
-import AbsoluteButton from "../../../../common/AbsoluteButton";
-import { CgMathPlus, CgMathMinus } from "react-icons/cg";
-import { calcIsSupportedLocation } from "../../../../utils/calcIsSupportedLocation";
 
 const Mapbox = ReactMapboxGl({
   accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
@@ -21,14 +18,9 @@ const Mapbox = ReactMapboxGl({
 export const MapRenderer = (props) => {
   let initialViewport;
   const { locks, coordinates, dispatch } = useGlobalState();
-  const { center } = coordinates;
   const { id }: any = useParams();
   const { onOpen, onClose } = useDisclosure();
-  const {
-    isOpen: newUserIsOpen,
-    onOpen: newUserOnOpen,
-    onClose: newUserOnClose,
-  } = useDisclosure();
+  const { onOpen: newUserOnOpen } = useDisclosure();
 
   const lock: any = locks?.[id];
 
@@ -44,8 +36,8 @@ export const MapRenderer = (props) => {
     initialViewport = {
       width: window.innerWidth,
       height: window.innerHeight,
-      latitude: coordinates.latitude,
-      longitude: coordinates.longitude,
+      latitude: coordinates.center?.latitude ?? coordinates.latitude,
+      longitude: coordinates.center?.longitude ?? coordinates.longitude,
       zoom: 15,
     };
   }
@@ -59,28 +51,6 @@ export const MapRenderer = (props) => {
     lock: lock || {},
     id: props.id,
   });
-
-  const handleZoomUp = () => {
-    setViewport({
-      ...viewport,
-      latitude: center?.latitude,
-      longitude: center?.longitude,
-      zoom: viewport.zoom + 1,
-    });
-  };
-
-  const handleZoomDown = () => {
-    setViewport({
-      ...viewport,
-      latitude: center?.latitude,
-      longitude: center?.longitude,
-      zoom: viewport.zoom - 1,
-    });
-  };
-
-  const handleIsSupported = (center: any, dbKey: string) => {
-    calcIsSupportedLocation(dispatch, parseInt(dbKey));
-  };
 
   const MemorizedMap = React.useMemo(() => {
     if (!viewport) {
@@ -97,13 +67,6 @@ export const MapRenderer = (props) => {
     }
     return (
       <>
-        <MapActions
-          setViewport={setViewport}
-          viewport={viewport}
-          newUserOnOpen={newUserOnOpen}
-          onOpen={onOpen}
-        />
-        <NewUserModal />
         <Mapbox
           style="mapbox://styles/thefreymaster/ckke447ga0wla19k1cqupmrrz"
           containerStyle={{
@@ -150,31 +113,13 @@ export const MapRenderer = (props) => {
           )}
           <UserLocation coordinates={coordinates} />
         </Mapbox>
-        {/* <AbsoluteButton
-          borderRadius="100px"
-          minHeight="45px"
-          minWidth="45px"
-          padding="0px"
-          fontSize="20px"
-          left={20}
-          right="none"
-          bottom={70}
-          onClick={handleZoomUp}
-        >
-          <CgMathPlus />
-        </AbsoluteButton>
-        <AbsoluteButton
-          borderRadius="100px"
-          minHeight="45px"
-          minWidth="45px"
-          padding="0px"
-          fontSize="20px"
-          left={20}
-          right="none"
-          onClick={handleZoomDown}
-        >
-          <CgMathMinus />
-        </AbsoluteButton> */}
+        <MapActions
+          setViewport={setViewport}
+          viewport={viewport}
+          newUserOnOpen={newUserOnOpen}
+          onOpen={onOpen}
+        />
+        <NewUserModal />
       </>
     );
   }, [viewport, popupViewport, lock]);

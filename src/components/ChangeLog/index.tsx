@@ -4,6 +4,7 @@ import DeviceWrapper from "../../common/DeviceWrapper";
 import Wrapper from "../../common/Wrapper";
 import Font from "../../common/Font";
 import { RiExternalLinkLine } from "react-icons/ri";
+import { BackButton } from "../../common/BackButton";
 
 const ChangeLog = () => {
   return (
@@ -11,6 +12,7 @@ const ChangeLog = () => {
       <DeviceWrapper>
         <Box>
           <Box display="flex" flexDir="row" alignItems="center">
+            <BackButton />
             <Box>
               <Font variant="primary" fontWeight="bold" fontSize="32px">
                 Change Log

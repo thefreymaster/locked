@@ -3,9 +3,9 @@ import { Box, Tag, Switch } from "@chakra-ui/react";
 import { isDesktop } from "react-device-detect";
 import { CurrentCoordinates } from "../CurrentCoordinates";
 import { CenterX } from "./CenterX";
-import AbsoluteButton from "../../common/AbsoluteButton";
+import AbsoluteIconButton from "../../common/AbsoluteIconButton";
 import { useHistory } from "react-router-dom";
-import { FiPlusCircle } from "react-icons/fi";
+import { AiOutlinePlus } from "react-icons/ai";
 import { useModalControlState } from "../../providers/ModalControl";
 
 interface IMapActions {
@@ -21,11 +21,11 @@ const MapActions = (props: IMapActions) => {
   const { onOpenNewUser, onOpenAddToMap } = useModalControlState();
 
   const history = useHistory();
+
   return (
     <>
       {firebase.isAuthenticated && (
-        <AbsoluteButton
-          colorScheme="yellow"
+        <AbsoluteIconButton
           onClick={() => {
             if (user.isNew) {
               onOpenNewUser();
@@ -34,16 +34,19 @@ const MapActions = (props: IMapActions) => {
               onOpenAddToMap();
             }
           }}
+          round
+          colorScheme="yellow"
+          size="sm"
         >
-          <FiPlusCircle />
-        </AbsoluteButton>
+          <AiOutlinePlus fontSize="24px" color="white" />
+        </AbsoluteIconButton>
       )}
       {coordinates.showCoordinates && <CurrentCoordinates />}
       <CenterX />
       {isDesktop && (
         <Tag
           boxShadow="base"
-          borderRadius="md"
+          borderRadius="100px"
           colorScheme="yellow"
           variant="solid"
           padding={1}

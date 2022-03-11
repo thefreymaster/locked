@@ -16,6 +16,7 @@ export const CurrentCoordinates = () => {
       right="none"
       minH="25px"
       colorScheme="yellow"
+      borderRadius="100px"
       left={isMobile ? 2 : (window.innerWidth - 154) / 2}
     >
       {center?.latitude?.toFixed(5)}, {center?.longitude?.toFixed(5)}
