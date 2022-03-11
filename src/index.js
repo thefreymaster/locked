@@ -3,11 +3,12 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, ColorModeScript } from "@chakra-ui/react";
 import * as Root from "./providers/root";
 import * as Modal from "./providers/ModalControl";
 import { BrowserRouter as RouterProvider } from "react-router-dom";
 import firebase from "firebase/app";
+import theme from './theme';
 
 var firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -27,6 +28,7 @@ ReactDOM.render(
       <Modal.Provider>
         <Root.Provider>
           <ChakraProvider>
+            <ColorModeScript initialColorMode={theme.config.initialColorMode} />
             <App />
           </ChakraProvider>
         </Root.Provider>

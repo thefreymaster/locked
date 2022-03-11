@@ -8,6 +8,7 @@ import {
   Text,
   Spinner,
   ScaleFade,
+  useColorMode,
 } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
 import "./users-map.scss";
@@ -44,7 +45,8 @@ export const RackInformation = (props: {
 }) => {
   const history = useHistory();
   const { firebase, meta } = useGlobalState();
-
+  const { colorMode } = useColorMode();
+  
   const canEditDelete =
     firebase.isAuthenticated &&
     firebase.provider &&
@@ -63,7 +65,6 @@ export const RackInformation = (props: {
         >
           <CloseButton
             position="absolute"
-            color="white"
             size="lg"
             onClick={() => {
               props.setFadeIn(false);
@@ -78,14 +79,12 @@ export const RackInformation = (props: {
           />
         </Box>
       )}
-      {/* <ScaleFade initialScale={0.9} in={isLoaded}> */}
       <Image
         minH={props.variant === "modal" ? 275 : props.minH}
         minW={props.variant === "modal" ? "100%" : props.minW}
         maxH={props.maxH}
         objectFit="cover"
         bg="yellow.400"
-        color="white"
         loading="lazy"
         borderRadius={props.borderRadius}
         name={props.lock.name}
@@ -94,16 +93,14 @@ export const RackInformation = (props: {
           setIsLoaded(true);
         }}
       />
-      {/* </ScaleFade> */}
       <Box
         position={props.variant === "drawer" ? "fixed" : "inherit"}
         minW="100%"
         bottom="0px"
+        backgroundColor={colorMode === 'light' ? 'white' : '#1a212f'}
         paddingBottom={
           meta.isInstalled && props.variant === "drawer" ? "80px" : "0px"
         }
-        backgroundColor="white"
-        borderRadius={props.variant === "modal" ? "10px" : "0px"}
       >
         <Box
           display="flex"
@@ -211,7 +208,7 @@ export const RackInformation = (props: {
           )}
         </Box>
         <Box pt={3}>
-          <Divider />
+          <Divider borderColor={colorMode === 'light' ? 'white' : '#1c374a'} />
         </Box>
         {canEditDelete && (
           <Box width="100%" display="flex" justifyContent="flex-end">
@@ -220,7 +217,6 @@ export const RackInformation = (props: {
               margin="2"
               marginRight="0"
               size="sm"
-              icon={<BiTrash />}
               onClick={() => props.setIsOpen(true)}
             >
               Remove
@@ -230,7 +226,6 @@ export const RackInformation = (props: {
               colorScheme="gray"
               margin="2"
               size="sm"
-              icon={<BiEditAlt />}
               onClick={() => {
                 history.push(`/edit/${props.id}`);
                 props.onOpen();
@@ -240,11 +235,10 @@ export const RackInformation = (props: {
             </Button>
             {props.variant === "modal" && (
               <Button
-                colorScheme="gray"
                 margin="2"
                 marginLeft="1"
                 size="sm"
-                icon={<BiEditAlt />}
+                colorScheme="gray"
                 onClick={() => {
                   history.push(`/details/${props.id}`);
                   props.onOpenDetails();
@@ -264,7 +258,6 @@ export const RackInformation = (props: {
               margin="2"
               marginLeft="1"
               size="sm"
-              icon={<BiEditAlt />}
               onClick={() => {
                 history.push(`/details/${props.id}`);
                 props.onOpenDetails();

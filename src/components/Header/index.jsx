@@ -1,26 +1,33 @@
 import Flex from "../../common/Flex";
 import "./header.scss";
 import SettingsMenu from "../SettingsMenu";
-import { Box, Slide, IconButton } from "@chakra-ui/react";
+import { Box, Slide, useColorMode, IconButton } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { useHistory, useLocation } from "react-router-dom";
-import { FiPlusCircle } from "react-icons/fi";
 import { useGlobalState } from "../../providers/root";
 import LockAndKeyLogo from "../../common/Logo";
 import Font from "../../common/Font";
-import { useModalControlState } from "../../providers/ModalControl";
+import { BsFillBrightnessLowFill, BsMoonStarsFill } from "react-icons/bs";
 
 const Header = () => {
-  const { onOpenNewUser, onOpenAddToMap } = useModalControlState();
-  const { meta, user, firebase } = useGlobalState();
+  const { meta } = useGlobalState();
+  const { colorMode, toggleColorMode } = useColorMode();
+
   const history = useHistory();
   const location = useLocation();
+  const getBorder = () => {
+    if (location.pathname === "/map") {
+      return colorMode === "light"
+        ? "1px solid #ffffff6b"
+        : "1px solid #1926378c";
+    }
+  };
   const fixed = {
     position: "fixed",
     top: 0,
     width: "100%",
     zIndex: 6,
-    borderBottom: location.pathname !== "/" && "1px solid #ffffff6b",
+    borderBottom: getBorder(),
   };
 
   return (
@@ -50,29 +57,26 @@ const Header = () => {
               variant="primary"
               onClick={() => history.push("/")}
               fontWeight="bold"
+              color={colorMode === "light" ? "#1926378c" : "white"}
             >
               Lock & Key
             </Font>
           </Flex>
         </Flex>
         <Box marginRight={2} flexGrow={1} />
-        {/* {firebase.isAuthenticated && (
-          <IconButton
-            onClick={() => {
-              if (user.isNew) {
-                onOpenNewUser();
-              } else {
-                history.push("/add");
-                onOpenAddToMap();
-              }
-            }}
-            size="sm"
-            marginRight={5}
-            colorScheme="yellow"
-            borderRadius={3}
-            icon={<FiPlusCircle />}
-          />
-        )} */}
+        <IconButton
+          onClick={toggleColorMode}
+          borderRadius={100}
+          marginRight={4}
+          size="sm"
+          icon={
+            colorMode === "light" ? (
+              <BsMoonStarsFill />
+            ) : (
+              <BsFillBrightnessLowFill />
+            )
+          }
+        />
         {!meta.isInstalled && <SettingsMenu />}
       </Flex>
     </Slide>

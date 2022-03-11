@@ -1,4 +1,4 @@
-import { Box, Button, useDisclosure, useToast, Slide } from "@chakra-ui/react";
+import { Box, Button, useDisclosure, useToast, useColorMode, Switch } from "@chakra-ui/react";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
@@ -20,6 +20,7 @@ const Account = () => {
   const { dispatch, firebase, meta } = useGlobalState();
   const { onToggle } = useDisclosure();
   const history = useHistory();
+  const { colorMode, toggleColorMode } = useColorMode();
 
   const toast = useToast();
 
@@ -92,12 +93,24 @@ const Account = () => {
               </Button>
             )}
           </Box>
+          <Box borderRadius="lg" boxShadow="md" marginTop={4} padding={4} minW="100%">
+            <Box
+              minW="100%"
+              size="md"
+              borderBottomRightRadius="0px"
+              borderBottomLeftRadius="0px"
+              display="flex"
+            >
+              Dark Mode
+              <Box flexGrow={1} />
+              <Switch colorScheme="yellow" isChecked={colorMode === 'dark'} onChange={toggleColorMode} />
+            </Box>
+          </Box>
           <Box minW="100%" marginTop={4} boxShadow="md" borderRadius="5px">
             <Link to="/changes">
               <Button
                 minW="100%"
                 size="md"
-                backgroundColor="white"
                 borderTop="1px solid #80808021"
                 borderBottomRightRadius="0px"
                 borderBottomLeftRadius="0px"
@@ -113,7 +126,6 @@ const Account = () => {
                 minW="100%"
                 size="md"
                 borderRadius="0px"
-                backgroundColor="white"
                 _hover={{ backgroundColor: "#edf2f778" }}
               >
                 Map Settings
@@ -126,7 +138,6 @@ const Account = () => {
                 minW="100%"
                 borderTopRightRadius="0px"
                 borderTopLeftRadius="0px"
-                backgroundColor="white"
                 _hover={{ backgroundColor: "#edf2f778" }}
                 onClick={() => {
                   setSignOutConfirm(true);

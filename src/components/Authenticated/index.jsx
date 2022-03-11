@@ -1,7 +1,6 @@
-import { Avatar, Fade, Tag } from '@chakra-ui/react';
+import { Avatar, Fade, Tag, useColorMode } from '@chakra-ui/react';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
 import Flex from '../../common/Flex';
 import Font from '../../common/Font';
 import { BACKGROUND_COLOR_HW, BLUE } from '../../constants';
@@ -9,10 +8,12 @@ import { useGlobalState } from '../../providers/root';
 import './avatar.scss';
 
 const Authenticated = (props) => {
+    const { colorMode } = useColorMode();
+
     const { firebase, meta } = useGlobalState();
 
     const inlineTag = {
-        backgroundColor: meta.isDay ? BACKGROUND_COLOR_HW : BLUE,
+        backgroundColor: colorMode === 'light' ? BACKGROUND_COLOR_HW : BLUE,
     }
     if (firebase.isAuthenticated) {
         const { user } = firebase;
@@ -45,9 +46,9 @@ const Authenticated = (props) => {
                     <Flex margin="0px 0px 5px 0px" flexGrow="none" />
                     <Tag size="sm" style={inlineTag}>
                         <Flex display="flex" direction="row" justifyContent="center" alignItems="center">
-                            <FontAwesomeIcon color={meta.isDay ? BLUE : BACKGROUND_COLOR_HW} icon={faGoogle} />
+                            <FontAwesomeIcon color={colorMode === 'light' ? BLUE : BACKGROUND_COLOR_HW} icon={faGoogle} />
                             <Flex margin="0px 5px 0px 0px" flexGrow="none" />
-                            <Font fontSize="11px" color={meta.isDay ? BLUE : BACKGROUND_COLOR_HW} fontWeight={500}>Google Auth</Font>
+                            <Font fontSize="11px" color={colorMode === 'light' ? BLUE : BACKGROUND_COLOR_HW} fontWeight={500}>Google Auth</Font>
                         </Flex>
                     </Tag>
                 </Flex>

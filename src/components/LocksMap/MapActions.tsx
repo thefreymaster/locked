@@ -38,7 +38,7 @@ const MapActions = (props: IMapActions) => {
           colorScheme="yellow"
           size="sm"
         >
-          <AiOutlinePlus fontSize="24px" color="white" />
+          <AiOutlinePlus fontSize="24px" />
         </AbsoluteIconButton>
       )}
       {coordinates.showCoordinates && <CurrentCoordinates />}

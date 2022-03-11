@@ -9,11 +9,7 @@ import {
   Box,
   useToast,
   Spinner,
-  Badge,
-  Code,
-  Switch,
-  FormControl,
-  FormLabel,
+  useColorMode,
 } from "@chakra-ui/react";
 import { BLUE } from "../../constants";
 import { CgClose, CgMenu } from "react-icons/cg";
@@ -137,6 +133,8 @@ const SettingsMenu = () => {
 };
 
 const SettingsMenuButton = ({ firebase, meta, isOpen }) => {
+  const { colorMode } = useColorMode();
+
   if (firebase.isValidatingAuthentication) {
     return <Spinner color="white" colorScheme="white" />;
   }
@@ -145,7 +143,7 @@ const SettingsMenuButton = ({ firebase, meta, isOpen }) => {
   ) : (
     <IconButton
       borderRadius="md"
-      className={meta.isDay ? "menu-button" : "menu-button-dark"}
+      className={colorMode === 'light' ? "menu-button" : "menu-button-dark"}
       colorScheme="gray"
       icon={isOpen ? <CgClose color="black" /> : <CgMenu color="black" />}
     />

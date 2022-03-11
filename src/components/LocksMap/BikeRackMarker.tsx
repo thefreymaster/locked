@@ -1,4 +1,4 @@
-import { Icon } from "@chakra-ui/react";
+import { Icon, useColorMode } from "@chakra-ui/react";
 import {
   HiOutlineBadgeCheck,
   HiOutlineXCircle,
@@ -7,11 +7,12 @@ import {
 import { PRIMARY_GREEN, PRIMARY_YELLOW, PRIMARY_RED } from "../../constants";
 
 const BikeRackMarker = (props: { overallRating: number }) => {
+  const { colorMode } = useColorMode();
   const style = {
     fontSize: 15,
     width: 25,
     height: 25,
-    backgroundColor: "white",
+    backgroundColor: colorMode === 'light' ? "white" : "black",
     top: "0px",
     left: "0px",
     borderRadius: "50px 50px 50px 50px",

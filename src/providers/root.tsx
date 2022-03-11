@@ -78,8 +78,8 @@ const defaultState: IDefaultState = {
   meta: {
     isServerError: false,
     fetching: true,
-    isDay:
-      new Date().getHours() >= 6 && new Date().getHours() <= 17 ? true : false,
+    isDay: false,
+      // new Date().getHours() >= 6 && new Date().getHours() <= 17 ? true : false,
     isInstalled:
       localStorage.getItem("isInstalled") === "true" ? true : false || false,
     dbKey: "",

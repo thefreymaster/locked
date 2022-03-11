@@ -1,4 +1,4 @@
-import { Box, useDisclosure } from "@chakra-ui/react";
+import { Box, useColorMode, useDisclosure } from "@chakra-ui/react";
 import React from "react";
 import LottieLoading from "../../../../common/LottieLoading";
 import { useGlobalState } from "../../../../providers/root";
@@ -16,6 +16,7 @@ const Mapbox = ReactMapboxGl({
 });
 
 export const MapRenderer = (props) => {
+  const { colorMode } = useColorMode();
   let initialViewport;
   const { locks, coordinates, dispatch } = useGlobalState();
   const { id }: any = useParams();
@@ -68,7 +69,11 @@ export const MapRenderer = (props) => {
     return (
       <>
         <Mapbox
-          style="mapbox://styles/thefreymaster/ckke447ga0wla19k1cqupmrrz"
+          style={
+            colorMode === 'light'
+              ? "mapbox://styles/thefreymaster/ckke447ga0wla19k1cqupmrrz"
+              : "mapbox://styles/thefreymaster/ckz2wubzy000714ox0su8us49"
+          }
           containerStyle={{
             height: "100vh",
             width: "100vw",
@@ -122,7 +127,7 @@ export const MapRenderer = (props) => {
         <NewUserModal />
       </>
     );
-  }, [viewport, popupViewport, lock]);
+  }, [viewport, popupViewport, lock, colorMode]);
 
   return <>{MemorizedMap}</>;
 };
