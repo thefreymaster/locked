@@ -21,9 +21,9 @@ export const MapDataGetter = () => {
   const { meta } = useGlobalState();
   const { id }: any = useParams();
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     const getItem = async () => {
-      firebaseApi.db.openSingleItmeDbConnection({
+      await firebaseApi.db.openSingleItmeDbConnection({
         dbKey: meta.dbKey,
         id,
         setLock,
@@ -48,9 +48,10 @@ export const MapRenderer = (props: { id: any; lock: any }) => {
           width: window.innerWidth,
           height: window.innerHeight,
           latitude:
-            props.lock?.location?.lat + 0.00061000001135 ??
+            props.lock?.location?.lat ??
             coordinates.center?.latitude,
-          longitude: props.lock?.location?.long ?? coordinates.center?.longitude,
+          longitude:
+            props.lock?.location?.long ?? coordinates.center?.longitude,
           zoom: 18,
         }
       : {
@@ -122,7 +123,7 @@ export const MapRenderer = (props: { id: any; lock: any }) => {
             setViewport={setViewport}
             setPopupViewport={setPopupViewport}
           />
-          {popupViewport.visible && (
+          {popupViewport.visible && popupViewport?.coordinates?.length > 0 && (
             <Popup
               anchor="bottom"
               coordinates={popupViewport.coordinates}

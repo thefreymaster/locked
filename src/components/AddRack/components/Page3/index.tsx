@@ -75,9 +75,9 @@ export const Page3 = (props: {
           validatePage3({ values: props.formProps.values }) || isUploading
         }
         loading={isUploading || meta.fetching}
-        onClick={() => {
+        onClick={async () => {
           if (id) {
-            firebaseApi.update({
+            await firebaseApi.update({
               postData: props.formProps.values,
               dispatch,
               itemId: id,

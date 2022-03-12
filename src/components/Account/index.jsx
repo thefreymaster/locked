@@ -25,6 +25,7 @@ import { MdOutlineChangeCircle } from "react-icons/md";
 import { BsMoonStars } from "react-icons/bs";
 import { FaMapMarkedAlt, FaSatellite } from "react-icons/fa";
 import { isGPSNotEnabled, isGPSEnabled } from "../../actions/index";
+import { SwitchContainer } from "./components/SwitchContainer/index";
 
 const Account = () => {
   const [signOutConfirm, setSignOutConfirm] = React.useState(false);
@@ -141,69 +142,39 @@ const Account = () => {
               )}
             </Box>
           </Box>
-          <Box
-            borderRadius="lg"
-            boxShadow="md"
-            marginTop={4}
-            padding={4}
-            minW="100%"
-          >
-            <Box
-              minW="100%"
+          <SwitchContainer>
+            <FaSatellite />
+            <Text marginLeft={2}>Real Time Tracking</Text>
+            <Box flexGrow={1} />
+            <Switch
               size="md"
-              borderBottomRightRadius="0px"
-              borderBottomLeftRadius="0px"
-              display="flex"
-              alignItems="center"
-            >
-              <FaSatellite />
-              <Text marginLeft={2}>Real Time Tracking</Text>
-              <Box flexGrow={1} />
-              <Switch
-                size="md"
-                colorScheme="yellow"
-                isChecked={meta.liveGPSEnabled}
-                onChange={(c) => {
-                  if (c.target.checked) {
-                    showGPSSuccessToast();
-                    localStorage.setItem("gps-tracking", "true");
-                  } else {
-                    hideGPSInfoToast();
-                    localStorage.setItem("gps-tracking", "false");
-                  }
-                  return c.target.checked
-                    ? dispatch(isGPSEnabled)
-                    : dispatch(isGPSNotEnabled);
-                }}
-              />
-            </Box>
-          </Box>
-          <Box
-            borderRadius="lg"
-            boxShadow="md"
-            marginTop={4}
-            padding={4}
-            minW="100%"
-          >
-            <Box
-              minW="100%"
+              colorScheme="yellow"
+              isChecked={meta.liveGPSEnabled}
+              onChange={(c) => {
+                if (c.target.checked) {
+                  showGPSSuccessToast();
+                  localStorage.setItem("gps-tracking", "true");
+                } else {
+                  hideGPSInfoToast();
+                  localStorage.setItem("gps-tracking", "false");
+                }
+                return c.target.checked
+                  ? dispatch(isGPSEnabled)
+                  : dispatch(isGPSNotEnabled);
+              }}
+            />
+          </SwitchContainer>
+          <SwitchContainer>
+            <BsMoonStars />
+            <Text marginLeft={2}>Dark Mode</Text>
+            <Box flexGrow={1} />
+            <Switch
               size="md"
-              borderBottomRightRadius="0px"
-              borderBottomLeftRadius="0px"
-              display="flex"
-              alignItems="center"
-            >
-              <BsMoonStars />
-              <Text marginLeft={2}>Dark Mode</Text>
-              <Box flexGrow={1} />
-              <Switch
-                size="md"
-                colorScheme="yellow"
-                isChecked={colorMode === "dark"}
-                onChange={toggleColorMode}
-              />
-            </Box>
-          </Box>
+              colorScheme="yellow"
+              isChecked={colorMode === "dark"}
+              onChange={toggleColorMode}
+            />
+          </SwitchContainer>
           <Box minW="100%" marginTop={4} boxShadow="md" borderRadius="5px">
             <Link to="/changes">
               <Button

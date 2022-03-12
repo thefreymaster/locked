@@ -1,5 +1,9 @@
 export const changeLog = [
   {
+    version: "v1.0.1",
+    changes: "Fixed popup initial load",
+  },
+  {
     version: "v1.0.0",
     changes: "Refactor adding/deleting racks to not show full map updates",
   },

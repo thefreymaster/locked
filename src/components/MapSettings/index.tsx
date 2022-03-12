@@ -1,10 +1,13 @@
-import { Box, Badge, Divider, Switch } from "@chakra-ui/react";
+import { Box, Divider, Switch } from "@chakra-ui/react";
 import DeviceWrapper from "../../common/DeviceWrapper";
 import Wrapper from "../../common/Wrapper";
 import Font from "../../common/Font";
 import { useGlobalState } from "../../providers/root";
 import { isDesktop } from "react-device-detect";
 import { BackButton } from "../../common/BackButton";
+import { SwitchContainer } from "../Account/components/SwitchContainer";
+import { MdGpsFixed } from "react-icons/md";
+import { GrClose } from "react-icons/gr";
 
 const MapSettings = () => {
   const { dispatch, coordinates } = useGlobalState();
@@ -22,14 +25,11 @@ const MapSettings = () => {
               </Font>
             </Box>
             <Box flexGrow={1} />
-            {/* <Box>
-              <Badge colorScheme="purple">BETA</Badge>
-            </Box> */}
           </Box>
         </Box>
-        <Divider mt={2} mb={2} />
-        <Box display="flex" flexDir="row" alignItems="center">
-          <Box pr="2" pl="2">
+        <SwitchContainer>
+          <GrClose />
+          <Box pr="2" pl="2" marginLeft={2}>
             Center Marker
           </Box>
           <Box flexGrow={1} />
@@ -43,10 +43,10 @@ const MapSettings = () => {
             colorScheme="yellow"
             size={isDesktop ? "md" : "lg"}
           />
-        </Box>
-        <Divider mt={2} mb={2} />
-        <Box display="flex" flexDir="row" alignItems="center">
-          <Box pr="2" pl="2">
+        </SwitchContainer>
+        <SwitchContainer>
+          <MdGpsFixed />
+          <Box pr="2" pl="2" marginLeft={2}>
             Current Coordinates
           </Box>
           <Box flexGrow={1} />
@@ -60,7 +60,7 @@ const MapSettings = () => {
             colorScheme="yellow"
             size={isDesktop ? "md" : "lg"}
           />
-        </Box>
+        </SwitchContainer>
       </DeviceWrapper>
     </Wrapper>
   );
