@@ -10,27 +10,48 @@ import RackPopup from "../../Popup";
 import { UserLocation } from "../UserLocation/index";
 import { RacksRenderer } from "../RacksRenderer";
 import { useParams } from "react-router-dom";
+import firebaseApi from "../../../../api/firebase";
 
 const Mapbox = ReactMapboxGl({
   accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
 });
 
-export const MapRenderer = (props) => {
-  const { colorMode } = useColorMode();
-  const { locks, coordinates, dispatch } = useGlobalState();
+export const MapDataGetter = () => {
+  const [lock, setLock] = React.useState();
+  const { meta } = useGlobalState();
   const { id }: any = useParams();
+
+  React.useEffect(() => {
+    const getItem = async () => {
+      firebaseApi.db.openSingleItmeDbConnection({
+        dbKey: meta.dbKey,
+        id,
+        setLock,
+      });
+    };
+    if (id) {
+      getItem();
+    }
+  }, [id, meta.dbKey]);
+
+  if (id && !lock) {
+    return null;
+  }
+  return <MapRenderer id={id} lock={lock} />;
+};
+
+export const MapRenderer = (props: { id: any; lock: any }) => {
+  const { colorMode } = useColorMode();
+  const { coordinates, dispatch } = useGlobalState();
   const { onOpen, onClose } = useDisclosure();
   const { onOpen: newUserOnOpen } = useDisclosure();
-
-  const lock: any = locks?.[id];
-
   const [viewport, setViewport] = React.useState(
     props.id
       ? {
           width: window.innerWidth,
           height: window.innerHeight,
-          latitude: lock.location!.lat + 0.00061000001135,
-          longitude: lock.location!.long,
+          latitude: props.lock.location!.lat + 0.00061000001135,
+          longitude: props.lock.location!.long,
           zoom: 18,
         }
       : {
@@ -44,10 +65,10 @@ export const MapRenderer = (props) => {
 
   const [popupViewport, setPopupViewport] = React.useState({
     visible: props.id ? true : false,
-    coordinates: lock
-      ? [lock.location.long, lock.location.lat + 0.00009590001135]
+    coordinates: props.lock
+      ? [props.lock.location.long, props.lock.location.lat + 0.00009590001135]
       : [],
-    lock: lock || {},
+    lock: props.lock || {},
     id: props.id,
   });
 
@@ -113,7 +134,6 @@ export const MapRenderer = (props) => {
                 viewport={viewport}
                 setPopupViewport={setPopupViewport}
                 id={popupViewport.id}
-                lock={lock}
                 onOpen={onOpen}
                 onClose={onClose}
               />
@@ -130,7 +150,7 @@ export const MapRenderer = (props) => {
         <NewUserModal />
       </>
     );
-  }, [viewport, popupViewport, lock, colorMode]);
+  }, [viewport, popupViewport, props.lock, colorMode]);
 
   return <>{MemorizedMap}</>;
 };

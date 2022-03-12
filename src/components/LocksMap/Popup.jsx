@@ -18,7 +18,7 @@ import { isMobile } from "react-device-detect";
 const RackPopup = (props) => {
   const ref = React.useRef();
   const [lock, setLock] = React.useState();
-  const { dispatch, meta } = useGlobalState();
+  const { meta } = useGlobalState();
   const {
     isOpen: isOpenDetails,
     onOpen: onOpenDetails,
@@ -77,7 +77,7 @@ const RackPopup = (props) => {
     return `100%`;
   };
 
-  if(!lock){
+  if (!lock) {
     return null;
   }
 
@@ -108,6 +108,7 @@ const RackPopup = (props) => {
           variant="modal"
         />
         <DeleteRack
+          setPopupViewport={props.setPopupViewport}
           setIsOpen={setIsOpen}
           isOpen={isDeleteOpenOpen}
           id={props.id}

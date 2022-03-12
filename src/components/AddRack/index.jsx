@@ -12,13 +12,25 @@ import LottieLoading from "../../common/LottieLoading";
 import { Page1 } from "./components/Page1";
 import { Page2 } from "./components/Page2";
 import { Page3 } from "./components/Page3/index";
+import firebaseApi from "../../api/firebase";
 
 const AddRack = (props) => {
   let { id } = useParams();
-  const { firebase, meta, locks, coordinates } = useGlobalState();
+  const [lock, setLock] = React.useState();
+  const { firebase, meta, coordinates } = useGlobalState();
   const history = useHistory();
 
   const [page, setPage] = React.useState(1);
+
+  React.useEffect(() => {
+    if (id) {
+      firebaseApi.db.openSingleItmeDbConnection({
+        dbKey: meta.dbKey,
+        id,
+        setLock,
+      });
+    }
+  }, []);
 
   if (firebase.isValidatingAuthentication || meta.fetching) {
     return (
@@ -36,7 +48,9 @@ const AddRack = (props) => {
   if (!firebase.isAuthenticated) {
     return <Redirect to="/welcome" />;
   }
-
+  if (id && !lock) {
+    return null;
+  }
   return (
     <Fade in>
       <Box
@@ -49,7 +63,7 @@ const AddRack = (props) => {
         <DeviceWrapper>
           <Formik
             initialValues={
-              locks[id] || {
+              lock ?? {
                 ...initialValues,
                 location: {
                   lat: coordinates.center.latitude,
@@ -79,6 +93,7 @@ const AddRack = (props) => {
                       formProps={formProps}
                       setPage={setPage}
                       onClose={props.onClose}
+                      lock={lock}
                     />
                   )}
                   <AbsoluteButton

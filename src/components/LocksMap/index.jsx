@@ -6,10 +6,10 @@ import './users-map.scss';
 import DeviceWrapper from '../../common/DeviceWrapper';
 import DrawerContainer from '../../common/DrawerContainer';
 import AddRack from '../AddRack';
-import { MapRenderer } from './components/MapRenderer';
+import { MapDataGetter } from './components/MapRenderer';
 
 const LocksMap = () => {
-    const { coordinates, locks } = useGlobalState();
+    const { coordinates } = useGlobalState();
     const { id } = useParams();
     const history = useHistory();
     const { isOpen, onClose } = useDisclosure();
@@ -24,14 +24,9 @@ const LocksMap = () => {
             <Redirect to="/request" />
         )
     }
-    if (id && !locks[id]) {
-        return (
-            <Redirect to="/map" />
-        )
-    }
     return (
         <DeviceWrapper>
-            <MapRenderer id={id} />
+            <MapDataGetter id={id} />
             <DrawerContainer title="Add Bike Rack" isOpen={isOpen} onClose={() => {
                 history.push('/map');
                 onClose();

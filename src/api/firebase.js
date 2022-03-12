@@ -22,7 +22,7 @@ const onAuthChange = ({ dispatch }) => {
   });
 };
 
-const openDbConnection = ({ lat, lng, dispatch }) => {
+const openDbConnection = ({ lat, lng, setLocks, dispatch }) => {
   const dbKey = generateDbKey({ lat, lng });
   dispatch({ type: "SET_DB_KEY", payload: { dbKey } });
 
@@ -30,18 +30,8 @@ const openDbConnection = ({ lat, lng, dispatch }) => {
   refUpdates.on("value", (snapshot) => {
     dispatch(isFetching);
     const snapshotValue = snapshot.val();
-
-    if (snapshotValue) {
-      dispatch({
-        type: "POPULATE_DATA",
-        payload: {
-          locks: snapshotValue,
-        },
-      });
-      dispatch(fetchingComplete);
-    } else {
-      dispatch(fetchingComplete);
-    }
+    setLocks(snapshotValue);
+    dispatch(fetchingComplete);
   });
 };
 

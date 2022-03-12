@@ -13,7 +13,7 @@ import { useHistory } from 'react-router-dom';
 
 const App = () => {
   const { colorMode } = useColorMode();
-  const { dispatch, coordinates, meta, firebase } = useGlobalState();
+  const { dispatch, meta, firebase } = useGlobalState();
   const toast = useToast();
   const history = useHistory();
 
@@ -38,12 +38,6 @@ const App = () => {
       getGPSCoordinates({ dispatch, firebaseApi, showSuccessToast, firebase });
     }
   }, [])
-
-  React.useEffect(() => {
-    if(coordinates.hasCoordinates){
-      firebaseApi.db.openNewDbConnection({ dbKey: meta.dbKey, dispatch });
-    }
-  }, [meta.dbKey])
 
   React.useLayoutEffect(() => {
     if (colorMode === 'light') {

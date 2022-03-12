@@ -1,17 +1,22 @@
 import { useHistory } from "react-router-dom";
-import { useGlobalState } from "../../../../providers/root";
 import { isMobile } from "react-device-detect";
 import { calculateOverallRating } from "../../../../utils/calcOverallRating";
 import { Marker } from "react-mapbox-gl";
 import { Fade } from "@chakra-ui/react";
 import BikeRackMarker from "../../BikeRackMarker";
+import React from "react";
+import firebaseApi from "../../../../api/firebase";
+import { useGlobalState } from "../../../../providers/root";
+import { ILock } from "../../../../interfaces/ILock";
 
 export const RacksRenderer = (props: {
   setPopupViewport(v: any): void;
   setViewport(v: any): void;
 }) => {
-  const global = useGlobalState();
-  const { locks } = global;
+  const [locks, setLocks]: any = React.useState();
+  const { meta, coordinates, dispatch } = useGlobalState();
+  const { latitude, longitude } = coordinates.center;
+
   const history = useHistory();
 
   const handleClick = (
@@ -37,9 +42,21 @@ export const RacksRenderer = (props: {
     history.push(`/map/${key}`);
   };
 
+  React.useEffect(() => {
+    firebaseApi.db.openDbConnection({
+      lat: latitude,
+      lng: longitude,
+      setLocks,
+      dispatch,
+    });
+  }, [meta.dbKey]);
+
+  if (!locks) {
+    return null;
+  }
   return (
     <>
-      {Object.entries(locks).map(([key, value]) => {
+      {Object.entries(locks).map(([key, value]: [key: string, value: ILock]) => {
         const { location, ratings } = value;
         const latAdjustmentPopup = isMobile
           ? 0.0001590001135

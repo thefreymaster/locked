@@ -55,15 +55,15 @@ export const getCoordinatesOutsideForm = (
   );
 };
 
-export const getGPSCoordinates = ({ dispatch, showSuccessToast }) => {
+export const getGPSCoordinates = ({ dispatch }) => {
   const options = {
     timeout: 10000,
     enableHighAccuracy: true,
   };
-  return navigator.geolocation.getCurrentPosition(
-    (position) => {
-      const { latitude } = position.coords;
-      const { longitude } = position.coords;
+  const setGPSCoordinates = (position) => {
+    const { latitude } = position.coords;
+    const { longitude } = position.coords;
+    try {
       dispatch({
         type: "SET_GPS_COORDINATES",
         payload: { latitude, longitude },
@@ -72,17 +72,13 @@ export const getGPSCoordinates = ({ dispatch, showSuccessToast }) => {
         type: "SET_USER_GPS_COORDINATES",
         payload: { latitude, longitude },
       });
-      dispatch({
-        type: "SET_CENTER_GPS_COORDINATES",
-        payload: { latitude, longitude },
-      });
+    } catch (error) {
+      dispatch({ type: "HAS_COORDINATES_ERROR" });
+    }
+  };
 
-      firebaseApi.db.openDbConnection({
-        lat: latitude,
-        lng: longitude,
-        dispatch,
-      });
-    },
+  navigator.geolocation.getCurrentPosition(
+    setGPSCoordinates,
     (e) => {
       console.log(e);
       dispatch({ type: "HAS_COORDINATES_ERROR" });

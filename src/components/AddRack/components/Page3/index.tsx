@@ -13,12 +13,13 @@ import { BiArrowBack } from 'react-icons/bi';
 
 export const Page3 = (props: {
   formProps: any;
+  lock: any;
   setPage(v: number): void;
   onClose(v: boolean): void;
 }) => {
   let { id }: { id: string } = useParams();
   const history = useHistory();
-  const { firebase, meta, dispatch, locks } = useGlobalState();
+  const { firebase, meta, dispatch } = useGlobalState();
   const { dbKey } = meta;
   const toast = useToast();
   const [isUploading, setIsUploading] = React.useState(false);
@@ -59,8 +60,8 @@ export const Page3 = (props: {
       {id && (
         <Box pt="20px">
           <Photo
-            name={locks[id].name}
-            imageUrlAbsolute={locks[id].imageUrlAbsolute}
+            name={props.lock.name}
+            imageUrlAbsolute={props.lock.imageUrlAbsolute}
           />
         </Box>
       )}
