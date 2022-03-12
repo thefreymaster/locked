@@ -26,7 +26,7 @@ const LocksMap = () => {
     }
     return (
         <DeviceWrapper>
-            <MapDataGetter id={id} />
+            <MapDataGetter />
             <DrawerContainer title="Add Bike Rack" isOpen={isOpen} onClose={() => {
                 history.push('/map');
                 onClose();

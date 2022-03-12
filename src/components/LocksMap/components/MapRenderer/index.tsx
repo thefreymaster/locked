@@ -34,9 +34,6 @@ export const MapDataGetter = () => {
     }
   }, [id, meta.dbKey]);
 
-  if (id && !lock) {
-    return null;
-  }
   return <MapRenderer id={id} lock={lock} />;
 };
 
@@ -50,8 +47,10 @@ export const MapRenderer = (props: { id: any; lock: any }) => {
       ? {
           width: window.innerWidth,
           height: window.innerHeight,
-          latitude: props.lock.location!.lat + 0.00061000001135,
-          longitude: props.lock.location!.long,
+          latitude:
+            props.lock?.location?.lat + 0.00061000001135 ??
+            coordinates.center?.latitude,
+          longitude: props.lock?.location?.long ?? coordinates.center?.longitude,
           zoom: 18,
         }
       : {

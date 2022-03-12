@@ -73,7 +73,7 @@ const Account = () => {
     onToggle();
   }, []);
 
-  if (firebase.isValidatingAuthentication || meta.fetching) {
+  if (firebase.isValidatingAuthentication) {
     return (
       <Box
         display="flex"
@@ -106,25 +106,40 @@ const Account = () => {
               Settings
             </Font>
           </Box>
-          <Box marginTop="3" minW="100%">
-            {firebase.isAuthenticated ? (
-              <Authenticated justifyContent="flex-start" />
-            ) : (
-              <Button
-                boxShadow="md"
-                minW="100%"
-                onClick={() =>
-                  firebaseApi.auth.signIn(dispatch, showSuccessToast)
-                }
-              >
-                <FontAwesomeIcon
-                  color={colorMode === "light" ? "black" : "white"}
-                  icon={faGoogle}
-                />
-                <Box mr={3} />
-                Sign In With Google
-              </Button>
-            )}
+          <Box
+            borderRadius="lg"
+            boxShadow="md"
+            marginTop={4}
+            padding={4}
+            minW="100%"
+          >
+            <Box
+              minW="100%"
+              size="md"
+              borderBottomRightRadius="0px"
+              borderBottomLeftRadius="0px"
+              display="flex"
+              alignItems="center"
+            >
+              {firebase.isAuthenticated ? (
+                <Authenticated justifyContent="flex-start" />
+              ) : (
+                <Button
+                  boxShadow="md"
+                  minW="100%"
+                  onClick={() =>
+                    firebaseApi.auth.signIn(dispatch, showSuccessToast)
+                  }
+                >
+                  <FontAwesomeIcon
+                    color={colorMode === "light" ? "black" : "white"}
+                    icon={faGoogle}
+                  />
+                  <Box mr={3} />
+                  Sign In With Google
+                </Button>
+              )}
+            </Box>
           </Box>
           <Box
             borderRadius="lg"
@@ -145,6 +160,7 @@ const Account = () => {
               <Text marginLeft={2}>Real Time Tracking</Text>
               <Box flexGrow={1} />
               <Switch
+                size="md"
                 colorScheme="yellow"
                 isChecked={meta.liveGPSEnabled}
                 onChange={(c) => {
@@ -181,6 +197,7 @@ const Account = () => {
               <Text marginLeft={2}>Dark Mode</Text>
               <Box flexGrow={1} />
               <Switch
+                size="md"
                 colorScheme="yellow"
                 isChecked={colorMode === "dark"}
                 onChange={toggleColorMode}
@@ -192,7 +209,7 @@ const Account = () => {
               <Button
                 minW="100%"
                 size="md"
-                borderTop="1px solid #80808021"
+                colorScheme="gray"
                 borderBottomRightRadius="0px"
                 borderBottomLeftRadius="0px"
                 _hover={{ backgroundColor: "#edf2f778" }}
