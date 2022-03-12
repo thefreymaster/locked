@@ -17,6 +17,7 @@ export interface IDefaultState {
     isInstalled: boolean;
     containsLocks?: boolean;
     dbKey: string;
+    liveGPSEnabled: boolean;
     supported: boolean;
   };
   coordinates: {
@@ -79,11 +80,12 @@ const defaultState: IDefaultState = {
     isServerError: false,
     fetching: true,
     isDay: false,
-      // new Date().getHours() >= 6 && new Date().getHours() <= 17 ? true : false,
     isInstalled:
       localStorage.getItem("isInstalled") === "true" ? true : false || false,
     dbKey: "",
     supported: false,
+    liveGPSEnabled:
+      localStorage.getItem("gps-tracking") === "true" ? true : false,
   },
   coordinates: {
     hasCoordinates: false,
@@ -92,7 +94,8 @@ const defaultState: IDefaultState = {
       localStorage.getItem("center-coordinates") === "true" ? true : false,
     live: {},
     center: {
-      showCenter: localStorage.getItem("center-marker") === "true" ? true : false,
+      showCenter:
+        localStorage.getItem("center-marker") === "true" ? true : false,
     },
   },
   locks: [],

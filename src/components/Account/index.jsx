@@ -23,7 +23,8 @@ import Font from "../../common/Font";
 import { BackButton } from "../../common/BackButton";
 import { MdOutlineChangeCircle } from "react-icons/md";
 import { BsMoonStars } from "react-icons/bs";
-import { FaMapMarkedAlt } from "react-icons/fa";
+import { FaMapMarkedAlt, FaSatellite } from "react-icons/fa";
+import { isGPSNotEnabled, isGPSEnabled } from "../../actions/index";
 
 const Account = () => {
   const [signOutConfirm, setSignOutConfirm] = React.useState(false);
@@ -45,6 +46,23 @@ const Account = () => {
   const showInfoToast = () => {
     toast({
       title: "See ya!",
+      status: "info",
+      duration: 3000,
+      isClosable: true,
+    });
+  };
+
+  const showGPSSuccessToast = () => {
+    toast({
+      title: "GPS tracking enabled",
+      status: "success",
+      duration: 3000,
+      isClosable: true,
+    });
+  };
+  const hideGPSInfoToast = () => {
+    toast({
+      title: "GPS tracking disabled",
       status: "info",
       duration: 3000,
       isClosable: true,
@@ -107,6 +125,42 @@ const Account = () => {
                 Sign In With Google
               </Button>
             )}
+          </Box>
+          <Box
+            borderRadius="lg"
+            boxShadow="md"
+            marginTop={4}
+            padding={4}
+            minW="100%"
+          >
+            <Box
+              minW="100%"
+              size="md"
+              borderBottomRightRadius="0px"
+              borderBottomLeftRadius="0px"
+              display="flex"
+              alignItems="center"
+            >
+              <FaSatellite />
+              <Text marginLeft={2}>Real Time Tracking</Text>
+              <Box flexGrow={1} />
+              <Switch
+                colorScheme="yellow"
+                isChecked={meta.liveGPSEnabled}
+                onChange={(c) => {
+                  if (c.target.checked) {
+                    showGPSSuccessToast();
+                    localStorage.setItem("gps-tracking", "true");
+                  } else {
+                    hideGPSInfoToast();
+                    localStorage.setItem("gps-tracking", "false");
+                  }
+                  return c.target.checked
+                    ? dispatch(isGPSEnabled)
+                    : dispatch(isGPSNotEnabled);
+                }}
+              />
+            </Box>
           </Box>
           <Box
             borderRadius="lg"

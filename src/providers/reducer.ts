@@ -121,6 +121,14 @@ const reducer = (state: any, action: any) => {
       newState.alpha.minimal = false;
       break;
     }
+    case "IS_GPS_ENABLED": {
+      newState.meta.liveGPSEnabled = true;
+      break;
+    }
+    case "IS_NOT_GPS_ENABLED": {
+      newState.meta.liveGPSEnabled = false;
+      break;
+    }
     default:
       console.error(new Error());
   }
