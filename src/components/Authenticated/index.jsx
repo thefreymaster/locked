@@ -10,7 +10,7 @@ import './avatar.scss';
 const Authenticated = (props) => {
     const { colorMode } = useColorMode();
 
-    const { firebase, meta } = useGlobalState();
+    const { firebase } = useGlobalState();
 
     const inlineTag = {
         backgroundColor: colorMode === 'light' ? BACKGROUND_COLOR_HW : BLUE,

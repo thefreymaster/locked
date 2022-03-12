@@ -1,4 +1,4 @@
-import { Icon, useColorMode } from "@chakra-ui/react";
+import { Icon, useColorMode, Text, Flex } from "@chakra-ui/react";
 import {
   HiOutlineBadgeCheck,
   HiOutlineXCircle,
@@ -6,13 +6,52 @@ import {
 } from "react-icons/hi";
 import { PRIMARY_GREEN, PRIMARY_YELLOW, PRIMARY_RED } from "../../constants";
 
+const RatingMarker = (props: {
+  overallRating: number;
+  children: React.ReactNode;
+  variant: "green" | "yellow" | "red";
+}) => {
+  const { colorMode } = useColorMode();
+  const getZIndex = () => {
+    if (props.variant === "green") {
+      return 3;
+    }
+    if (props.variant === "yellow") {
+      return 2;
+    }
+    return 1;
+  };
+
+  return (
+    <Flex
+      borderRadius="100px"
+      justifyContent="center"
+      alignItems="center"
+      backgroundColor={colorMode === "light" ? "white" : "black"}
+      boxShadow="md"
+      transition="background-color 350ms ease-in-out"
+      _hover={{
+        boxShadow: "dark-lg",
+      }}
+      style={{
+        zIndex: getZIndex(),
+      }}
+    >
+      {props.children}
+      <Text fontWeight={900} marginLeft="1" paddingRight="2">
+        {props.overallRating}
+      </Text>
+    </Flex>
+  );
+};
+
 const BikeRackMarker = (props: { overallRating: number }) => {
   const { colorMode } = useColorMode();
   const style = {
     fontSize: 15,
     width: 25,
     height: 25,
-    backgroundColor: colorMode === 'light' ? "white" : "black",
+    backgroundColor: colorMode === "light" ? "white" : "black",
     top: "0px",
     left: "0px",
     borderRadius: "50px 50px 50px 50px",
@@ -21,47 +60,22 @@ const BikeRackMarker = (props: { overallRating: number }) => {
 
   if (props.overallRating >= 4) {
     return (
-      <Icon
-        boxShadow="base"
-        zIndex={1}
-        _hover={{
-          boxShadow: "dark-lg",
-        }}
-        as={(p) => (
-          <HiOutlineBadgeCheck
-            {...p}
-            style={{ ...style, color: PRIMARY_GREEN }}
-          />
-        )}
-      />
+      <RatingMarker variant="green" overallRating={props.overallRating}>
+        <HiOutlineBadgeCheck style={{ ...style, color: PRIMARY_GREEN }} />
+      </RatingMarker>
     );
   }
   if (props.overallRating < 4 && props.overallRating > 3) {
     return (
-      <Icon
-        boxShadow="base"
-        _hover={{
-          boxShadow: "dark-lg",
-        }}
-        as={(p) => (
-          <HiOutlineMinusCircle
-            {...p}
-            style={{ ...style, color: PRIMARY_YELLOW }}
-          />
-        )}
-      />
+      <RatingMarker variant="yellow" overallRating={props.overallRating}>
+        <HiOutlineMinusCircle style={{ ...style, color: PRIMARY_YELLOW }} />
+      </RatingMarker>
     );
   }
   return (
-    <Icon
-      boxShadow="base"
-      _hover={{
-        boxShadow: "dark-lg",
-      }}
-      as={(p) => (
-        <HiOutlineXCircle {...p} style={{ ...style, color: PRIMARY_RED }} />
-      )}
-    />
+    <RatingMarker variant="red" overallRating={props.overallRating}>
+      <HiOutlineXCircle style={{ ...style, color: PRIMARY_RED }} />
+    </RatingMarker>
   );
 };
 

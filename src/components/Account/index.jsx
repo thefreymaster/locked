@@ -1,10 +1,17 @@
-import { Box, Button, useDisclosure, useToast, useColorMode, Switch } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  useDisclosure,
+  useToast,
+  useColorMode,
+  Switch,
+  Text,
+} from "@chakra-ui/react";
 import { faGoogle } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
 import firebaseApi from "../../api/firebase";
 import Wrapper from "../../common/Wrapper";
-import { BLUE } from "../../constants";
 import { useGlobalState } from "../../providers/root";
 import Authenticated from "../Authenticated";
 import { Link, useHistory } from "react-router-dom";
@@ -14,6 +21,9 @@ import LottieLoading from "../../common/LottieLoading";
 import DeviceWrapper from "../../common/DeviceWrapper";
 import Font from "../../common/Font";
 import { BackButton } from "../../common/BackButton";
+import { MdOutlineChangeCircle } from "react-icons/md";
+import { BsMoonStars } from "react-icons/bs";
+import { FaMapMarkedAlt } from "react-icons/fa";
 
 const Account = () => {
   const [signOutConfirm, setSignOutConfirm] = React.useState(false);
@@ -78,32 +88,49 @@ const Account = () => {
               Settings
             </Font>
           </Box>
-          <Box borderRadius="lg" boxShadow="md" padding={4} minW="100%">
+          <Box marginTop="3" minW="100%">
             {firebase.isAuthenticated ? (
               <Authenticated justifyContent="flex-start" />
             ) : (
               <Button
+                boxShadow="md"
+                minW="100%"
                 onClick={() =>
                   firebaseApi.auth.signIn(dispatch, showSuccessToast)
                 }
               >
-                <FontAwesomeIcon color={BLUE} icon={faGoogle} />
+                <FontAwesomeIcon
+                  color={colorMode === "light" ? "black" : "white"}
+                  icon={faGoogle}
+                />
                 <Box mr={3} />
                 Sign In With Google
               </Button>
             )}
           </Box>
-          <Box borderRadius="lg" boxShadow="md" marginTop={4} padding={4} minW="100%">
+          <Box
+            borderRadius="lg"
+            boxShadow="md"
+            marginTop={4}
+            padding={4}
+            minW="100%"
+          >
             <Box
               minW="100%"
               size="md"
               borderBottomRightRadius="0px"
               borderBottomLeftRadius="0px"
               display="flex"
+              alignItems="center"
             >
-              Dark Mode
+              <BsMoonStars />
+              <Text marginLeft={2}>Dark Mode</Text>
               <Box flexGrow={1} />
-              <Switch colorScheme="yellow" isChecked={colorMode === 'dark'} onChange={toggleColorMode} />
+              <Switch
+                colorScheme="yellow"
+                isChecked={colorMode === "dark"}
+                onChange={toggleColorMode}
+              />
             </Box>
           </Box>
           <Box minW="100%" marginTop={4} boxShadow="md" borderRadius="5px">
@@ -116,7 +143,8 @@ const Account = () => {
                 borderBottomLeftRadius="0px"
                 _hover={{ backgroundColor: "#edf2f778" }}
               >
-                Change Log
+                <MdOutlineChangeCircle />
+                <Text marginLeft={2}>Change Log</Text>
                 <Box flexGrow={1} />
                 <FiChevronRight />
               </Button>
@@ -126,9 +154,16 @@ const Account = () => {
                 minW="100%"
                 size="md"
                 borderRadius="0px"
+                borderBottomRightRadius={
+                  firebase.isAuthenticated ? "0px" : "5px"
+                }
+                borderBottomLeftRadius={
+                  firebase.isAuthenticated ? "0px" : "5px"
+                }
                 _hover={{ backgroundColor: "#edf2f778" }}
               >
-                Map Settings
+                <FaMapMarkedAlt />
+                <Text marginLeft={2}>Map Settings</Text>
                 <Box flexGrow={1} />
                 <FiChevronRight />
               </Button>

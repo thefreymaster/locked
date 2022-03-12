@@ -3,7 +3,7 @@ import React from 'react';
 import Router from './router/index';
 import Zindex from './common/Zindex';
 import { useGlobalState } from './providers/root';
-import { useToast } from '@chakra-ui/react';
+import { useToast, useColorMode } from '@chakra-ui/react';
 import firebaseApi from './api/firebase';
 import Header from './components/Header';
 import { getGPSCoordinates } from './utils/gps';
@@ -12,7 +12,7 @@ import Footer from './components/Footer';
 import { useHistory } from 'react-router-dom';
 
 const App = () => {
-
+  const { colorMode } = useColorMode();
   const { dispatch, coordinates, meta, firebase } = useGlobalState();
   const toast = useToast();
   const history = useHistory();
@@ -44,6 +44,14 @@ const App = () => {
       firebaseApi.db.openNewDbConnection({ dbKey: meta.dbKey, dispatch });
     }
   }, [meta.dbKey])
+
+  React.useLayoutEffect(() => {
+    if (colorMode === 'light') {
+      document.querySelector('meta[name="theme-color"]').content = "#ffb100";
+    } else {
+      document.querySelector('meta[name="theme-color"]').content = "#1a202c";
+    }
+  }, [colorMode])
 
   return (
     <Zindex zIndex={1}>

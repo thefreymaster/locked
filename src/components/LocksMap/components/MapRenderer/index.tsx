@@ -17,7 +17,6 @@ const Mapbox = ReactMapboxGl({
 
 export const MapRenderer = (props) => {
   const { colorMode } = useColorMode();
-  let initialViewport;
   const { locks, coordinates, dispatch } = useGlobalState();
   const { id }: any = useParams();
   const { onOpen, onClose } = useDisclosure();
@@ -25,25 +24,26 @@ export const MapRenderer = (props) => {
 
   const lock: any = locks?.[id];
 
-  if (props.id) {
-    initialViewport = {
-      width: window.innerWidth,
-      height: window.innerHeight,
-      latitude: lock.location!.lat + 0.00061000001135,
-      longitude: lock.location!.long,
-      zoom: 18,
-    };
-  } else {
-    initialViewport = {
-      width: window.innerWidth,
-      height: window.innerHeight,
-      latitude: coordinates.center?.latitude ?? coordinates.latitude,
-      longitude: coordinates.center?.longitude ?? coordinates.longitude,
-      zoom: 15,
-    };
-  }
+  const [viewport, setViewport] = React.useState(
+    props.id
+      ? {
+          width: window.innerWidth,
+          height: window.innerHeight,
+          latitude: lock.location!.lat + 0.00061000001135,
+          longitude: lock.location!.long,
+          zoom: 18,
+        }
+      : {
+          width: window.innerWidth,
+          height: window.innerHeight,
+          latitude: coordinates.center?.latitude,
+          longitude: coordinates.center?.longitude,
+          zoom: 15,
+        }
+  );
+  // console.log(viewport);
+  console.log(coordinates.center);
 
-  const [viewport, setViewport] = React.useState({ ...initialViewport });
   const [popupViewport, setPopupViewport] = React.useState({
     visible: props.id ? true : false,
     coordinates: lock
@@ -52,6 +52,9 @@ export const MapRenderer = (props) => {
     lock: lock || {},
     id: props.id,
   });
+
+  const DAY_MAP = "mapbox://styles/thefreymaster/ckke447ga0wla19k1cqupmrrz";
+  const NIGHT_MAP = "mapbox://styles/thefreymaster/ckz2wubzy000714ox0su8us49";
 
   const MemorizedMap = React.useMemo(() => {
     if (!viewport) {
@@ -69,11 +72,7 @@ export const MapRenderer = (props) => {
     return (
       <>
         <Mapbox
-          style={
-            colorMode === 'light'
-              ? "mapbox://styles/thefreymaster/ckke447ga0wla19k1cqupmrrz"
-              : "mapbox://styles/thefreymaster/ckz2wubzy000714ox0su8us49"
-          }
+          style={colorMode === "light" ? DAY_MAP : NIGHT_MAP}
           containerStyle={{
             height: "100vh",
             width: "100vw",
@@ -81,7 +80,7 @@ export const MapRenderer = (props) => {
           center={[viewport.longitude, viewport.latitude]}
           zoom={[viewport.zoom]}
           onDragEnd={(mapEnd) => {
-            const { center } = mapEnd?.transform;
+            const { center, zoom } = mapEnd?.transform;
             const dbKey = generateDbKey({ lat: center.lat, lng: center.lng });
             dispatch({
               type: "SET_CENTER_GPS_COORDINATES",
@@ -92,6 +91,12 @@ export const MapRenderer = (props) => {
               payload: {
                 dbKey,
               },
+            });
+            setViewport({
+              ...viewport,
+              zoom,
+              latitude: center.lat,
+              longitude: center.lng,
             });
           }}
         >

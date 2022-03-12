@@ -45,7 +45,7 @@ export const RacksRenderer = (props: {
           ? 0.0001590001135
           : 0.00015590001135;
         const latAdjustmentViewport = isMobile
-          ? 0.00239590001135
+          ? 0.00209590001135
           : 0.00199590001135;
         const overallRating = calculateOverallRating({ ratings });
         return (

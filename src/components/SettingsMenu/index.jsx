@@ -24,7 +24,8 @@ import Authenticated from "../Authenticated";
 import { changeLog } from "../../json/changeLog";
 
 const SettingsMenu = () => {
-  const { dispatch, firebase, meta, alpha } = useGlobalState();
+  const { colorMode } = useColorMode();
+  const { dispatch, firebase, meta } = useGlobalState();
   const toast = useToast();
   const history = useHistory();
 
@@ -68,7 +69,7 @@ const SettingsMenu = () => {
                     firebaseApi.auth.signIn(dispatch, showSuccessToast)
                   }
                 >
-                  <FontAwesomeIcon color={BLUE} icon={faGoogle} />
+                  <FontAwesomeIcon color={colorMode === "light" ? "black" : "white"} icon={faGoogle} />
                   <Box mr={3} />
                   Sign In With Google
                 </MenuItem>
@@ -81,36 +82,6 @@ const SettingsMenu = () => {
               </MenuItem>
             </MenuGroup>
             <MenuGroup></MenuGroup>
-            {/* <MenuGroup>
-              <MenuDivider />
-              <MenuItem onClick={() => history.push("/changes")}>
-                <Box>
-                  <Code>{changeLog[0].version}</Code>
-                </Box>
-                <Box flexGrow={1} />
-                <Box>
-                  <Badge colorScheme="purple">BETA</Badge>
-                </Box>
-              </MenuItem>
-            </MenuGroup>
-            <MenuGroup>
-              <MenuDivider />
-              <MenuItem>
-                <Switch
-                  onChange={() =>
-                    alpha.minimal
-                      ? dispatch({ type: "IS_NOT_ALPHA" })
-                      : dispatch({ type: "IS_ALPHA" })
-                  }
-                  colorScheme="purple"
-                  id="email-alerts"
-                />
-                <Box flexGrow={1} />
-                <Box>
-                  <Badge colorScheme="purple">ALPHA FEATURES</Badge>
-                </Box>
-              </MenuItem>
-            </MenuGroup> */}
             <MenuGroup>
               {firebase.isAuthenticated && (
                 <>
@@ -133,8 +104,6 @@ const SettingsMenu = () => {
 };
 
 const SettingsMenuButton = ({ firebase, meta, isOpen }) => {
-  const { colorMode } = useColorMode();
-
   if (firebase.isValidatingAuthentication) {
     return <Spinner color="white" colorScheme="white" />;
   }
@@ -143,9 +112,8 @@ const SettingsMenuButton = ({ firebase, meta, isOpen }) => {
   ) : (
     <IconButton
       borderRadius="md"
-      className={colorMode === 'light' ? "menu-button" : "menu-button-dark"}
       colorScheme="gray"
-      icon={isOpen ? <CgClose color="black" /> : <CgMenu color="black" />}
+      icon={isOpen ? <CgClose /> : <CgMenu />}
     />
   );
 };

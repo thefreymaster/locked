@@ -8,6 +8,7 @@ import { useGlobalState } from "../../providers/root";
 import LockAndKeyLogo from "../../common/Logo";
 import Font from "../../common/Font";
 import { BsFillBrightnessLowFill, BsMoonStarsFill } from "react-icons/bs";
+import { isMobile } from "react-device-detect";
 
 const Header = () => {
   const { meta } = useGlobalState();
@@ -34,7 +35,7 @@ const Header = () => {
     <Slide direction="top" in style={{ zIndex: 10 }}>
       <Flex
         style={{ ...fixed }}
-        transitionBackground
+        backgroundColor={isMobile && colorMode === "light" && "#ffb100"}
         display="flex"
         alignItems="center"
         padding={meta.isInstalled ? "50px 20px 15px 20px" : "15px 20px"}
@@ -64,19 +65,21 @@ const Header = () => {
           </Flex>
         </Flex>
         <Box marginRight={2} flexGrow={1} />
-        <IconButton
-          onClick={toggleColorMode}
-          borderRadius={100}
-          marginRight={4}
-          size="sm"
-          icon={
-            colorMode === "light" ? (
-              <BsMoonStarsFill />
-            ) : (
-              <BsFillBrightnessLowFill />
-            )
-          }
-        />
+        {history.location.pathname !== "/" && (
+          <IconButton
+            onClick={toggleColorMode}
+            borderRadius={100}
+            marginRight={4}
+            size="sm"
+            icon={
+              colorMode === "light" ? (
+                <BsMoonStarsFill />
+              ) : (
+                <BsFillBrightnessLowFill />
+              )
+            }
+          />
+        )}
         {!meta.isInstalled && <SettingsMenu />}
       </Flex>
     </Slide>
