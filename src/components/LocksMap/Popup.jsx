@@ -1,6 +1,12 @@
 import React from "react";
 import { useGlobalState } from "../../providers/root";
-import { Fade, Box, useDisclosure, CloseButton, useOutsideClick } from "@chakra-ui/react";
+import {
+  Fade,
+  Box,
+  useDisclosure,
+  CloseButton,
+  useOutsideClick,
+} from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
 import "./users-map.scss";
 import firebaseApi from "../../api/firebase";
@@ -11,7 +17,8 @@ import { isMobile } from "react-device-detect";
 
 const RackPopup = (props) => {
   const ref = React.useRef();
-  const { dispatch, locks } = useGlobalState();
+  const [lock, setLock] = React.useState();
+  const { dispatch, meta } = useGlobalState();
   const {
     isOpen: isOpenDetails,
     onOpen: onOpenDetails,
@@ -20,9 +27,8 @@ const RackPopup = (props) => {
   useOutsideClick({
     ref: ref,
     handler: () => onCloseDetails(false),
-  })
+  });
 
-  const lock = locks?.[props.id];
   const [fadeIn, setFadeIn] = React.useState(false);
   const [isDeleteOpenOpen, setIsOpen] = React.useState(false);
   const history = useHistory();
@@ -32,13 +38,21 @@ const RackPopup = (props) => {
       if (lock && lock?.imageUrl) {
         await firebaseApi.getImage({
           fileUrl: lock.imageUrl,
-          dispatch,
-          id: props.id,
+          lock,
+          setLock,
         });
       }
     };
     getUrl();
   }, [lock, lock?.imageUrl]);
+
+  React.useEffect(() => {
+    firebaseApi.db.openSingleItmeDbConnection({
+      dbKey: meta.dbKey,
+      id: props.id,
+      setLock: setLock,
+    });
+  }, []);
 
   const inline = {
     borderRadius: 10,
@@ -62,6 +76,10 @@ const RackPopup = (props) => {
     }
     return `100%`;
   };
+
+  if(!lock){
+    return null;
+  }
 
   return (
     <Fade in={fadeIn}>

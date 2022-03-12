@@ -63,6 +63,14 @@ const openNewDbConnection = ({ dbKey, dispatch }) => {
   });
 };
 
+const openSingleItmeDbConnection = ({ dbKey, id, setLock }) => {
+  var refUpdates = firebase.database().ref(`locks/${dbKey}/${id}`);
+  refUpdates.once("value", (snapshot) => {
+    const snapshotValue = snapshot.val();
+    setLock(snapshotValue);
+  });
+};
+
 const openAuthConnection = ({ dispatch, showSuccessToast }) => {
   firebase
     .auth()
@@ -202,14 +210,14 @@ const upload = ({ uid, file, form, setIsUploading }) => {
     });
 };
 
-const getImage = ({ id, fileUrl, dispatch }) => {
+const getImage = ({ fileUrl, lock, setLock }) => {
   const storage = firebase.storage();
   const storageRef = storage.ref();
   return storageRef
     .child(fileUrl)
     .getDownloadURL()
     .then((url) => {
-      dispatch({ type: "SET_IMAGE_ABSOLUTE_URL", payload: { url, id } });
+      setLock({ ...lock, imageUrlAbsolute: url });
     });
 };
 
@@ -265,6 +273,7 @@ const firebaseApi = {
   db: {
     openDbConnection,
     openNewDbConnection,
+    openSingleItmeDbConnection,
     openAuthConnection,
   },
   update,

@@ -41,8 +41,6 @@ export const MapRenderer = (props) => {
           zoom: 15,
         }
   );
-  // console.log(viewport);
-  console.log(coordinates.center);
 
   const [popupViewport, setPopupViewport] = React.useState({
     visible: props.id ? true : false,

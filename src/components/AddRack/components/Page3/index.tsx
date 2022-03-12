@@ -69,7 +69,6 @@ export const Page3 = (props: {
       </AbsoluteButton>
       <AbsoluteButton
         bottom={20}
-        color="white"
         colorScheme="yellow"
         disabled={
           validatePage3({ values: props.formProps.values }) || isUploading
