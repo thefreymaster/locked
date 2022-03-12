@@ -1,4 +1,4 @@
-import { Image, Box, Button, AspectRatio } from "@chakra-ui/react";
+import { Image, Box, Button } from "@chakra-ui/react";
 import React from "react";
 import firebaseApi from "../../api/firebase";
 import { useGlobalState } from "../../providers/root";
@@ -7,18 +7,20 @@ import "./upload.scss";
 const Upload = (props) => {
   const { firebase } = useGlobalState();
   const [path, setPath] = React.useState("");
-  const [name, setName] = React.useState("");
 
   const handleOnChange = (e) => {
     const { files } = e.target;
     const reader = new FileReader();
-    const [file] = files
-    reader.onload = (e) => setPath(e.target.result);
+    const [file] = files;
     reader.readAsDataURL(file);
-    setPath("");
+
+    reader.onload = (e) => {
+      setPath(e.target.result);
+    };
     props.setIsUploading(true);
+
     firebaseApi.upload({
-      file: file,
+      file,
       uid: firebase.user.uid,
       form: props.form,
       setIsUploading: props.setIsUploading,
@@ -41,7 +43,7 @@ const Upload = (props) => {
             src={path}
             className="upload"
             borderRadius={10}
-            alt="restaurant"
+            alt="bike-lock"
             size="xlg"
             objectFit="cover"
             minH="500px"

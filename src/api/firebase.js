@@ -5,7 +5,6 @@ import "firebase/analytics";
 import "firebase/auth";
 import "firebase/database";
 import "firebase/storage";
-
 import {
   authValidationComplete,
   fetchingComplete,
@@ -188,7 +187,6 @@ const upload = ({ uid, file, form, setIsUploading }) => {
     maxSizeMB: 0.25,
     useWebWorker: true,
   };
-
   imageCompression(file, options)
     .then(function (compressedFile) {
       imageRef.put(compressedFile).then((snapshot) => {
@@ -210,9 +208,9 @@ const getImage = ({ id, fileUrl, dispatch }) => {
   return storageRef
     .child(fileUrl)
     .getDownloadURL()
-    .then((url) =>
-      dispatch({ type: "SET_IMAGE_ABSOLUTE_URL", payload: { url, id } })
-    );
+    .then((url) => {
+      dispatch({ type: "SET_IMAGE_ABSOLUTE_URL", payload: { url, id } });
+    });
 };
 
 const refresh = ({ lat, lng, dispatch }) => {

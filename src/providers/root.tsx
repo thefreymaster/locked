@@ -68,6 +68,13 @@ export interface IDefaultState {
   };
 }
 
+const gps = () => {
+  if(!localStorage.getItem("gps-tracking")){
+    return true;
+  }
+  return localStorage.getItem("gps-tracking") === "true" ? true : false;
+}
+
 const defaultState: IDefaultState = {
   firebase: {
     isValidatingAuthentication: true,
@@ -84,8 +91,7 @@ const defaultState: IDefaultState = {
       localStorage.getItem("isInstalled") === "true" ? true : false || false,
     dbKey: "",
     supported: false,
-    liveGPSEnabled:
-      localStorage.getItem("gps-tracking") === "true" ? true : false,
+    liveGPSEnabled: gps(),
   },
   coordinates: {
     hasCoordinates: false,
