@@ -11,6 +11,11 @@ import { UserLocation } from "../UserLocation/index";
 import { RacksRenderer } from "../RacksRenderer";
 import { useParams } from "react-router-dom";
 import firebaseApi from "../../../../api/firebase";
+import {
+  Provider as MapProvider,
+  useMapState,
+} from "../../../../providers/MapContext";
+import { PopupRenderer } from "../PopupRenderer";
 
 const Mapbox = ReactMapboxGl({
   accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
@@ -18,7 +23,7 @@ const Mapbox = ReactMapboxGl({
 
 export const MapDataGetter = () => {
   const [lock, setLock] = React.useState();
-  const { meta } = useGlobalState();
+  const { meta, coordinates } = useGlobalState();
   const { id }: any = useParams();
 
   React.useLayoutEffect(() => {
@@ -34,22 +39,29 @@ export const MapDataGetter = () => {
     }
   }, [id, meta.dbKey]);
 
-  return <MapRenderer id={id} lock={lock} />;
+  return (
+    <MapProvider
+      latidude={coordinates.center?.latitude}
+      longitude={coordinates.center?.longitude}
+    >
+      <MapRenderer id={id} lock={lock} />
+    </MapProvider>
+  );
 };
 
 export const MapRenderer = (props: { id: any; lock: any }) => {
   const { colorMode } = useColorMode();
+  const { viewport, dispatch: mapDispatch } = useMapState();
+
   const { coordinates, dispatch } = useGlobalState();
   const { onOpen, onClose } = useDisclosure();
   const { onOpen: newUserOnOpen } = useDisclosure();
-  const [viewport, setViewport] = React.useState(
+  const [, setViewport] = React.useState(
     props.id
       ? {
           width: window.innerWidth,
           height: window.innerHeight,
-          latitude:
-            props.lock?.location?.lat ??
-            coordinates.center?.latitude,
+          latitude: props.lock?.location?.lat ?? coordinates.center?.latitude,
           longitude:
             props.lock?.location?.long ?? coordinates.center?.longitude,
           zoom: 18,
@@ -63,14 +75,16 @@ export const MapRenderer = (props: { id: any; lock: any }) => {
         }
   );
 
-  const [popupViewport, setPopupViewport] = React.useState({
+  const defaultPopupState = {
     visible: props.id ? true : false,
     coordinates: props.lock
       ? [props.lock.location.long, props.lock.location.lat + 0.00009590001135]
       : [],
     lock: props.lock || {},
     id: props.id,
-  });
+  };
+
+  const [popupViewport, setPopupViewport] = React.useState(defaultPopupState);
 
   const DAY_MAP = "mapbox://styles/thefreymaster/ckke447ga0wla19k1cqupmrrz";
   const NIGHT_MAP = "mapbox://styles/thefreymaster/ckz2wubzy000714ox0su8us49";
@@ -111,35 +125,22 @@ export const MapRenderer = (props: { id: any; lock: any }) => {
                 dbKey,
               },
             });
-            setViewport({
-              ...viewport,
-              zoom,
-              latitude: center.lat,
-              longitude: center.lng,
+            mapDispatch({
+              type: "SET_VIEWPORT",
+              payload: {
+                ...viewport,
+                zoom,
+                latitude: center.lat,
+                longitude: center.lng,
+              },
             });
           }}
         >
-          <RacksRenderer
-            setViewport={setViewport}
-            setPopupViewport={setPopupViewport}
-          />
-          {popupViewport.visible && popupViewport?.coordinates?.length > 0 && (
-            <Popup
-              anchor="bottom"
-              coordinates={popupViewport.coordinates}
-              offset={8}
-            >
-              <RackPopup
-                setViewport={setViewport}
-                viewport={viewport}
-                setPopupViewport={setPopupViewport}
-                id={popupViewport.id}
-                onOpen={onOpen}
-                onClose={onClose}
-              />
-            </Popup>
-          )}
-          <UserLocation coordinates={coordinates} />
+          <>
+            <RacksRenderer />
+            <PopupRenderer />
+            <UserLocation coordinates={coordinates} />
+          </>
         </Mapbox>
         <MapActions
           setViewport={setViewport}

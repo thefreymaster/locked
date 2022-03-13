@@ -8,12 +8,11 @@ import React from "react";
 import firebaseApi from "../../../../api/firebase";
 import { useGlobalState } from "../../../../providers/root";
 import { ILock } from "../../../../interfaces/ILock";
+import { useMapState } from "../../../../providers/MapContext";
 
-export const RacksRenderer = (props: {
-  setPopupViewport(v: any): void;
-  setViewport(v: any): void;
-}) => {
+export const RacksRenderer = () => {
   const [locks, setLocks]: any = React.useState();
+  const { dispatch: mapDispatch } = useMapState();
   const { meta, coordinates, dispatch } = useGlobalState();
   const { latitude, longitude } = coordinates.center;
 
@@ -25,19 +24,25 @@ export const RacksRenderer = (props: {
     latAdjustmentPopup: number,
     latAdjustmentViewport: number
   ) => {
-    props.setPopupViewport({
-      visible: true,
-      coordinates: [
-        value.location.long,
-        value.location.lat + latAdjustmentPopup,
-      ],
-      lock: value,
-      id: key,
+    mapDispatch({
+      type: "SET_POPUP",
+      payload: {
+        visible: true,
+        coordinates: [
+          value.location.long,
+          value.location.lat + latAdjustmentPopup,
+        ],
+        lock: value,
+        id: key,
+      },
     });
-    props.setViewport({
-      zoom: 16,
-      latitude: value.location.lat + latAdjustmentViewport,
-      longitude: value.location.long,
+    mapDispatch({
+      type: "SET_VIEWPORT",
+      payload: {
+        zoom: 16,
+        latitude: value.location.lat + latAdjustmentViewport,
+        longitude: value.location.long,
+      },
     });
     history.push(`/map/${key}`);
   };
@@ -56,30 +61,37 @@ export const RacksRenderer = (props: {
   }
   return (
     <>
-      {Object.entries(locks).map(([key, value]: [key: string, value: ILock]) => {
-        const { location, ratings } = value;
-        const latAdjustmentPopup = isMobile
-          ? 0.0001590001135
-          : 0.00015590001135;
-        const latAdjustmentViewport = isMobile
-          ? 0.00209590001135
-          : 0.00199590001135;
-        const overallRating = calculateOverallRating({ ratings });
-        return (
-          <Marker
-            onClick={() =>
-              handleClick(value, key, latAdjustmentPopup, latAdjustmentViewport)
-            }
-            key={`friend-marker-${key}`}
-            coordinates={[location.long, location.lat]}
-            className="rack-marker"
-          >
-            <Fade in>
-              <BikeRackMarker overallRating={overallRating} />
-            </Fade>
-          </Marker>
-        );
-      })}
+      {Object.entries(locks).map(
+        ([key, value]: [key: string, value: ILock]) => {
+          const { location, ratings } = value;
+          const latAdjustmentPopup = isMobile
+            ? 0.0001590001135
+            : 0.00015590001135;
+          const latAdjustmentViewport = isMobile
+            ? 0.00209590001135
+            : 0.00199590001135;
+          const overallRating = calculateOverallRating({ ratings });
+          return (
+            <Marker
+              onClick={() =>
+                handleClick(
+                  value,
+                  key,
+                  latAdjustmentPopup,
+                  latAdjustmentViewport
+                )
+              }
+              key={`friend-marker-${key}`}
+              coordinates={[location.long, location.lat]}
+              className="rack-marker"
+            >
+              <Fade in>
+                <BikeRackMarker overallRating={overallRating} />
+              </Fade>
+            </Marker>
+          );
+        }
+      )}
     </>
   );
 };
