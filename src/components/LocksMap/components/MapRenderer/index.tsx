@@ -26,18 +26,18 @@ export const MapDataGetter = () => {
   const { meta, coordinates } = useGlobalState();
   const { id }: any = useParams();
 
-  React.useLayoutEffect(() => {
-    const getItem = async () => {
-      await firebaseApi.db.openSingleItmeDbConnection({
-        dbKey: meta.dbKey,
-        id,
-        setLock,
-      });
-    };
-    if (id) {
-      getItem();
-    }
-  }, [id, meta.dbKey]);
+  // React.useLayoutEffect(() => {
+  //   const getItem = async () => {
+  //     await firebaseApi.db.openSingleItmeDbConnection({
+  //       dbKey: meta.dbKey,
+  //       id,
+  //       setLock,
+  //     });
+  //   };
+  //   if (id) {
+  //     getItem();
+  //   }
+  // }, [id, meta.dbKey]);
 
   return (
     <MapProvider
@@ -51,9 +51,9 @@ export const MapDataGetter = () => {
 
 export const MapRenderer = (props: { id: any; lock: any }) => {
   const { colorMode } = useColorMode();
-  const { viewport, dispatch: mapDispatch } = useMapState();
+  const { viewport, popup, dispatch: mapDispatch } = useMapState();
 
-  const { coordinates, dispatch } = useGlobalState();
+  const { coordinates, dispatch, locks } = useGlobalState();
   const { onOpen, onClose } = useDisclosure();
   const { onOpen: newUserOnOpen } = useDisclosure();
   const [, setViewport] = React.useState(

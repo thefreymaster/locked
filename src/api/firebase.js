@@ -53,11 +53,14 @@ const openNewDbConnection = ({ dbKey, dispatch }) => {
   });
 };
 
-const openSingleItmeDbConnection = ({ dbKey, id, setLock }) => {
+const openSingleItmeDbConnection = ({ dbKey, id, showPopup, mapDispatch }) => {
   var refUpdates = firebase.database().ref(`locks/${dbKey}/${id}`);
   refUpdates.once("value", (snapshot) => {
     const snapshotValue = snapshot.val();
-    setLock(snapshotValue);
+    mapDispatch({
+      type: "SET_VIEWPORT",
+      payload: { ...snapshotValue, visible: showPopup },
+    });
   });
 };
 

@@ -9,6 +9,7 @@ import {
   Spinner,
   ScaleFade,
   useColorMode,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
 import "./users-map.scss";
@@ -26,36 +27,49 @@ import { useGlobalState } from "../../providers/root";
 import { Details } from "./Details";
 import { isDesktop } from "react-device-detect";
 import React from "react";
+import { useMapState } from "../../providers/MapContext";
+import DeleteRack from "../DeleteRack/index";
 
 export const RackInformation = (props: {
-  setFadeIn(v: boolean): void;
-  setPopupViewport: any;
-  setViewport: any;
-  setIsOpen: any;
-  onOpen: any;
-  onOpenDetails: any;
-  lock: any;
-  viewport: any;
   id: string;
   maxH?: number;
   minW?: number;
-  borderRadius?: number;
+  borderRadius?: string;
   minH?: number;
   variant: "drawer" | "modal";
 }) => {
   const history = useHistory();
+  const { dispatch: mapDispatch, popup, viewport } = useMapState();
   const { firebase, meta } = useGlobalState();
   const { colorMode } = useColorMode();
-  
+
   const canEditDelete =
     firebase.isAuthenticated &&
     firebase.provider &&
-    firebase.user?.uid === props.lock?.author;
+    firebase.user?.uid === popup.lock?.author;
 
-  const [isLoaded, setIsLoaded] = React.useState(false);
+  const [, setIsLoaded] = React.useState(false);
+  //delete modal
+  const { isOpen, onOpen } = useDisclosure();
+  const { onOpen: onOpenDetails } = useDisclosure();
 
   return (
     <>
+      <DeleteRack
+        setPopupViewport={() =>
+          mapDispatch({
+            type: "SET_POPUP",
+            payload: {
+              visible: false,
+              coordinates: [],
+              lock: {},
+            },
+          })
+        }
+        setIsOpen={onOpen}
+        isOpen={isOpen}
+        id={props.id}
+      />
       {props.variant === "modal" && (
         <Box
           width="100%"
@@ -67,13 +81,18 @@ export const RackInformation = (props: {
             position="absolute"
             size="lg"
             onClick={() => {
-              props.setFadeIn(false);
-              props.setPopupViewport({
-                visible: false,
-                coordinates: [],
-                lock: {},
+              mapDispatch({
+                type: "SET_POPUP",
+                payload: {
+                  visible: false,
+                  coordinates: [],
+                  lock: {},
+                },
               });
-              props.setViewport({ ...props.viewport, zoom: 15 });
+              mapDispatch({
+                type: "SET_VIEWPORT",
+                payload: { ...viewport, zoom: 15 },
+              });
               history.push("/map");
             }}
           />
@@ -87,8 +106,9 @@ export const RackInformation = (props: {
         bg="yellow.400"
         loading="lazy"
         borderRadius={props.borderRadius}
-        name={props.lock.name}
-        src={props.lock.imageUrlAbsolute}
+        name={popup.lock.name}
+        //@ts-ignore
+        src={popup.lock?.imageUrlAbsolute}
         onLoad={() => {
           setIsLoaded(true);
         }}
@@ -97,7 +117,7 @@ export const RackInformation = (props: {
         position={props.variant === "drawer" ? "fixed" : "inherit"}
         minW="100%"
         bottom="0px"
-        backgroundColor={colorMode === 'light' ? 'white' : '#1a212f'}
+        backgroundColor={colorMode === "light" ? "white" : "#1a212f"}
         paddingBottom={
           meta.isInstalled && props.variant === "drawer" ? "80px" : "0px"
         }
@@ -110,11 +130,11 @@ export const RackInformation = (props: {
           alignItems="center"
         >
           <RackRecommendation
-            recommended={props.lock.recommended}
+            recommended={popup.lock.recommended}
             variant={props.variant}
           />
-          <RackSize size={props.lock.size} variant={props.variant} />
-          <RackTraffic traffic={props.lock.traffic} variant={props.variant} />
+          <RackSize size={popup.lock.size} variant={props.variant} />
+          <RackTraffic traffic={popup.lock.traffic} variant={props.variant} />
           <ToolTip label="Overall Rating">
             <Badge
               minH="25px"
@@ -131,7 +151,7 @@ export const RackInformation = (props: {
                 <AiFillStar color="#FBB03B" fontSize="14px" />
                 <Box marginRight="3px" />
                 <Font fontSize="14px" fontWeight={900}>
-                  {calculateOverallRating({ ratings: props.lock.ratings })}
+                  {calculateOverallRating({ ratings: popup.lock.ratings })}
                 </Font>
               </Box>
             </Badge>
@@ -155,9 +175,10 @@ export const RackInformation = (props: {
         <Divider pt={3} />
         <Box padding="15px 15px 0px 15px">
           <Font fontSize={24} textAlign="center" fontWeight="bold">
-            {props.lock.name}
+            {popup.lock.name}
           </Font>
-          <Text textAlign="center">{props.lock.notes}</Text>
+          {/* //@ts-ignore */}
+          <Text textAlign="center">{popup.lock?.notes}</Text>
           <Box
             display="flex"
             direction="row"
@@ -171,7 +192,7 @@ export const RackInformation = (props: {
               alignItems="center"
               flexGrow={1}
             >
-              <StarRating overallRating={props.lock.ratings.quality} />
+              <StarRating overallRating={popup.lock.ratings.quality} />
               <Font fontWeight="bold">Quality</Font>
             </Box>
             <Box
@@ -181,7 +202,7 @@ export const RackInformation = (props: {
               alignItems="center"
               flexGrow={1}
             >
-              <StarRating overallRating={props.lock.ratings.safety} />
+              <StarRating overallRating={popup.lock.ratings.safety} />
               <Font fontWeight="bold">Safety</Font>
             </Box>
             <Box
@@ -191,7 +212,7 @@ export const RackInformation = (props: {
               alignItems="center"
               flexGrow={1}
             >
-              <StarRating overallRating={props.lock.ratings.illumination} />
+              <StarRating overallRating={popup.lock.ratings.illumination} />
               <Font fontWeight="bold">Lighting</Font>
             </Box>
             {/* {lock.traffic && lock.traffic !== 'medium' && (
@@ -204,11 +225,11 @@ export const RackInformation = (props: {
             )} */}
           </Box>
           {props.variant === "drawer" && isDesktop && (
-            <Details lock={props.lock} />
+            <Details lock={popup.lock} />
           )}
         </Box>
         <Box pt={3}>
-          <Divider borderColor={colorMode === 'light' ? 'white' : '#1c374a'} />
+          <Divider borderColor={colorMode === "light" ? "white" : "#1c374a"} />
         </Box>
         {canEditDelete && (
           <Box width="100%" display="flex" justifyContent="flex-end">
@@ -217,7 +238,7 @@ export const RackInformation = (props: {
               margin="2"
               marginRight="0"
               size="sm"
-              onClick={() => props.setIsOpen(true)}
+              onClick={onOpen}
             >
               Remove
             </Button>
@@ -228,7 +249,7 @@ export const RackInformation = (props: {
               size="sm"
               onClick={() => {
                 history.push(`/edit/${props.id}`);
-                props.onOpen();
+                onOpen();
               }}
             >
               Edit
@@ -241,7 +262,7 @@ export const RackInformation = (props: {
                 colorScheme="gray"
                 onClick={() => {
                   history.push(`/details/${props.id}`);
-                  props.onOpenDetails();
+                  onOpenDetails();
                 }}
               >
                 Details
@@ -260,7 +281,7 @@ export const RackInformation = (props: {
               size="sm"
               onClick={() => {
                 history.push(`/details/${props.id}`);
-                props.onOpenDetails();
+                onOpenDetails();
               }}
             >
               Details

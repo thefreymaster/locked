@@ -11,4 +11,6 @@ export interface ILock {
   recommended: false;
   size: string;
   traffic: string;
+  notes?: string;
+  imageUrlAbsolute?: string;
 }

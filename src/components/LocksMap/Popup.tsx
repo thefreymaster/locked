@@ -7,7 +7,7 @@ import {
   CloseButton,
   useOutsideClick,
 } from "@chakra-ui/react";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import "./users-map.scss";
 import firebaseApi from "../../api/firebase";
 import DeleteRack from "../DeleteRack";
@@ -18,10 +18,11 @@ import { useMapState } from "../../providers/MapContext";
 
 const RackPopup = () => {
   const ref = React.useRef();
+  const { id }: any = useParams();
   const { popup } = useMapState();
 
   return (
-    <Fade in delay={250}>
+    <Fade in>
       <Box
         ref={ref}
         flexDir="column"
@@ -37,7 +38,11 @@ const RackPopup = () => {
         borderRadius="10px"
         zIndex={10000}
       >
-        Popup
+        <RackInformation
+          id={id}
+          borderRadius="10px 10px 0px 0px"
+          variant="modal"
+        />
       </Box>
     </Fade>
   );
@@ -111,25 +116,25 @@ const RackPopup = () => {
   //     borderRadius="10px"
   //     zIndex={10000}
   //   >
-  //       <RackInformation
-  //         id={props.id}
-  //         setIsOpen={setIsOpen}
-  //         setFadeIn={setFadeIn}
-  //         setPopupViewport={props.setPopupViewport}
-  //         setViewport={props.setViewport}
-  //         onOpenDetails={onOpenDetails}
-  //         onOpen={props.onOpen}
-  //         viewport={props.viewport}
-  //         lock={lock}
-  //         borderRadius="10px 10px 0px 0px"
-  //         variant="modal"
-  //       />
-  //       <DeleteRack
-  //         setPopupViewport={props.setPopupViewport}
-  //         setIsOpen={setIsOpen}
-  //         isOpen={isDeleteOpenOpen}
-  //         id={props.id}
-  //       />
+  // <RackInformation
+  //   id={props.id}
+  //   setIsOpen={setIsOpen}
+  //   setFadeIn={setFadeIn}
+  //   setPopupViewport={props.setPopupViewport}
+  //   setViewport={props.setViewport}
+  //   onOpenDetails={onOpenDetails}
+  //   onOpen={props.onOpen}
+  //   viewport={props.viewport}
+  //   lock={lock}
+  //   borderRadius="10px 10px 0px 0px"
+  //   variant="modal"
+  // />
+        // <DeleteRack
+        //   setPopupViewport={props.setPopupViewport}
+        //   setIsOpen={setIsOpen}
+        //   isOpen={isDeleteOpenOpen}
+        //   id={props.id}
+        // />
   //       <DetailsDrawer
   //         title={lock.name}
   //         location={lock.location}

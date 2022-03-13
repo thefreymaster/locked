@@ -69,11 +69,7 @@ const DeleteRack = (props) => {
                   toast: showSuccessToast,
                   dbKey,
                 });
-                props.setPopupViewport({
-                  visible: false,
-                  coordinates: [],
-                  lock: {},
-                });
+                props.setPopupViewport();
               }}
               ml={3}
             >

@@ -3,7 +3,7 @@ import React from "react";
 import ToolTip from "../../common/ToolTip";
 
 const RackSize = (props: {
-  size: "sm" | "md" | "lg";
+  size: string;
   variant: "drawer" | "modal";
 }) => {
   if (props.size === "sm") {
