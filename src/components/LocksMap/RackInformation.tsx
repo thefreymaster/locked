@@ -29,13 +29,14 @@ import { isDesktop } from "react-device-detect";
 import React from "react";
 import { useMapState } from "../../providers/MapContext";
 import DeleteRack from "../DeleteRack/index";
+import { isDrawerNotVisible, isDrawerVisible } from "../../actions/index";
 
 export const RackInformation = (props: {
   id: string;
-  maxH?: number;
-  minW?: number;
+  maxH?: string;
+  minW?: string;
   borderRadius?: string;
-  minH?: number;
+  minH?: string;
   variant: "drawer" | "modal";
 }) => {
   const history = useHistory();
@@ -51,7 +52,6 @@ export const RackInformation = (props: {
   const [, setIsLoaded] = React.useState(false);
   //delete modal
   const { isOpen, onOpen } = useDisclosure();
-  const { onOpen: onOpenDetails } = useDisclosure();
 
   return (
     <>
@@ -262,7 +262,7 @@ export const RackInformation = (props: {
                 colorScheme="gray"
                 onClick={() => {
                   history.push(`/details/${props.id}`);
-                  onOpenDetails();
+                  mapDispatch(isDrawerVisible);
                 }}
               >
                 Details
@@ -281,7 +281,7 @@ export const RackInformation = (props: {
               size="sm"
               onClick={() => {
                 history.push(`/details/${props.id}`);
-                onOpenDetails();
+                mapDispatch(isDrawerVisible);
               }}
             >
               Details

@@ -9,8 +9,6 @@ import { AiOutlinePlus } from "react-icons/ai";
 import { useModalControlState } from "../../providers/ModalControl";
 
 interface IMapActions {
-  setViewport(viewPort: any): void;
-  viewport: any;
   newUserOnOpen(): void;
   onOpen(): void;
 }

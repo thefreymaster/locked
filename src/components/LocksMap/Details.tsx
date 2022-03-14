@@ -9,7 +9,10 @@ import {
   Tag,
 } from "@chakra-ui/react";
 import { ILock } from "../../interfaces/ILock";
+import { useMapState } from "../../providers/MapContext";
 import { useGlobalState } from "../../providers/root";
+import { isDrawerNotVisible } from "../../actions/index";
+import { useHistory, useParams } from "react-router-dom";
 
 export const Details = (props: { lock: ILock }) => {
   return (
@@ -25,23 +28,20 @@ export const Details = (props: { lock: ILock }) => {
   );
 };
 
-export const DetailsDrawer = (props: {
-  onClose(): void;
-  isOpen: boolean;
-  title: string;
-  location?: {
-    city?: string;
-    state?: string;
-  };
-  children: React.ReactNode;
-  closeButton: React.ReactNode;
-}) => {
+export const DetailsDrawer = (props: { children: React.ReactNode }) => {
+  const history = useHistory();
+  const { id }: { id: string } = useParams();
   const { meta } = useGlobalState();
+  const { popup, drawer, dispatch: mapDispatch } = useMapState();
+
   return (
     <Drawer
       placement="right"
-      onClose={props.onClose}
-      isOpen={props.isOpen}
+      onClose={() => {
+        mapDispatch(isDrawerNotVisible);
+        history.push(`/map/${id}`);
+      }}
+      isOpen={drawer.visible}
       size="lg"
     >
       <DrawerOverlay />
@@ -52,11 +52,7 @@ export const DetailsDrawer = (props: {
           borderTopWidth="1px"
           paddingTop={meta.isInstalled ? "60px" : "16px"}
         >
-          <Box>
-            {props.title}{" "}
-            {props.location?.city &&
-              `${props.location?.city}, ${props.location?.state}`}
-          </Box>
+          <Box>{popup.lock.name}</Box>
         </DrawerHeader>
         <DrawerBody
           padding="0px"

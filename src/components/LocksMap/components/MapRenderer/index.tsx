@@ -26,19 +26,6 @@ export const MapDataGetter = () => {
   const { meta, coordinates } = useGlobalState();
   const { id }: any = useParams();
 
-  // React.useLayoutEffect(() => {
-  //   const getItem = async () => {
-  //     await firebaseApi.db.openSingleItmeDbConnection({
-  //       dbKey: meta.dbKey,
-  //       id,
-  //       setLock,
-  //     });
-  //   };
-  //   if (id) {
-  //     getItem();
-  //   }
-  // }, [id, meta.dbKey]);
-
   return (
     <MapProvider
       latidude={coordinates.center?.latitude}
@@ -51,10 +38,10 @@ export const MapDataGetter = () => {
 
 export const MapRenderer = (props: { id: any; lock: any }) => {
   const { colorMode } = useColorMode();
-  const { viewport, popup, dispatch: mapDispatch } = useMapState();
+  const { viewport, dispatch: mapDispatch } = useMapState();
 
-  const { coordinates, dispatch, locks } = useGlobalState();
-  const { onOpen, onClose } = useDisclosure();
+  const { coordinates, dispatch } = useGlobalState();
+  const { onOpen } = useDisclosure();
   const { onOpen: newUserOnOpen } = useDisclosure();
   const [, setViewport] = React.useState(
     props.id
@@ -74,17 +61,6 @@ export const MapRenderer = (props: { id: any; lock: any }) => {
           zoom: 15,
         }
   );
-
-  const defaultPopupState = {
-    visible: props.id ? true : false,
-    coordinates: props.lock
-      ? [props.lock.location.long, props.lock.location.lat + 0.00009590001135]
-      : [],
-    lock: props.lock || {},
-    id: props.id,
-  };
-
-  const [popupViewport, setPopupViewport] = React.useState(defaultPopupState);
 
   const DAY_MAP = "mapbox://styles/thefreymaster/ckke447ga0wla19k1cqupmrrz";
   const NIGHT_MAP = "mapbox://styles/thefreymaster/ckz2wubzy000714ox0su8us49";
@@ -143,15 +119,13 @@ export const MapRenderer = (props: { id: any; lock: any }) => {
           </>
         </Mapbox>
         <MapActions
-          setViewport={setViewport}
-          viewport={viewport}
           newUserOnOpen={newUserOnOpen}
           onOpen={onOpen}
         />
         <NewUserModal />
       </>
     );
-  }, [viewport, popupViewport, props.lock, colorMode]);
+  }, [viewport, colorMode]);
 
   return <>{MemorizedMap}</>;
 };

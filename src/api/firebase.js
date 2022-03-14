@@ -203,14 +203,17 @@ const upload = ({ uid, file, form, setIsUploading }) => {
     });
 };
 
-const getImage = ({ fileUrl, lock, setLock }) => {
+const getImage = ({ fileUrl, lock, mapDispatch }) => {
   const storage = firebase.storage();
   const storageRef = storage.ref();
   return storageRef
     .child(fileUrl)
     .getDownloadURL()
     .then((url) => {
-      setLock({ ...lock, imageUrlAbsolute: url });
+      mapDispatch({
+        type: "SET_POPUP_IMAGE_URL",
+        payload: { url },
+      });
     });
 };
 

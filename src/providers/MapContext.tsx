@@ -18,6 +18,9 @@ export interface IDefaultState {
     lock?: ILock;
     id?: string;
   };
+  drawer: {
+    visible: boolean;
+  };
   dispatch(v: any): void;
 }
 
@@ -33,6 +36,9 @@ const defaultState: IDefaultState = {
     visible: false,
     coordinates: [],
   },
+  drawer: {
+    visible: false,
+  },
   dispatch: () => {},
 };
 
@@ -41,12 +47,24 @@ const reducer = (state: any, action: any) => {
   const { payload } = action;
 
   switch (action.type) {
+    case "SET_POPUP_IMAGE_URL": {
+      newState.popup!.lock!.imageUrlAbsolute = payload.url;
+      break;
+    }
     case "SET_POPUP": {
       newState.popup = payload;
       break;
     }
     case "SET_VIEWPORT": {
       newState.viewport = payload;
+      break;
+    }
+    case "SET_DRAWER_VISIBLE": {
+      newState.drawer.visible = true;
+      break;
+    }
+    case "SET_DRAWER_NOT_VISIBLE": {
+      newState.drawer.visible = false;
       break;
     }
     default:

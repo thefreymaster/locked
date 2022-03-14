@@ -1,25 +1,31 @@
 import React from "react";
-import { useGlobalState } from "../../providers/root";
-import {
-  Fade,
-  Box,
-  useDisclosure,
-  CloseButton,
-  useOutsideClick,
-} from "@chakra-ui/react";
-import { useHistory, useParams } from "react-router-dom";
+import { Fade, Box } from "@chakra-ui/react";
+import { useParams } from "react-router-dom";
 import "./users-map.scss";
-import firebaseApi from "../../api/firebase";
-import DeleteRack from "../DeleteRack";
 import { DetailsDrawer } from "./Details";
 import { RackInformation } from "./RackInformation";
-import { isMobile } from "react-device-detect";
 import { useMapState } from "../../providers/MapContext";
+import firebaseApi from "../../api/firebase";
+import { useGlobalState } from "../../providers/root";
 
 const RackPopup = () => {
   const ref = React.useRef();
+  const { meta } = useGlobalState();
   const { id }: any = useParams();
-  const { popup } = useMapState();
+  const { popup, dispatch: mapDispatch } = useMapState();
+
+  React.useLayoutEffect(() => {
+    const getUrl = async () => {
+      if (popup?.lock && popup?.lock?.imageUrl) {
+        await firebaseApi.getImage({
+          fileUrl: popup?.lock?.imageUrl,
+          lock: popup?.lock,
+          mapDispatch,
+        });
+      }
+    };
+    getUrl();
+  }, [popup.lock, popup.lock?.imageUrl]);
 
   return (
     <Fade in>
@@ -44,6 +50,15 @@ const RackPopup = () => {
           variant="modal"
         />
       </Box>
+      <DetailsDrawer>
+        <RackInformation
+          id={id}
+          borderRadius="0px"
+          variant="drawer"
+          minH="100%"
+          minW="100%"
+        />
+      </DetailsDrawer>
     </Fade>
   );
 
@@ -129,50 +144,50 @@ const RackPopup = () => {
   //   borderRadius="10px 10px 0px 0px"
   //   variant="modal"
   // />
-        // <DeleteRack
-        //   setPopupViewport={props.setPopupViewport}
-        //   setIsOpen={setIsOpen}
-        //   isOpen={isDeleteOpenOpen}
-        //   id={props.id}
-        // />
-  //       <DetailsDrawer
-  //         title={lock.name}
-  //         location={lock.location}
-  //         isOpen={isOpenDetails}
-  //         onClose={onCloseDetails}
-  //         closeButton={
-  //           <CloseButton
-  //             position="absolute"
-  //             color="white"
-  //             size="lg"
-  //             onClick={() => {
-  //               props.setFadeIn(false);
-  //               props.setPopupViewport({
-  //                 visible: false,
-  //                 coordinates: [],
-  //                 lock: {},
-  //               });
-  //               props.setViewport({ ...props.viewport, zoom: 15 });
-  //               history.push("/map");
-  //             }}
-  //           />
-  //         }
-  //       >
-  //         <RackInformation
-  //           id={props.id}
-  //           setIsOpen={setIsOpen}
-  //           setFadeIn={setFadeIn}
-  //           setPopupViewport={props.setPopupViewport}
-  //           setViewport={props.setViewport}
-  //           onOpenDetails={onOpenDetails}
-  //           onOpen={props.onOpen}
-  //           viewport={props.viewport}
-  //           lock={lock}
-  //           minH={calculateHeight}
-  //           minW="100%"
-  //           variant="drawer"
-  //         />
-  //       </DetailsDrawer>
+  // <DeleteRack
+  //   setPopupViewport={props.setPopupViewport}
+  //   setIsOpen={setIsOpen}
+  //   isOpen={isDeleteOpenOpen}
+  //   id={props.id}
+  // />
+  // <DetailsDrawer
+  //   title={lock.name}
+  //   location={lock.location}
+  //   isOpen={isOpenDetails}
+  //   onClose={onCloseDetails}
+  //   closeButton={
+  //     <CloseButton
+  //       position="absolute"
+  //       color="white"
+  //       size="lg"
+  //       onClick={() => {
+  //         props.setFadeIn(false);
+  //         props.setPopupViewport({
+  //           visible: false,
+  //           coordinates: [],
+  //           lock: {},
+  //         });
+  //         props.setViewport({ ...props.viewport, zoom: 15 });
+  //         history.push("/map");
+  //       }}
+  //     />
+  //   }
+  // >
+  //   <RackInformation
+  //     id={props.id}
+  //     setIsOpen={setIsOpen}
+  //     setFadeIn={setFadeIn}
+  //     setPopupViewport={props.setPopupViewport}
+  //     setViewport={props.setViewport}
+  //     onOpenDetails={onOpenDetails}
+  //     onOpen={props.onOpen}
+  //     viewport={props.viewport}
+  //     lock={lock}
+  // minH={calculateHeight}
+  // minW="100%"
+  //     variant="drawer"
+  //   />
+  // </DetailsDrawer>
   //     </Box>
   //   </Fade>
   // );
