@@ -1,15 +1,15 @@
 export const validatePage1 = ({ values }) => {
-    const { name, location } = values;
-    if (name && location.lat && location.long) {
+    const { location } = values;
+    if (location.lat && location.long) {
         return false;
     }
     return true;
 }
 
 export const validatePage2 = ({ values }) => {
-    const { ratings, recommended, size, traffic } = values;
+    const { ratings, size, traffic } = values;
     const { quality, safety, illumination } = ratings;
-    if (size && quality && safety && illumination && traffic && recommended !== null) {
+    if (size && quality && safety && illumination && traffic) {
         return false;
     }
     return true;

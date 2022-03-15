@@ -53,7 +53,7 @@ const openNewDbConnection = ({ dbKey, dispatch }) => {
   });
 };
 
-const openSingleItmeDbConnection = ({ dbKey, id, showPopup, mapDispatch }) => {
+const openSingleItemDbConnection = ({ dbKey, id, showPopup, mapDispatch }) => {
   var refUpdates = firebase.database().ref(`locks/${dbKey}/${id}`);
   refUpdates.once("value", (snapshot) => {
     const snapshotValue = snapshot.val();
@@ -61,6 +61,19 @@ const openSingleItmeDbConnection = ({ dbKey, id, showPopup, mapDispatch }) => {
       type: "SET_VIEWPORT",
       payload: { ...snapshotValue, visible: showPopup },
     });
+  });
+};
+
+const openSingleItemDbConnectionForForm = ({ dbKey, id, mapDispatch }) => {
+  mapDispatch({ type: "IS_LOADING" });
+  var refUpdates = firebase.database().ref(`locks/${dbKey}/${id}`);
+  refUpdates.once("value", (snapshot) => {
+    const snapshotValue = snapshot.val();
+    mapDispatch({
+      type: "SET_FORM_STATE",
+      payload: { ...snapshotValue },
+    });
+    mapDispatch({ type: "IS_NOT_LOADING" });
   });
 };
 
@@ -269,7 +282,8 @@ const firebaseApi = {
   db: {
     openDbConnection,
     openNewDbConnection,
-    openSingleItmeDbConnection,
+    openSingleItemDbConnection,
+    openSingleItemDbConnectionForForm,
     openAuthConnection,
   },
   update,

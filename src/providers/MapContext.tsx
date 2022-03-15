@@ -20,7 +20,12 @@ export interface IDefaultState {
   };
   drawer: {
     visible: boolean;
+    lock?: ILock;
   };
+  form: {
+    visible: boolean;
+  };
+  isLoading: boolean;
   dispatch(v: any): void;
 }
 
@@ -39,6 +44,10 @@ const defaultState: IDefaultState = {
   drawer: {
     visible: false,
   },
+  form: {
+    visible: false,
+  },
+  isLoading: false,
   dispatch: () => {},
 };
 
@@ -47,6 +56,24 @@ const reducer = (state: any, action: any) => {
   const { payload } = action;
 
   switch (action.type) {
+    case "IS_LOADING": {
+      newState.isLoading = true;
+      break;
+    }
+    case "IS_NOT_LOADING": {
+      newState.isLoading = false;
+      break;
+    }
+    case "SET_FORM_STATE": {
+      newState.form.lock = payload;
+      newState.form.visible = true;
+      break;
+    }
+    case "CLOSE_FORM": {
+      delete newState.form.lock;
+      newState.form.visible = false;
+      break;
+    }
     case "SET_POPUP_IMAGE_URL": {
       newState.popup!.lock!.imageUrlAbsolute = payload.url;
       break;

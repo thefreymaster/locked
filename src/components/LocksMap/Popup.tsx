@@ -10,7 +10,6 @@ import { useGlobalState } from "../../providers/root";
 
 const RackPopup = () => {
   const ref = React.useRef();
-  const { meta } = useGlobalState();
   const { id }: any = useParams();
   const { popup, dispatch: mapDispatch } = useMapState();
 
@@ -93,7 +92,7 @@ const RackPopup = () => {
   // }, [lock, lock?.imageUrl]);
 
   // React.useEffect(() => {
-  //   firebaseApi.db.openSingleItmeDbConnection({
+  //   firebaseApi.db.openSingleItemDbConnection({
   //     dbKey: meta.dbKey,
   //     id: props.id,
   //     setLock: setLock,

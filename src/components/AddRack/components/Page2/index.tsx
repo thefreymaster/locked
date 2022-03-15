@@ -255,7 +255,7 @@ export const Page2 = (props: { formProps: any; setPage(v: number): void }) => {
           </FormControl>
         )}
       </Field>
-      <Field name="recommended">
+      {/* <Field name="recommended">
         {({ field, form }) => (
           <FormControl isRequired id="recommended">
             <FormLabel>Recommendation</FormLabel>
@@ -279,7 +279,7 @@ export const Page2 = (props: { formProps: any; setPage(v: number): void }) => {
             </ButtonGroup>
           </FormControl>
         )}
-      </Field>
+      </Field> */}
       <Divider margin="15px 0px 15px 0px" />
       {Object.entries(props.formProps.values.ratings).length === 3 && (
         <Fade in={Object.entries(props.formProps.values.ratings).length === 3}>

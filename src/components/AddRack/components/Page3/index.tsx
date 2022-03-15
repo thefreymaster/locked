@@ -10,16 +10,17 @@ import firebaseApi from "../../../../api/firebase";
 import { useHistory, useParams } from "react-router-dom";
 import { useGlobalState } from "../../../../providers/root";
 import { BiArrowBack } from 'react-icons/bi';
+import { useMapState } from "../../../../providers/MapContext";
 
 export const Page3 = (props: {
   formProps: any;
-  lock: any;
   setPage(v: number): void;
   onClose(v: boolean): void;
 }) => {
   let { id }: { id: string } = useParams();
   const history = useHistory();
   const { firebase, meta, dispatch } = useGlobalState();
+  const { form: mapForm }: any = useMapState();
   const { dbKey } = meta;
   const toast = useToast();
   const [isUploading, setIsUploading] = React.useState(false);
@@ -60,8 +61,8 @@ export const Page3 = (props: {
       {id && (
         <Box pt="20px">
           <Photo
-            name={props.lock.name}
-            imageUrlAbsolute={props.lock.imageUrlAbsolute}
+            name={mapForm.lock.name}
+            imageUrlAbsolute={mapForm.lock.imageUrlAbsolute}
           />
         </Box>
       )}

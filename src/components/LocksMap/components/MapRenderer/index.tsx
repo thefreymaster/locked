@@ -39,7 +39,12 @@ export const MapDataGetter = () => {
         title="Add Bike Rack"
         isOpen={isOpen}
         onClose={() => {
-          history.push("/map");
+          if (id) {
+            history.push(`/map/${id}`);
+          }
+          else{
+            history.push(`/map`);
+          }
           onClose();
         }}
       >

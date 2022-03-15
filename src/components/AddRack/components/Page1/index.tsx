@@ -13,16 +13,19 @@ import {
   AlertDescription,
   InputLeftElement,
   CloseButton,
+  TagLeftIcon,
+  Tag,
+  TagLabel,
 } from "@chakra-ui/react";
-import { Field } from "formik";
+import { Field, useFormikContext } from "formik";
 import React from "react";
 import { MdGpsFixed } from "react-icons/md";
 import { isMobile } from "react-device-detect";
 import { getCoordinates } from "../../../../utils/gps";
-import AbsoluteButton from '../../../../common/AbsoluteButton';
+import AbsoluteButton from "../../../../common/AbsoluteButton";
 import { validatePage1 } from "../../../../validation";
 
-export const Page1 = (props: { formProps: any, setPage(v: number): void }) => {
+export const Page1 = (props: { formProps: any; setPage(v: number): void }) => {
   const [gpsError, setGpsError] = React.useState(false);
   const [isGettingCoordinates, setIsGettingCoordinates] = React.useState(false);
 
@@ -30,10 +33,11 @@ export const Page1 = (props: { formProps: any, setPage(v: number): void }) => {
     setIsGettingCoordinates(true);
     getCoordinates(setFieldValue, setIsGettingCoordinates, setGpsError);
   };
+  const form: any = useFormikContext();
 
   return (
     <Box minW={isMobile ? "100%" : "400px"}>
-      <Field name="name">
+      {/* <Field name="name">
         {({ field, form }) => (
           <FormControl
             colorScheme="red"
@@ -51,7 +55,7 @@ export const Page1 = (props: { formProps: any, setPage(v: number): void }) => {
             />
           </FormControl>
         )}
-      </Field>
+      </Field> */}
       <Field name="notes">
         {({ field, form }) => (
           <FormControl isInvalid={form.errors.notes && form.touched.notes}>
@@ -60,12 +64,12 @@ export const Page1 = (props: { formProps: any, setPage(v: number): void }) => {
               {...field}
               variant="filled"
               id="notes"
-              placeholder="What made it memoriable"
+              placeholder="Jot down thoughts on this bike rack"
             />
           </FormControl>
         )}
       </Field>
-      <Stack direction="row">
+      <Stack direction="row" style={{ display: "none" }}>
         <Field name="location.lat">
           {({ field }) => (
             <FormControl isRequired>
@@ -108,7 +112,7 @@ export const Page1 = (props: { formProps: any, setPage(v: number): void }) => {
         </Field>
       </Stack>
       <Box margin="15px" />
-      <Box marginBottom="15px">
+      <Box marginBottom="15px" display="flex" flexDir="column">
         <Button
           isLoading={isGettingCoordinates}
           minW="100%"
@@ -118,6 +122,22 @@ export const Page1 = (props: { formProps: any, setPage(v: number): void }) => {
         >
           Use Current Location
         </Button>
+        <Box margin="2" />
+        <Box display="flex" flexDir="row" justifyContent="center">
+          <Tag
+            size="lg"
+            variant="subtle"
+            colorScheme="gray"
+            marginRight="2"
+          >
+            <TagLeftIcon boxSize="12px" as={MdGpsFixed} />
+            <TagLabel>{form.values?.location?.lat}</TagLabel>
+          </Tag>
+          <Tag size="lg" key="long" variant="subtle" colorScheme="gray">
+            <TagLeftIcon boxSize="12px" as={MdGpsFixed} />
+            <TagLabel>{form.values?.location?.long}</TagLabel>
+          </Tag>
+        </Box>
       </Box>
       {gpsError && (
         <Alert status="error">
@@ -135,7 +155,8 @@ export const Page1 = (props: { formProps: any, setPage(v: number): void }) => {
       <AbsoluteButton
         bottom={20}
         disabled={
-          validatePage1({ values: props.formProps.values }) || isGettingCoordinates
+          validatePage1({ values: props.formProps.values }) ||
+          isGettingCoordinates
         }
         onClick={() => props.setPage(2)}
       >

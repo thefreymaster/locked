@@ -50,8 +50,7 @@ export const RackInformation = (props: {
     firebase.user?.uid === popup.lock?.author;
 
   const [, setIsLoaded] = React.useState(false);
-  //delete modal
-  const { isOpen, onOpen } = useDisclosure();
+  const [isOpen, setIsOpen] = React.useState(false);
 
   return (
     <>
@@ -66,7 +65,7 @@ export const RackInformation = (props: {
             },
           })
         }
-        setIsOpen={onOpen}
+        setIsOpen={setIsOpen}
         isOpen={isOpen}
         id={props.id}
       />
@@ -231,54 +230,38 @@ export const RackInformation = (props: {
         <Box pt={3}>
           <Divider borderColor={colorMode === "light" ? "white" : "#1c374a"} />
         </Box>
-        {canEditDelete && (
-          <Box width="100%" display="flex" justifyContent="flex-end">
-            <Button
-              colorScheme="red"
-              margin="2"
-              marginRight="0"
-              size="sm"
-              onClick={onOpen}
-            >
-              Remove
-            </Button>
-            <Box flexGrow={1} />
-            <Button
-              colorScheme="gray"
-              margin="2"
-              size="sm"
-              onClick={() => {
-                history.push(`/edit/${props.id}`);
-                onOpen();
-              }}
-            >
-              Edit
-            </Button>
-            {props.variant === "modal" && (
+
+        <Box width="100%" display="flex" justifyContent="flex-end">
+          {canEditDelete && (
+            <>
               <Button
+                colorScheme="red"
                 margin="2"
-                marginLeft="1"
+                marginRight="0"
                 size="sm"
+                onClick={() => setIsOpen(true)}
+              >
+                Remove
+              </Button>
+              <Box flexGrow={1} />
+              <Button
                 colorScheme="gray"
+                margin="2"
+                size="sm"
                 onClick={() => {
-                  history.push(`/details/${props.id}`);
-                  mapDispatch(isDrawerVisible);
+                  history.push(`/edit/${popup?.id}`);
                 }}
               >
-                Details
+                Edit
               </Button>
-            )}
-          </Box>
-        )}
-
-        {props.variant === "modal" && !canEditDelete && (
-          <Box width="100%" display="flex" justifyContent="flex-end">
-            <Box flexGrow={1} />
+            </>
+          )}
+          {props.variant === "modal" && (
             <Button
-              colorScheme="gray"
               margin="2"
               marginLeft="1"
               size="sm"
+              colorScheme="gray"
               onClick={() => {
                 history.push(`/details/${props.id}`);
                 mapDispatch(isDrawerVisible);
@@ -286,8 +269,8 @@ export const RackInformation = (props: {
             >
               Details
             </Button>
-          </Box>
-        )}
+          )}
+        </Box>
       </Box>
     </>
   );
