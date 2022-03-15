@@ -11,8 +11,6 @@ import { MapDataGetter } from './components/MapRenderer';
 const LocksMap = () => {
     const { coordinates } = useGlobalState();
     const { id } = useParams();
-    const history = useHistory();
-    const { isOpen, onClose } = useDisclosure();
 
     if (!coordinates.hasCoordinates) {
         if (id) {
@@ -27,12 +25,6 @@ const LocksMap = () => {
     return (
         <DeviceWrapper>
             <MapDataGetter />
-            <DrawerContainer title="Add Bike Rack" isOpen={isOpen} onClose={() => {
-                history.push('/map');
-                onClose();
-            }}>
-                <AddRack onClose={onClose} />
-            </DrawerContainer>
         </DeviceWrapper>
     )
 }

@@ -30,9 +30,11 @@ const NewUserModal = () => {
     border: "10px solid #F56565",
   };
   const cross = {
+    borderRadius: 10,
     border: "4px solid #F56565",
     backgroundColor: "#F56565",
-    width: 96,
+    maxWidth: "90px",
+    minWidth: "90px",
   };
   return (
     <Modal
@@ -51,7 +53,7 @@ const NewUserModal = () => {
             <Box
               transform={
                 isMobile
-                  ? "translateY(45px) translateX(-114px) rotate(45deg)"
+                  ? "translateY(45px) translateX(-117px) rotate(45deg)"
                   : "translateY(45px) translateX(-152px) rotate(45deg)"
               }
               position="absolute"
@@ -70,11 +72,11 @@ const NewUserModal = () => {
             <Box flexGrow={1} />
             <Box
               style={{
+                position: 'absolute',
                 transform: isMobile
                   ? "translateY(45px) translateX(0px) rotate(45deg)"
                   : "translateY(45px) translateX(0px) rotate(45deg)",
               }}
-              position="absolute"
               {...cross}
             />
             <Box
@@ -90,11 +92,12 @@ const NewUserModal = () => {
             <Box flexGrow={1} />
             <Box
               style={{
-                ...cross,
+                position: 'absolute',
                 transform: isMobile
-                  ? "translateY(45px) translateX(114px) rotate(45deg)"
-                  : "translateY(45px) translateX(153px) rotate(45deg)",
+                  ? "translateY(45px) translateX(120px) rotate(45deg)"
+                  : "translateY(45px) translateX(151px) rotate(45deg)",
               }}
+              {...cross}
             />
             <Box
               p={5}
@@ -117,7 +120,7 @@ const NewUserModal = () => {
               onCloseNewUser();
               // @ts-ignore
               firebaseApi.auth.oldUser({ uid: user!.uid });
-              history.push('/add')
+              history.push("/add");
               onOpenAddToMap();
             }}
           >

@@ -9,58 +9,53 @@ import ReactMapboxGl, { Popup } from "react-mapbox-gl";
 import RackPopup from "../../Popup";
 import { UserLocation } from "../UserLocation/index";
 import { RacksRenderer } from "../RacksRenderer";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import firebaseApi from "../../../../api/firebase";
 import {
   Provider as MapProvider,
   useMapState,
 } from "../../../../providers/MapContext";
 import { PopupRenderer } from "../PopupRenderer";
+import DrawerContainer from "../../../../common/DrawerContainer";
+import AddRack from "../../../AddRack";
 
 const Mapbox = ReactMapboxGl({
   accessToken: process.env.REACT_APP_MAPBOX_TOKEN,
 });
 
 export const MapDataGetter = () => {
-  const [lock, setLock] = React.useState();
-  const { meta, coordinates } = useGlobalState();
+  const { coordinates } = useGlobalState();
   const { id }: any = useParams();
+  const history = useHistory();
+  const { isOpen, onClose } = useDisclosure();
 
   return (
     <MapProvider
       latidude={coordinates.center?.latitude}
       longitude={coordinates.center?.longitude}
     >
-      <MapRenderer id={id} lock={lock} />
+      <MapRenderer id={id} />
+      <DrawerContainer
+        title="Add Bike Rack"
+        isOpen={isOpen}
+        onClose={() => {
+          history.push("/map");
+          onClose();
+        }}
+      >
+        <AddRack onClose={onClose} />
+      </DrawerContainer>
     </MapProvider>
   );
 };
 
-export const MapRenderer = (props: { id: any; lock: any }) => {
+export const MapRenderer = (props: { id: any }) => {
   const { colorMode } = useColorMode();
   const { viewport, dispatch: mapDispatch } = useMapState();
 
   const { coordinates, dispatch } = useGlobalState();
   const { onOpen } = useDisclosure();
   const { onOpen: newUserOnOpen } = useDisclosure();
-  const [, setViewport] = React.useState(
-    props.id
-      ? {
-          width: window.innerWidth,
-          height: window.innerHeight,
-          latitude: props.lock?.location?.lat ?? coordinates.center?.latitude,
-          longitude:
-            props.lock?.location?.long ?? coordinates.center?.longitude,
-          zoom: 18,
-        }
-      : {
-          width: window.innerWidth,
-          height: window.innerHeight,
-          latitude: coordinates.center?.latitude,
-          longitude: coordinates.center?.longitude,
-          zoom: 15,
-        }
-  );
 
   const DAY_MAP = "mapbox://styles/thefreymaster/ckke447ga0wla19k1cqupmrrz";
   const NIGHT_MAP = "mapbox://styles/thefreymaster/ckz2wubzy000714ox0su8us49";
@@ -118,10 +113,7 @@ export const MapRenderer = (props: { id: any; lock: any }) => {
             <UserLocation coordinates={coordinates} />
           </>
         </Mapbox>
-        <MapActions
-          newUserOnOpen={newUserOnOpen}
-          onOpen={onOpen}
-        />
+        <MapActions newUserOnOpen={newUserOnOpen} onOpen={onOpen} />
         <NewUserModal />
       </>
     );

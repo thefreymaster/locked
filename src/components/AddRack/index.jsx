@@ -16,6 +16,8 @@ import firebaseApi from "../../api/firebase";
 
 const AddRack = (props) => {
   let { id } = useParams();
+
+  // need to fetch lock here, do not use local state
   const [lock, setLock] = React.useState();
   const { firebase, meta, coordinates } = useGlobalState();
   const history = useHistory();
