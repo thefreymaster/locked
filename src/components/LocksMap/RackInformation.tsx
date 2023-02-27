@@ -16,7 +16,13 @@ import "./users-map.scss";
 import RackSize from "./Size";
 import RackRecommendation from "./Recommendation";
 import Font from "../../common/Font";
-import { AiFillStar } from "react-icons/ai";
+import {
+  AiFillStar,
+  AiOutlineCompass,
+  AiOutlineDelete,
+  AiOutlineEdit,
+  AiOutlineInfoCircle,
+} from "react-icons/ai";
 import { IoHappyOutline } from "react-icons/io5";
 import { BiEditAlt, BiTrash } from "react-icons/bi";
 import StarRating from "../../components/StarRating";
@@ -30,6 +36,7 @@ import React from "react";
 import { useMapState } from "../../providers/MapContext";
 import DeleteRack from "../DeleteRack/index";
 import { isDrawerNotVisible, isDrawerVisible } from "../../actions/index";
+import { BsPinMap } from "react-icons/bs";
 
 export const RackInformation = (props: {
   id: string;
@@ -105,7 +112,7 @@ export const RackInformation = (props: {
         bg="yellow.400"
         loading="lazy"
         borderRadius={props.borderRadius}
-        name={popup.lock.name}
+        // name={popup.lock.name}
         //@ts-ignore
         src={popup.lock?.imageUrlAbsolute}
         onLoad={() => {
@@ -143,7 +150,7 @@ export const RackInformation = (props: {
             >
               <Box
                 display="flex"
-                direction="row"
+                flexDirection="row"
                 justifyContent="center"
                 alignItems="center"
               >
@@ -160,7 +167,7 @@ export const RackInformation = (props: {
               <Badge variant="subtle" marginLeft="2" minH="25px">
                 <Box
                   display="flex"
-                  direction="row"
+                  flexDirection="row"
                   justifyContent="center"
                   alignItems="center"
                   padding="3.5px"
@@ -180,7 +187,7 @@ export const RackInformation = (props: {
           <Text textAlign="center">{popup.lock?.notes}</Text>
           <Box
             display="flex"
-            direction="row"
+            flexDirection="row"
             alignItems="flex-start"
             marginTop={4}
           >
@@ -241,9 +248,8 @@ export const RackInformation = (props: {
                 size="sm"
                 onClick={() => setIsOpen(true)}
               >
-                Remove
+                <AiOutlineDelete />
               </Button>
-              <Box flexGrow={1} />
               <Button
                 colorScheme="gray"
                 margin="2"
@@ -252,23 +258,38 @@ export const RackInformation = (props: {
                   history.push(`/edit/${popup?.id}`);
                 }}
               >
-                Edit
+                <AiOutlineEdit />
               </Button>
+              <Box flexGrow={1} />
             </>
           )}
-          {props.variant === "modal" && (
+          <ToolTip label="Directions" placement="bottom">
             <Button
-              margin="2"
-              marginLeft="1"
-              size="sm"
               colorScheme="gray"
-              onClick={() => {
-                history.push(`/details/${props.id}`);
-                mapDispatch(isDrawerVisible);
-              }}
+              margin="2"
+              size="sm"
+              as="a"
+              target="_blank"
+              href={`https://www.google.com/maps/dir/${popup.lock.location.lat}, ${popup.lock.location.long}`}
             >
-              Details
+              <AiOutlineCompass />
             </Button>
+          </ToolTip>
+          {props.variant === "modal" && (
+            <ToolTip label="Details" placement="bottom">
+              <Button
+                margin="2"
+                marginLeft="1"
+                size="sm"
+                colorScheme="gray"
+                onClick={() => {
+                  history.push(`/details/${props.id}`);
+                  mapDispatch(isDrawerVisible);
+                }}
+              >
+                <AiOutlineInfoCircle />
+              </Button>
+            </ToolTip>
           )}
         </Box>
       </Box>

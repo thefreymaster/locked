@@ -26,6 +26,7 @@ import { BsMoonStars } from "react-icons/bs";
 import { FaMapMarkedAlt, FaSatellite } from "react-icons/fa";
 import { isGPSNotEnabled, isGPSEnabled } from "../../actions/index";
 import { SwitchContainer } from "./components/SwitchContainer/index";
+import { isDesktop } from 'react-device-detect';
 
 const Account = () => {
   const [signOutConfirm, setSignOutConfirm] = React.useState(false);
@@ -107,47 +108,48 @@ const Account = () => {
               Settings
             </Font>
           </Box>
-          <Box
-            borderRadius="lg"
-            boxShadow="md"
-            marginTop={4}
-            padding={4}
-            minW="100%"
-          >
+          {firebase.isAuthenticated ? (
             <Box
+              borderRadius="lg"
+              boxShadow="md"
+              marginTop={4}
+              padding={4}
               minW="100%"
-              size="md"
-              borderBottomRightRadius="0px"
-              borderBottomLeftRadius="0px"
-              display="flex"
-              alignItems="center"
             >
-              {firebase.isAuthenticated ? (
+              <Box
+                minW="100%"
+                size="md"
+                borderBottomRightRadius="0px"
+                borderBottomLeftRadius="0px"
+                display="flex"
+                alignItems="center"
+              >
                 <Authenticated justifyContent="flex-start" />
-              ) : (
-                <Button
-                  boxShadow="md"
-                  minW="100%"
-                  onClick={() =>
-                    firebaseApi.auth.signIn(dispatch, showSuccessToast)
-                  }
-                >
-                  <FontAwesomeIcon
-                    color={colorMode === "light" ? "black" : "white"}
-                    icon={faGoogle}
-                  />
-                  <Box mr={3} />
-                  Sign In With Google
-                </Button>
-              )}
+              </Box>
             </Box>
-          </Box>
+          ) : (
+            <Button
+              boxShadow="md"
+              marginTop={4}
+              minW="100%"
+              onClick={() =>
+                firebaseApi.auth.signIn(dispatch, showSuccessToast)
+              }
+            >
+              <FontAwesomeIcon
+                color={colorMode === "light" ? "black" : "white"}
+                icon={faGoogle}
+              />
+              <Box mr={3} />
+              Sign In With Google
+            </Button>
+          )}
           <SwitchContainer>
             <FaSatellite />
             <Text marginLeft={2}>Real Time Tracking</Text>
             <Box flexGrow={1} />
             <Switch
-              size="md"
+              size={isDesktop ? "md" : "lg"}
               colorScheme="yellow"
               isChecked={meta.liveGPSEnabled}
               onChange={(c) => {
@@ -169,7 +171,7 @@ const Account = () => {
             <Text marginLeft={2}>Dark Mode</Text>
             <Box flexGrow={1} />
             <Switch
-              size="md"
+              size={isDesktop ? "md" : "lg"}
               colorScheme="yellow"
               isChecked={colorMode === "dark"}
               onChange={toggleColorMode}

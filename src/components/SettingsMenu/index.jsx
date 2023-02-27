@@ -103,7 +103,7 @@ const SettingsMenu = () => {
   );
 };
 
-const SettingsMenuButton = ({ firebase, meta, isOpen }) => {
+const SettingsMenuButton = ({ firebase, isOpen }) => {
   if (firebase.isValidatingAuthentication) {
     return <Spinner color="white" colorScheme="white" />;
   }

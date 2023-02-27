@@ -29,7 +29,6 @@ const DrawerContainer = (props: IDrawerContainer) => {
       }
       onClose={props.onClose}
       size="lg"
-      motionPreset="slideInBottom"
     >
       <DrawerOverlay />
       <DrawerContent boxShadow="dark-lg">

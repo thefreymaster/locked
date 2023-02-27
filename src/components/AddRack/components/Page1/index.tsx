@@ -37,7 +37,7 @@ export const Page1 = (props: { formProps: any; setPage(v: number): void }) => {
 
   return (
     <Box minW={isMobile ? "100%" : "400px"}>
-      {/* <Field name="name">
+      <Field name="name">
         {({ field, form }) => (
           <FormControl
             colorScheme="red"
@@ -55,11 +55,11 @@ export const Page1 = (props: { formProps: any; setPage(v: number): void }) => {
             />
           </FormControl>
         )}
-      </Field> */}
+      </Field>
       <Field name="notes">
         {({ field, form }) => (
           <FormControl isInvalid={form.errors.notes && form.touched.notes}>
-            <FormLabel htmlFor="notes">Description</FormLabel>
+            <FormLabel htmlFor="notes">Description (optional)</FormLabel>
             <Textarea
               {...field}
               variant="filled"

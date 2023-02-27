@@ -103,7 +103,7 @@ const openAuthConnection = ({ dispatch, showSuccessToast }) => {
 
 const signIn = () => {
   var provider = new firebase.auth.GoogleAuthProvider();
-  firebase.auth().signInWithRedirect(provider);
+  firebase.auth().signInWithPopup(provider);
 };
 
 const signOut = (dispatch, showInfoToast, history) => {
@@ -196,24 +196,24 @@ const remove = ({
 const upload = ({ uid, file, form, setIsUploading }) => {
   const storage = firebase.storage();
   const storageRef = storage.ref();
-  const imageRef = storageRef.child(`images/${uid}/${uuidv4()}`);
+  const imageRef = storageRef.child(`images/${uid}/${uuidv4()}.jpg`);
   const options = {
     maxSizeMB: 0.25,
     useWebWorker: true,
   };
-  imageCompression(file, options)
-    .then(function (compressedFile) {
-      imageRef.put(compressedFile).then((snapshot) => {
-        const { metadata } = snapshot;
-        const { fullPath } = metadata;
-        form.setFieldValue("imageUrl", fullPath);
-        console.log("Uploaded a blob or file!");
-        setIsUploading(false);
-      });
-    })
-    .catch(function (error) {
-      console.log(error.message);
-    });
+  // imageCompression(file, options)
+  //   .then(function (compressedFile) {
+  imageRef.put(file).then((snapshot) => {
+    const { metadata } = snapshot;
+    const { fullPath } = metadata;
+    form.setFieldValue("imageUrl", fullPath);
+    console.log("Uploaded a blob or file!");
+    setIsUploading(false);
+  });
+  // })
+  // .catch(function (error) {
+  //   console.log(error.message);
+  // });
 };
 
 const getImage = ({ fileUrl, lock, mapDispatch }) => {

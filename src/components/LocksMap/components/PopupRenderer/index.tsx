@@ -9,6 +9,7 @@ export const PopupRenderer = () => {
     return null;
   }
   return (
+    // @ts-ignore
     <Popup anchor="bottom" coordinates={popup.coordinates} offset={8}>
       <RackPopup />
     </Popup>

@@ -35,7 +35,6 @@ const Header = () => {
     <Slide direction="top" in style={{ zIndex: 10 }}>
       <Flex
         style={{ ...fixed }}
-        backgroundColor={isMobile && colorMode === "light" && "#ffb100"}
         display="flex"
         alignItems="center"
         padding={meta.isInstalled ? "50px 20px 15px 20px" : "15px 20px"}

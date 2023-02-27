@@ -24,14 +24,6 @@ export const Page2 = (props: { formProps: any; setPage(v: number): void }) => {
             <FormLabel>Build Quality</FormLabel>
             <ButtonGroup isAttached style={{ minWidth: "100%" }}>
               <Button
-                colorScheme={field.value === -1 ? "blackAlpha" : "gray"}
-                isFullWidth
-                mr="-px"
-                onClick={(e) => form.setFieldValue("ratings.quality", -1)}
-              >
-                n/a
-              </Button>
-              <Button
                 colorScheme={field.value === 1 ? "red" : "gray"}
                 isFullWidth
                 mr="-px"
@@ -81,14 +73,6 @@ export const Page2 = (props: { formProps: any; setPage(v: number): void }) => {
             <FormLabel>Area Safety</FormLabel>
             <ButtonGroup isAttached style={{ minWidth: "100%" }}>
               <Button
-                colorScheme={field.value === -1 ? "blackAlpha" : "gray"}
-                isFullWidth
-                mr="-px"
-                onClick={(e) => form.setFieldValue("ratings.safety", -1)}
-              >
-                n/a
-              </Button>
-              <Button
                 colorScheme={field.value === 1 ? "red" : "gray"}
                 isFullWidth
                 mr="-px"
@@ -137,14 +121,6 @@ export const Page2 = (props: { formProps: any; setPage(v: number): void }) => {
           <FormControl isRequired id="ratings.illumination">
             <FormLabel>Area Lighting</FormLabel>
             <ButtonGroup isAttached style={{ minWidth: "100%" }}>
-              <Button
-                colorScheme={field.value === -1 ? "blackAlpha" : "gray"}
-                isFullWidth
-                mr="-px"
-                onClick={(e) => form.setFieldValue("ratings.illumination", -1)}
-              >
-                n/a
-              </Button>
               <Button
                 colorScheme={field.value === 1 ? "red" : "gray"}
                 isFullWidth

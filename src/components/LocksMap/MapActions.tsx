@@ -7,6 +7,8 @@ import AbsoluteIconButton from "../../common/AbsoluteIconButton";
 import { useHistory } from "react-router-dom";
 import { AiOutlinePlus } from "react-icons/ai";
 import { useModalControlState } from "../../providers/ModalControl";
+import { useMapState } from "../../providers/MapContext";
+import { resetPopup } from "../../actions";
 
 interface IMapActions {
   newUserOnOpen(): void;
@@ -14,6 +16,7 @@ interface IMapActions {
 }
 
 const MapActions = (props: IMapActions) => {
+  const { dispatch: mapDispatch, viewport } = useMapState();
   const { dispatch, coordinates, meta, firebase, user } = useGlobalState();
   const { center } = coordinates;
   const { onOpenNewUser, onOpenAddToMap } = useModalControlState();
@@ -29,6 +32,11 @@ const MapActions = (props: IMapActions) => {
               onOpenNewUser();
             } else {
               history.push("/add");
+              mapDispatch(resetPopup);
+              mapDispatch({
+                type: "SET_VIEWPORT",
+                payload: { ...viewport, zoom: 15 },
+              });
               onOpenAddToMap();
             }
           }}

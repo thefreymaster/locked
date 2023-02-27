@@ -1,5 +1,9 @@
 export const changeLog = [
   {
+    version: "v1.1.0",
+    changes: "New map rendering engine",
+  },
+  {
     version: "v1.0.1",
     changes: "Fixed popup initial load",
   },
