@@ -1,5 +1,15 @@
 export const changeLog = [
   {
+    version: "v1.2.1",
+    changes:
+      "Added copyright disclaimer",
+  },
+  {
+    version: "v1.2.0",
+    changes:
+      "Images no longer upload sideways, changed text to icons on rack modal",
+  },
+  {
     version: "v1.1.0",
     changes: "New map rendering engine",
   },

@@ -64,21 +64,19 @@ const Header = () => {
           </Flex>
         </Flex>
         <Box marginRight={2} flexGrow={1} />
-        {history.location.pathname !== "/" && (
-          <IconButton
-            onClick={toggleColorMode}
-            borderRadius={100}
-            marginRight={4}
-            size="sm"
-            icon={
-              colorMode === "light" ? (
-                <BsMoonStarsFill />
-              ) : (
-                <BsFillBrightnessLowFill />
-              )
-            }
-          />
-        )}
+        <IconButton
+          onClick={toggleColorMode}
+          borderRadius={100}
+          marginRight={4}
+          size="sm"
+          icon={
+            colorMode === "light" ? (
+              <BsMoonStarsFill />
+            ) : (
+              <BsFillBrightnessLowFill />
+            )
+          }
+        />
         {!meta.isInstalled && <SettingsMenu />}
       </Flex>
     </Slide>

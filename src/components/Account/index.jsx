@@ -27,6 +27,7 @@ import { FaMapMarkedAlt, FaSatellite } from "react-icons/fa";
 import { isGPSNotEnabled, isGPSEnabled } from "../../actions/index";
 import { SwitchContainer } from "./components/SwitchContainer/index";
 import { isDesktop } from 'react-device-detect';
+import { Legal } from '../Legal/index';
 
 const Account = () => {
   const [signOutConfirm, setSignOutConfirm] = React.useState(false);
@@ -303,6 +304,7 @@ const Account = () => {
           </Box> */}
         </Box>
       </DeviceWrapper>
+      <Legal />
     </Wrapper>
   );
 };

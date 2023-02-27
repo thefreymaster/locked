@@ -17,6 +17,7 @@ import {
   Box,
 } from "@chakra-ui/react";
 import MapSettings from "../components/MapSettings";
+import { PrivacyPolicy } from "../components/Legal/PrivacyPolicy";
 
 const Router = () => {
   const { firebase, meta, coordinates } = useGlobalState();
@@ -81,6 +82,9 @@ const Router = () => {
       </Route>
       <Route exact path="/account/map-settings">
         <MapSettings />
+      </Route>
+      <Route exact path="/account/policy">
+        <PrivacyPolicy />
       </Route>
 
       <Route exact path="/*">

@@ -20,6 +20,7 @@ import { PRIMARY_COLOR_SCHEME } from "../../constants";
 import LottieLoading from "../../common/LottieLoading";
 import MAP_IMAGE from "../../assets/map.jpeg";
 import MAP_IMAGE_DARK from "../../assets/map-dark.jpeg";
+import { Legal } from "../Legal";
 
 const Welcome = () => {
   const { colorMode } = useColorMode();
@@ -58,7 +59,7 @@ const Welcome = () => {
     position: "absolute",
     top: 0,
     filter: "blur(10px)",
-    transform: "scale(1)",
+    transform: "scale(1.2)",
     zIndex: -1,
   };
   return (
@@ -121,6 +122,7 @@ const Welcome = () => {
           <div style={background} className="cover-background" />
         </SlideFade>
       </div>
+      <Legal />
     </div>
   );
 };
