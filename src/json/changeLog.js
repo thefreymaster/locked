@@ -1,8 +1,11 @@
 export const changeLog = [
   {
+    version: "v1.2.2",
+    changes: "Fixed page one validation, fixed mobile form height",
+  },
+  {
     version: "v1.2.1",
-    changes:
-      "Added copyright disclaimer",
+    changes: "Added copyright disclaimer",
   },
   {
     version: "v1.2.0",
