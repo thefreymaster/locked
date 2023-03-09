@@ -30,18 +30,11 @@ const AddRack = (props) => {
         mapDispatch,
       });
     }
-  }, []);
+  }, [id, mapDispatch, meta.dbKey]);
 
   if (firebase.isValidatingAuthentication || isLoading) {
     return (
-      // <Box
-      //   display="flex"
-      //   justifyContent="center"
-      //   alignItems="center"
-      //   height="100vh"
-      // >
       <LottieLoading />
-      // </Box>
     );
   }
 

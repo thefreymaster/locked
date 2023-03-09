@@ -1,5 +1,9 @@
 export const changeLog = [
   {
+    version: "v1.3.0",
+    changes: "Added routing for on load of page with coordinates",
+  },
+  {
     version: "v1.2.2",
     changes: "Fixed page one validation, fixed mobile form height",
   },

@@ -75,7 +75,7 @@ const MapActions = (props: IMapActions) => {
                 ? dispatch({ type: "HIDE_CENTER" })
                 : dispatch({ type: "SHOW_CENTER" })
             }
-            colorScheme="yellow"
+            colorScheme="blackAlpha"
             isChecked={center.showCenter}
             size="md"
           />

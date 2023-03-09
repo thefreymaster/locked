@@ -25,14 +25,16 @@ const Mapbox = ReactMapboxGl({
 
 export const MapDataGetter = () => {
   const { coordinates } = useGlobalState();
-  const { id }: any = useParams();
+  const { id, lat, long }: any = useParams();
   const history = useHistory();
   const { isOpen, onClose } = useDisclosure();
 
+  console.log({ lat, long });
+
   return (
     <MapProvider
-      latidude={coordinates.center?.latitude}
-      longitude={coordinates.center?.longitude}
+      latidude={lat ?? coordinates.center?.latitude}
+      longitude={long ?? coordinates.center?.longitude}
     >
       <MapRenderer id={id} />
       <DrawerContainer
@@ -41,8 +43,7 @@ export const MapDataGetter = () => {
         onClose={() => {
           if (id) {
             history.push(`/map/${id}`);
-          }
-          else{
+          } else {
             history.push(`/map`);
           }
           onClose();
@@ -56,6 +57,7 @@ export const MapDataGetter = () => {
 
 export const MapRenderer = (props: { id: any }) => {
   const { colorMode } = useColorMode();
+  const { lat, long }: any = useParams();
   const { viewport, dispatch: mapDispatch } = useMapState();
 
   const { coordinates, dispatch } = useGlobalState();
@@ -64,6 +66,31 @@ export const MapRenderer = (props: { id: any }) => {
 
   const DAY_MAP = "mapbox://styles/thefreymaster/ckke447ga0wla19k1cqupmrrz";
   const NIGHT_MAP = "mapbox://styles/thefreymaster/ckz2wubzy000714ox0su8us49";
+
+  React.useEffect(() => {
+    if (lat && long) {
+      const dbKey = generateDbKey({ lat: lat, lng: long });
+      dispatch({
+        type: "SET_CENTER_GPS_COORDINATES",
+        payload: { latitude: lat, longitude: long },
+      });
+      dispatch({
+        type: "SET_DB_KEY",
+        payload: {
+          dbKey,
+        },
+      });
+      mapDispatch({
+        type: "SET_VIEWPORT",
+        payload: {
+          ...viewport,
+          zoom: 18,
+          latitude: lat,
+          longitude: long,
+        },
+      });
+    }
+  }, []);
 
   const MemorizedMap = React.useMemo(() => {
     if (!viewport) {

@@ -3,28 +3,19 @@ import {
   CloseButton,
   Image,
   Badge,
-  Button,
+  useClipboard,
   Divider,
   Text,
-  Spinner,
-  ScaleFade,
   useColorMode,
-  useDisclosure,
+  IconButton,
 } from "@chakra-ui/react";
 import { useHistory } from "react-router-dom";
 import "./users-map.scss";
 import RackSize from "./Size";
 import RackRecommendation from "./Recommendation";
 import Font from "../../common/Font";
-import {
-  AiFillStar,
-  AiOutlineCompass,
-  AiOutlineDelete,
-  AiOutlineEdit,
-  AiOutlineInfoCircle,
-} from "react-icons/ai";
-import { IoHappyOutline } from "react-icons/io5";
-import { BiEditAlt, BiTrash } from "react-icons/bi";
+import { AiFillStar, AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
+import { IoCopy, IoHappyOutline } from "react-icons/io5";
 import StarRating from "../../components/StarRating";
 import RackTraffic from "./Traffic";
 import { calculateOverallRating } from "../../utils/calcOverallRating";
@@ -35,8 +26,9 @@ import { isDesktop } from "react-device-detect";
 import React from "react";
 import { useMapState } from "../../providers/MapContext";
 import DeleteRack from "../DeleteRack/index";
-import { isDrawerNotVisible, isDrawerVisible } from "../../actions/index";
-import { BsPinMap } from "react-icons/bs";
+import { isDrawerVisible } from "../../actions/index";
+import { MdInfo, MdContentCopy, MdCheck } from "react-icons/md";
+import { IoNavigateCircle } from "react-icons/io5";
 
 export const RackInformation = (props: {
   id: string;
@@ -47,9 +39,12 @@ export const RackInformation = (props: {
   variant: "drawer" | "modal";
 }) => {
   const history = useHistory();
+  const { onCopy, value, hasCopied } = useClipboard(window.location.href);
   const { dispatch: mapDispatch, popup, viewport } = useMapState();
-  const { firebase, meta } = useGlobalState();
+  const { firebase, meta, coordinates } = useGlobalState();
   const { colorMode } = useColorMode();
+
+  console.log(value);
 
   const canEditDelete =
     firebase.isAuthenticated &&
@@ -105,7 +100,7 @@ export const RackInformation = (props: {
         </Box>
       )}
       <Image
-        minH={props.variant === "modal" ? 275 : props.minH}
+        minH={props.variant === "modal" ? 200 : props.minH}
         minW={props.variant === "modal" ? "100%" : props.minW}
         maxH={props.maxH}
         objectFit="cover"
@@ -136,7 +131,9 @@ export const RackInformation = (props: {
           alignItems="center"
         >
           <RackRecommendation
-            recommended={popup.lock.recommended}
+            recommended={
+              calculateOverallRating({ ratings: popup.lock.ratings }) > 3.5
+            }
             variant={props.variant}
           />
           <RackSize size={popup.lock.size} variant={props.variant} />
@@ -183,7 +180,6 @@ export const RackInformation = (props: {
           <Font fontSize={24} textAlign="center" fontWeight="bold">
             {popup.lock.name}
           </Font>
-          {/* //@ts-ignore */}
           <Text textAlign="center">{popup.lock?.notes}</Text>
           <Box
             display="flex"
@@ -221,14 +217,6 @@ export const RackInformation = (props: {
               <StarRating overallRating={popup.lock.ratings.illumination} />
               <Font fontWeight="bold">Lighting</Font>
             </Box>
-            {/* {lock.traffic && lock.traffic !== 'medium' && (
-                <Box display="flex" flexDir="column" justifyContent="center" alignItems="center" flexGrow={1}>
-                    {
-                        lock.traffic === 'high' ? <BsGraphDown /> : <BsGraphUp />
-                    }
-                    <Font>Traffic</Font>
-                </Box>
-            )} */}
           </Box>
           {props.variant === "drawer" && isDesktop && (
             <Details lock={popup.lock} />
@@ -238,48 +226,67 @@ export const RackInformation = (props: {
           <Divider borderColor={colorMode === "light" ? "white" : "#1c374a"} />
         </Box>
 
-        <Box width="100%" display="flex" justifyContent="flex-end">
+        <Box
+          width="100%"
+          display="flex"
+          gap="2"
+          padding="2"
+          justifyContent="flex-end"
+        >
           {canEditDelete && (
             <>
-              <Button
-                colorScheme="red"
-                margin="2"
-                marginRight="0"
-                size="sm"
-                onClick={() => setIsOpen(true)}
-              >
-                <AiOutlineDelete />
-              </Button>
-              <Button
-                colorScheme="gray"
-                margin="2"
-                size="sm"
-                onClick={() => {
-                  history.push(`/edit/${popup?.id}`);
-                }}
-              >
-                <AiOutlineEdit />
-              </Button>
+              <ToolTip label="Remove" placement="bottom">
+                <IconButton
+                  aria-label="remove"
+                  colorScheme="red"
+                  marginRight="0"
+                  size="sm"
+                  onClick={() => setIsOpen(true)}
+                >
+                  <AiOutlineDelete />
+                </IconButton>
+              </ToolTip>
+              <ToolTip label="Edit" placement="bottom">
+                <IconButton
+                  aria-label="edit"
+                  colorScheme="gray"
+                  size="sm"
+                  onClick={() => {
+                    history.push(`/edit/${popup?.id}`);
+                  }}
+                >
+                  <AiOutlineEdit />
+                </IconButton>
+              </ToolTip>
               <Box flexGrow={1} />
             </>
           )}
-          <ToolTip label="Directions" placement="bottom">
-            <Button
+          <ToolTip label="Copy Link" placement="bottom">
+            <IconButton
+              aria-label="copy"
               colorScheme="gray"
-              margin="2"
+              size="sm"
+              onClick={() => onCopy()}
+            >
+              {hasCopied ? <MdCheck /> : <MdContentCopy />}
+            </IconButton>
+          </ToolTip>
+          <ToolTip label="Directions" placement="bottom">
+            <IconButton
+              aria-label="directions"
+              colorScheme="gray"
               size="sm"
               as="a"
               target="_blank"
-              href={`https://www.google.com/maps/dir/${popup.lock.location.lat}, ${popup.lock.location.long}`}
+              href={`https://www.google.com/maps/dir/${coordinates.live.latitude},${coordinates.live.longitude}/${popup.lock.location.lat}, ${popup.lock.location.long}`}
             >
-              <AiOutlineCompass />
-            </Button>
+              <IoNavigateCircle />
+            </IconButton>
           </ToolTip>
           {props.variant === "modal" && (
             <ToolTip label="Details" placement="bottom">
-              <Button
-                margin="2"
-                marginLeft="1"
+              <IconButton
+                aria-label="details"
                 size="sm"
                 colorScheme="gray"
                 onClick={() => {
@@ -287,8 +294,8 @@ export const RackInformation = (props: {
                   mapDispatch(isDrawerVisible);
                 }}
               >
-                <AiOutlineInfoCircle />
-              </Button>
+                <MdInfo />
+              </IconButton>
             </ToolTip>
           )}
         </Box>

@@ -1,6 +1,6 @@
 export const validatePage1 = ({ values }) => {
     const { location } = values;
-    if (location.lat && location.long && values?.name) {
+    if (location?.lat && location?.long && values?.name) {
         return false;
     }
     return true;

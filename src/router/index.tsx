@@ -62,13 +62,13 @@ const Router = () => {
       <Route exact path="/map">
         <LocksMap />
       </Route>
-      <Route exact path="/map/:id">
+      <Route exact path={["/map/:id", "/map/:id/:lat/:long"]}>
         <LocksMap />
       </Route>
       <Route exact path="/edit/:id">
         <LocksMap />
       </Route>
-      <Route exact path="/details/:id">
+      <Route exact path={["/details/:id", "/details/:id/:lat/:long"]}>
         <LocksMap />
       </Route>
       <Route exact path="/add">
